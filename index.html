@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07070c">
+<title>Apexiffy Database — Registered Numbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070c;--bg2:#0c0c14;--surface:#12121c;--text:#f2f2f7;--muted:#8a8a9e;--accent:#c8ff3d;--accent2:#3dd6ff;--danger:#ff4d6d;--amber:#ffb03d;--border:rgba(255,255,255,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh}
+h1,h2,h3{font-family:'Sora',sans-serif;letter-spacing:-.02em}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:99px}
+.aurora{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;opacity:.4;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:34px 5vw 80px}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+.logo{font-size:1.35rem;font-weight:900;letter-spacing:.12em}
+.logo span{color:var(--accent);text-shadow:0 0 22px rgba(200,255,61,.7)}
+.logo small{display:block;color:var(--muted);font-size:.62rem;letter-spacing:.35em;font-weight:600;margin-top:3px}
+.btn{border:none;border-radius:999px;padding:11px 24px;font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit;transition:transform .25s,box-shadow .25s}
+.btn-primary{background:var(--accent);color:#000;box-shadow:0 0 30px rgba(200,255,61,.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(200,255,61,.4)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px}
+.stat small{color:var(--muted);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.stat b{display:block;font-size:1.9rem;margin-top:6px;font-family:'Sora',sans-serif}
+.stat.red b{color:var(--danger)} .stat.green b{color:var(--accent)} .stat.amber b{color:var(--amber)}
+.toolbar{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.search{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 18px;color:var(--text);font-size:.92rem;outline:none;font-family:inherit}
+.search:focus{border-color:var(--accent)}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:9px 18px;border-radius:999px;border:1px solid var(--border);background:none;color:var(--muted);font-weight:700;font-size:.78rem;cursor:pointer;font-family:inherit;transition:all .25s}
+.chip.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.tablecard{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:8px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:1020px}
+th{text-align:left;color:var(--muted);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:16px 14px;border-bottom:1px solid var(--border)}
+td{padding:15px 14px;border-bottom:1px solid rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .25s}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+tr.expired{background:rgba(255,77,109,.06)}
+tr.expired td:first-child{border-left:3px solid var(--danger)}
+tr.expired .phone{color:var(--danger);font-weight:700}
+.phone{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.pill{padding:5px 13px;border-radius:999px;font-size:.7rem;font-weight:800;white-space:nowrap}
+.pill.sub{background:rgba(200,255,61,.12);color:var(--accent)}
+.pill.trial{background:rgba(255,176,61,.12);color:var(--amber)}
+.pill.exp{background:rgba(255,77,109,.14);color:var(--danger)}
+.pill.elite{background:rgba(61,214,255,.12);color:var(--accent2)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 4px;color:var(--muted);font-size:.76rem}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.mode{margin-top:22px;background:var(--bg2);border:1px dashed var(--border);border-radius:16px;padding:16px 20px;font-size:.8rem;color:var(--muted);line-height:1.7}
+.mode b{color:var(--accent)}
+.mode code{background:rgba(255,255,255,.06);padding:2px 8px;border-radius:6px;font-size:.75rem}
+
+.gym-sec{margin-bottom:26px}
+.gym-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 6px 10px}
+.gym-head h3{font-size:1.05rem}
+.gym-head span{color:var(--muted);font-size:.78rem;font-weight:700}
+.gym-sec.home .gym-head h3{color:var(--accent2)}
+.gym-sec.home{border-top:1px dashed var(--border);padding-top:22px;margin-top:6px}
+.livechip{font-size:.7rem;font-weight:800;letter-spacing:.08em;color:var(--accent);padding:8px 14px;border:1px solid rgba(200,255,61,.3);border-radius:999px;background:rgba(200,255,61,.06)}
+.livechip:empty{display:none}
+#gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.gate-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:38px 32px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.gate-card.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@media (max-width:820px){.stats{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.stats{grid-template-columns:1fr 1fr}.stat b{font-size:1.4rem}.wrap{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<div class="aurora" style="width:520px;height:520px;background:rgba(200,255,61,.13);top:-160px;left:-140px"></div>
+<div class="aurora" style="width:600px;height:600px;background:rgba(61,214,255,.1);bottom:-200px;right:-160px"></div>
+
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="logo" style="text-align:center;margin-bottom:8px">APEX<span>IFFY</span><small>OWNER CONSOLE · RESTRICTED</small></div>
+    <p style="color:var(--muted);font-size:.85rem;text-align:center;margin:14px 0 22px">This database contains user contact numbers.<br>Enter the owner password to continue.</p>
+    <input type="password" id="gatePass" class="search" placeholder="Owner password" style="width:100%;text-align:center" onkeydown="if(event.key==='Enter')unlock()">
+    <div id="gateErr" style="color:var(--danger);font-size:.78rem;text-align:center;margin-top:10px;min-height:18px"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px;padding:14px" onclick="unlock()">Unlock Database →</button>
+  </div>
+</div>
+
+<div class="wrap" id="content" style="display:none">
+<header>
+  <div class="logo">APEX<span>IFFY</span><small>DATABASE · OWNER CONSOLE</small></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <span id="liveDot" class="livechip"></span>
+    <button class="btn btn-ghost" onclick="load()">↻ Refresh</button>
+    <button class="btn btn-primary" onclick="exportCSV()">Export CSV ↓</button>
+  </div>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="toolbar">
+  <input class="search" id="q" placeholder="Search username or phone number…" oninput="render()">
+  <div class="filters">
+    <button class="chip view-chip active" data-v="list" onclick="setView(this)">List view</button>
+    <button class="chip view-chip" data-v="gym" onclick="setView(this)">Group by gym</button>
+    <span style="width:1px;background:var(--border);margin:0 4px"></span>
+    <button class="chip active" data-f="all" onclick="setF(this)">All</button>
+    <button class="chip" data-f="expired" onclick="setF(this)">Not registered after 3 days</button>
+    <button class="chip" data-f="trial" onclick="setF(this)">Active trials</button>
+    <button class="chip" data-f="sub" onclick="setF(this)">Subscribed</button>
+  </div>
+</div>
+
+<div class="tablecard">
+<table>
+  <thead><tr><th>#</th><th>Username</th><th>Phone Number</th><th>Gym</th><th>Goal</th><th>BMI</th><th>Health</th><th>Signed Up</th><th>Trial Ends</th><th>Subscription</th><th>Status</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+
+<div id="gymView" style="display:none"></div>
+
+<div class="legend">
+  <span><i style="background:var(--danger)"></i>Red row = trial ended 3+ days ago, never subscribed — follow up</span>
+  <span><i style="background:var(--amber)"></i>Amber = trial still running</span>
+  <span><i style="background:var(--accent)"></i>Green = paying subscriber</span>
+</div>
+
+<div class="mode" id="modeBox"></div>
+</div>
+
+<script>
+
+/* ======= OWNER PASSWORD GATE =======
+   The password itself is never written in this file — only its SHA-256 fingerprint.
+   NOTE: any purely client-side gate is a deterrent, not bank-grade security.
+   Real protection = Supabase Row Level Security (I can set that up when you connect). */
+const GATE_HASH = '38131f15527050859a26cf37e3746012b0e105b0fa590182ee45514114c7e719';
+async function sha256(s){
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+let tries = 0;
+async function unlock(){
+  const v = document.getElementById('gatePass').value;
+  if (await sha256(v) === GATE_HASH){
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    load();
+  } else {
+    tries++;
+    const card = document.querySelector('.gate-card');
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    document.getElementById('gateErr').textContent = tries >= 3 ? 'Wrong password. Hint: it starts with the brand name.' : 'Wrong password. Try again.';
+    document.getElementById('gatePass').value = '';
+  }
+}
+
+/* ████████████████████████████████████████████████████████████████████
+   ██  APEXIFFY DATABASE CONSOLE — https://apexiffydatabase.vercel.app ██
+   ██  Paste the SAME two values you put in the main site file.       ██
+   ██  Once pasted: this console pulls live data EVERY SECOND.        ██
+   ████████████████████████████████████████████████████████████████████ */
+const SUPABASE_URL = '';   // ← PASTE your Project URL   (https://xxxx.supabase.co)
+const SUPABASE_KEY = '';   // ← PASTE your anon public key (starts with eyJ...)
+
+const DAY = 86400000;
+const now = () => Date.now();
+let users = [];  // starts empty — only real registrations appear here
+let filter = 'all';
+
+function statusOf(u){
+  if (/pro|elite/i.test(u.plan)) return 'sub';
+  const days = (now() - new Date(u.joined_at).getTime())/DAY;
+  return days > 3 ? 'expired' : 'trial';
+}
+function fmt(d){ return new Date(d).toLocaleDateString('en-PK',{month:'short',day:'numeric',year:'numeric'}); }
+function trialEnd(u){ return fmt(new Date(new Date(u.joined_at).getTime()+3*DAY)); }
+function daysLeft(u){ return Math.max(0, Math.ceil(3 - (now() - new Date(u.joined_at).getTime())/DAY)); }
+
+let view = 'list';
+function healthPill(hv){
+  if (hv == null || hv === '') return '—';
+  const c = hv >= 80 ? 'sub' : hv >= 50 ? 'trial' : 'exp';
+  return `<span class="pill ${c}">${hv}%</span>`;
+}
+function rowHTML(u, i){
+  const s = statusOf(u);
+  const statusPill = s==='sub' ? '<span class="pill sub">Subscribed</span>'
+    : s==='expired' ? '<span class="pill exp">Not subscribed · '+Math.floor((now()-new Date(u.joined_at).getTime())/DAY - 3)+'d overdue</span>'
+    : '<span class="pill trial">Trial · '+daysLeft(u)+'d left</span>';
+  const planPill = /elite/i.test(u.plan) ? '<span class="pill elite">Elite — Rs 2,499</span>'
+    : /pro/i.test(u.plan) ? '<span class="pill sub">Pro — Rs 999</span>'
+    : '<span class="pill trial">Free Trial</span>';
+  return `<tr class="${s==='expired'?'expired':''}"><td>${i+1}</td><td><b>${u.username}</b></td><td class="phone">${u.phone}</td><td>${u.gym||'—'}</td><td>${u.goal?u.goal[0].toUpperCase()+u.goal.slice(1):'—'}</td><td>${u.bmi||'—'}</td><td>${healthPill(u.health)}</td><td>${fmt(u.joined_at)}</td><td>${trialEnd(u)}</td><td>${planPill}</td><td>${statusPill}</td></tr>`;
+}
+function visibleUsers(){
+  const q = document.getElementById('q').value.toLowerCase();
+  return users.filter(u => (filter==='all'||statusOf(u)===filter) &&
+    (!q || u.username.toLowerCase().includes(q) || u.phone.replace(/\D/g,'').includes(q.replace(/\D/g,'')) || (u.gym||'').toLowerCase().includes(q)));
+}
+function render(){
+  const shown = visibleUsers();
+  const tableCard = document.querySelector('.tablecard'), gymView = document.getElementById('gymView');
+
+  if (view === 'gym'){
+    tableCard.style.display = 'none'; gymView.style.display = 'block';
+    const groups = {};
+    shown.forEach(u=>{ const g = u.gym || 'Unknown Gym'; (groups[g] = groups[g]||[]).push(u); });
+    const home = groups['Home Gym'] || []; delete groups['Home Gym'];
+    const names = Object.keys(groups).sort();
+    const section = (title, list, cls) => `
+      <div class="gym-sec ${cls||''}">
+        <div class="gym-head"><h3>${title}</h3><span>${list.length} member${list.length!==1?'s':''}</span></div>
+        <div class="tablecard"><table>
+          <thead><tr><th>#</th><th>Username</th><th>Phone Number</th><th>Gym</th><th>Goal</th><th>BMI</th><th>Health</th><th>Signed Up</th><th>Trial Ends</th><th>Subscription</th><th>Status</th></tr></thead>
+          <tbody>${list.map((u,i)=>rowHTML(u,i)).join('')}</tbody></table></div>
+      </div>`;
+    gymView.innerHTML =
+      (names.length ? names.map(n=>section(n, groups[n])).join('') : '') +
+      (home.length ? section('Home Gym Members', home, 'home') : '') +
+      (!names.length && !home.length ? '<div class="tablecard" style="text-align:center;color:var(--muted);padding:48px">No registrations yet</div>' : '');
+  } else {
+    tableCard.style.display = 'block'; gymView.style.display = 'none';
+    document.getElementById('rows').innerHTML = shown.map((u,i)=>rowHTML(u,i)).join('') ||
+      `<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:48px 20px">
+        <div style="font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px">No registrations yet</div>
+        <div style="font-size:.82rem">This list fills automatically as users sign up on apexiffy.vercel.app${SUPABASE_URL?'':' — connect Supabase first (see note below)'}</div></td></tr>`;
+  }
+
+  const c = {sub:0,trial:0,expired:0};
+  users.forEach(u=>c[statusOf(u)]++);
+  const avgH = users.filter(u=>u.health).length ? Math.round(users.reduce((a,u)=>a+(u.health||0),0)/users.filter(u=>u.health).length) : null;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><small>Total Registered Numbers</small><b>${users.length}</b></div>
+    <div class="stat green"><small>Subscribed</small><b>${c.sub}</b></div>
+    <div class="stat amber"><small>Active Trials</small><b>${c.trial}</b></div>
+    <div class="stat red"><small>Expired · Not Subscribed</small><b>${c.expired}</b></div>
+    <div class="stat"><small>Gyms Represented</small><b>${new Set(users.map(u=>u.gym).filter(Boolean)).size}</b></div>
+    <div class="stat ${avgH===null?'':avgH>=80?'green':avgH>=50?'amber':'red'}"><small>Avg Health Score</small><b>${avgH===null?'—':avgH+'%'}</b></div>`;
+}
+function setView(btn){
+  view = btn.dataset.v;
+  document.querySelectorAll('.view-chip').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active'); render();
+}
+function setF(btn){
+  filter = btn.dataset.f;
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active'); render();
+}
+async function load(quiet){
+  const box = document.getElementById('modeBox');
+  if (!SUPABASE_URL || !SUPABASE_KEY){
+    box.innerHTML = '<b>NOT CONNECTED</b> — this console only shows real data, and no data source is linked yet. To receive live signups from <code>apexiffy.vercel.app</code>: create a free Supabase project, add a <code>signups</code> table (username, phone, joined_at, plan, goal, gym, bmi, health, height, weight, calories), then paste your project URL and anon key into the <code>SUPABASE_URL / SUPABASE_KEY</code> constants at the top of BOTH files. This page will then load live registrations automatically.';
+    render(); return;
+  }
+  try{
+    const r = await fetch(SUPABASE_URL+'/rest/v1/signups?select=*&order=joined_at.desc',
+      { headers:{ apikey:SUPABASE_KEY, Authorization:'Bearer '+SUPABASE_KEY } });
+    const data = await r.json();
+    if (Array.isArray(data)) users = data;
+    else { if(!quiet) box.innerHTML = '<b style="color:var(--danger)">SUPABASE ERROR:</b> <code>'+(data.message||JSON.stringify(data)).slice(0,140)+'</code> — usually means the signups table or its policies are missing. Run the setup SQL.'; render(); return; }
+    lastSync = Date.now();
+    if (!quiet) box.innerHTML = '<b>LIVE MODE</b> — connected. Every signup on apexiffy.vercel.app appears here within a second.';
+    render();
+  }catch(e){
+    if (!quiet) box.innerHTML = '<b style="color:var(--danger)">CONNECTION FAILED</b> — check: (1) URL and key pasted correctly, (2) the <code>signups</code> table exists (run the setup SQL), (3) Row Level Security policies added. No data shown until fixed.';
+    render();
+  }
+}
+function exportCSV(){
+  const rows = [['Username','Phone','Gym','Goal','BMI','Health %','Signed Up','Trial Ends','Plan','Status'],
+    ...users.map(u=>[u.username,u.phone,u.gym||'',u.goal||'',u.bmi||'',u.health||'',fmt(u.joined_at),trialEnd(u),u.plan,statusOf(u)])];
+  const csv = rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'apexiffy-registered-numbers.csv'; a.click();
+}
+// load() now runs after unlock
+let lastSync = 0;
+setInterval(()=>{ if (SUPABASE_URL && document.getElementById('content').style.display !== 'none') load(true); }, 1000);
+setInterval(()=>{ // live "updated Xs ago" ticker + re-render so trial countdowns stay accurate
+  const el = document.getElementById('liveDot');
+  if (el && lastSync) el.textContent = 'LIVE · synced ' + Math.max(0, Math.round((Date.now()-lastSync)/1000)) + 's ago';
+}, 1000);
+</script>
+</body>
+</html>
