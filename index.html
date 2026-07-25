@@ -181,7 +181,20 @@ nav.solid{background:rgba(4,7,12,.94);border-color:var(--line2)}
 .reel .rl{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cy);font-weight:600}
 .reel .rt{font-family:var(--disp);font-size:.98rem;line-height:1.32}
 .reel .play{width:48px;height:48px;border-radius:50%;background:var(--cy);display:grid;place-items:center;
-  color:#00222c;align-self:center;box-shadow:0 0 24px rgba(0,216,255,.5)}
+  color:#00222c;align-self:center;box-shadow:0 0 24px rgba(0,216,255,.5);cursor:pointer;pointer-events:auto;
+  transition:transform .2s}
+.reel .play:hover{transform:scale(1.12)}
+.reel .ov{pointer-events:none}
+.reel .ov .play{pointer-events:auto}
+/* fullscreen reel modal */
+.reel-modal{position:fixed;inset:0;z-index:210;background:rgba(2,4,8,.94);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.reel-modal.open{opacity:1;pointer-events:auto}
+.reel-modal video{max-width:min(440px,92vw);max-height:90vh;width:auto;height:90vh;border-radius:18px;
+  border:1px solid var(--line2);box-shadow:0 30px 90px rgba(0,0,0,.8),0 0 60px rgba(0,216,255,.25);background:#000}
+.rm-close{position:absolute;top:20px;right:20px;width:48px;height:48px;border-radius:50%;border:1px solid var(--line2);
+  background:rgba(4,7,12,.8);color:var(--text);font-size:1.4rem;cursor:pointer;display:grid;place-items:center;z-index:2;transition:.25s}
+.rm-close:hover{border-color:var(--cy);color:var(--cy);transform:rotate(90deg)}
 .reel .play svg{width:18px;height:18px;fill:#00222c;margin-left:2px}
 .reel:nth-child(1){left:3%;top:34px;transform:rotateY(17deg) rotateZ(-6deg)}
 .reel:nth-child(2){left:30%;top:0;z-index:3;transform:translateZ(44px)}
@@ -556,15 +569,15 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;font-size:.86rem;col
     <div class="reel-stack" data-reveal>
       <div class="reel">
         <video src="VIDEO.2.mp4" poster="" autoplay muted loop playsinline preload="metadata"></video>
-        <div class="ov"><span class="rl">Ad Creative</span><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Product promo built to convert</span></div>
+        <div class="ov"><span class="rl">Ad Creative</span><span class="play" data-src="VIDEO.2.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Product promo built to convert</span></div>
       </div>
       <div class="reel">
         <video src="VIDEO.3.mp4" poster="" autoplay muted loop playsinline preload="metadata"></video>
-        <div class="ov"><span class="rl">Instagram Reel</span><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Trend-format edit with hook &amp; captions</span></div>
+        <div class="ov"><span class="rl">Instagram Reel</span><span class="play" data-src="VIDEO.3.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Trend-format edit with hook &amp; captions</span></div>
       </div>
       <div class="reel">
         <video src="VIDEO.1.mp4" poster="" autoplay muted loop playsinline preload="metadata"></video>
-        <div class="ov"><span class="rl">YouTube Short</span><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Long video &rarr; viral vertical cutdown</span></div>
+        <div class="ov"><span class="rl">YouTube Short</span><span class="play" data-src="VIDEO.1.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Long video &rarr; viral vertical cutdown</span></div>
       </div>
     </div>
     <div>
@@ -759,6 +772,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;font-size:.86rem;col
 </div>
 
 <button class="top" id="toTop" aria-label="Back to top">&#8593;</button>
+
+<!-- FULLSCREEN REEL PLAYER -->
+<div class="reel-modal" id="reelModal" aria-hidden="true">
+  <button class="rm-close" id="rmClose" aria-label="Close video">&#10005;</button>
+  <video id="rmVideo" controls playsinline></video>
+</div>
 
 <!-- LYRA AI -->
 <button class="cb-fab" id="cbFab" aria-label="Chat with Lyra">&#129302;<span class="dot"></span></button>
@@ -1059,6 +1078,33 @@ if(FINE&&!RM){
     card.addEventListener('mouseleave',()=>card.style.transform='');
   });
 }
+/* ── Fullscreen reel player (sound on) ── */
+(()=>{
+  const modal=document.getElementById('reelModal'),rv=document.getElementById('rmVideo'),rc=document.getElementById('rmClose');
+  const cardVids=[...document.querySelectorAll('.reel video')];
+  function open(src){
+    cardVids.forEach(v=>v.pause());
+    rv.src=src;rv.muted=false;rv.currentTime=0;
+    modal.classList.add('open');document.body.style.overflow='hidden';
+    const p=rv.play();if(p)p.catch(()=>{});SFX.click();
+    if(rv.requestFullscreen){rv.requestFullscreen().catch(()=>{});}
+  }
+  function close(){
+    modal.classList.remove('open');document.body.style.overflow='';
+    rv.pause();rv.removeAttribute('src');rv.load();
+    if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+    cardVids.forEach(v=>{const pr=v.play();if(pr)pr.catch(()=>{});});
+  }
+  document.querySelectorAll('.reel .play').forEach(btn=>{
+    const src=btn.getAttribute('data-src');
+    btn.addEventListener('click',()=>open(src));
+    btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(src);}});
+  });
+  rc.addEventListener('click',close);
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close();});
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&modal.classList.contains('open'))close();});
+})();
 </script>
 </body>
 </html>
