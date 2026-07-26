@@ -19,9 +19,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","name":"Nexlyr","slogan":"The Next Layer of Digital",
 "description":"Karachi digital agency: websites, video editing, reels, shorts, logo & branding, AI chatbots, ads and social media.",
-"telephone":"+92-305-3687680","email":"mhenterprises10609@gmail.com",
+"telephone":"+92-305-3687680","email":"nexlyr.solutions@gmail.com",
 "address":{"@type":"PostalAddress","addressLocality":"Karachi","addressRegion":"Sindh","addressCountry":"PK"},
-"areaServed":["Karachi","Pakistan","Worldwide"],"priceRange":"Rs. 1,500 - Rs. 80,000+","openingHours":"Mo-Su 11:00-02:00",
+"areaServed":["Karachi","Pakistan","Worldwide"],"priceRange":"Rs. 1,500 - Rs. 80,000+","openingHours":"Mo-Su 12:00-00:00",
 "sameAs":["https://www.instagram.com/mh.enterprises10/","https://wa.me/923053687680"]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lenis@1.3.25/dist/lenis.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --ink:#04070c;--ink2:#070b12;--panel:#0a0f17;--panel2:#101822;--text:#f2f6fa;--muted:#8b97a8;
@@ -503,7 +504,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
       <div class="wc" data-reveal style="--i:0"><span class="ico"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></span><b>Fast Delivery</b><span>Websites from 3 days, edits in 24–48 hours. Rush options available.</span></div>
       <div class="wc" data-reveal style="--i:1"><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></span><b>Fixed Pricing</b><span>Clear scope and price agreed before we start. No surprises later.</span></div>
       <div class="wc" data-reveal style="--i:2"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5M15 20c0-2 1-3.6 3-4"/></svg></span><b>One Team</b><span>Website, content, branding &amp; ads — no juggling five freelancers.</span></div>
-      <div class="wc" data-reveal style="--i:3"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><b>24/7 Support</b><span>We reply within minutes on WhatsApp, daily 11 AM – 2 AM.</span></div>
+      <div class="wc" data-reveal style="--i:3"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><b>24/7 Support</b><span>We reply within minutes on WhatsApp, daily 12 PM – 12 AM.</span></div>
     </div>
   </div>
 </section>
@@ -599,9 +600,9 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
 <section id="creative" class="why">
   <div class="wrap split" style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
     <div class="reel-stack" data-reveal style="position:relative;height:450px;perspective:1200px">
-      <div class="reel"><video src="VIDEO.2.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">Ad Creative</span><span class="play" data-src="reel3.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Product promo built to convert</span></div></div>
-      <div class="reel"><video src="VIDEO.4.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">Instagram Reel</span><span class="play" data-src="reel1.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Trend-format edit with hook &amp; captions</span></div></div>
-      <div class="reel"><video src="VIDEO.1.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">YouTube Short</span><span class="play" data-src="reel2.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Long video &rarr; viral vertical cutdown</span></div></div>
+      <div class="reel"><video src="reel3.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">Ad Creative</span><span class="play" data-src="reel3.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Product promo built to convert</span></div></div>
+      <div class="reel"><video src="reel1.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">Instagram Reel</span><span class="play" data-src="reel1.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Trend-format edit with hook &amp; captions</span></div></div>
+      <div class="reel"><video src="reel2.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="ov"><span class="rl">YouTube Short</span><span class="play" data-src="reel2.mp4" role="button" tabindex="0" aria-label="Play with sound"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="rt">Long video &rarr; viral vertical cutdown</span></div></div>
     </div>
     <div>
       <span class="eyebrow" data-reveal>Content that performs</span>
@@ -785,14 +786,14 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
     <div data-reveal>
       <span class="eyebrow">Schedule a call</span>
       <h2>Ready to Ignite Your <span class="cy">Digital Presence?</span></h2>
-      <p>One message and every digital need is handled. Free consultation, fixed prices, fast delivery — every day, 11 AM to 2 AM.</p>
+      <p>One message and every digital need is handled. Free consultation, fixed prices, fast delivery — every day, 12 PM to 12 AM.</p>
       <div class="btns"><a class="btn btn-a" href="https://wa.me/923053687680?text=Hi%20Nexlyr!%20Let's%20schedule%20a%20call.">Message on WhatsApp &rarr;</a><a class="btn btn-b" href="#contact">Fill the Form</a></div>
     </div>
     <div data-reveal style="--i:1">
       <div class="cbox" style="border-radius:22px">
         <a class="crow" style="border-top:none;padding-top:0" href="https://wa.me/923053687680"><span class="ci" style="background:rgba(37,211,102,.14);border:1px solid rgba(37,211,102,.4)"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm-2.7 6c.2 0 .4 0 .6.5.2.5.8 1.8.8 2 .1.1 0 .3-.1.4l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.4.1.6-.1.1-.1.6-.7.8-1 .2-.2.4-.2.6-.1.3.1 1.6.7 1.9.9.3.1.5.2.6.3 0 .1 0 .7-.2 1.3-.2.7-1.3 1.3-1.8 1.3-.5.1-1 .3-3.4-.7-3-1.1-4.8-4-5-4.2-.1-.2-1.1-1.6-1.1-2.9 0-1.3.6-1.9.9-2.3.2-.4.5-.4.7-.4h.3z"/></svg></span><div><b>WhatsApp</b><span>+92 305 3687680</span></div></a>
-        <a class="crow" href="mailto:mhenterprises10609@gmail.com"><span class="ci" style="background:rgba(234,67,53,.12);border:1px solid rgba(234,67,53,.4)"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></span><div><b>Email</b><span>mhenterprises10609@gmail.com</span></div></a>
-        <div class="crow"><span class="ci" style="background:var(--cy-soft);border:1px solid var(--line2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Hours</b><span>11:00 AM – 2:00 AM, daily</span></div></div>
+        <a class="crow" href="mailto:nexlyr.solutions@gmail.com"><span class="ci" style="background:rgba(234,67,53,.12);border:1px solid rgba(234,67,53,.4)"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></span><div><b>Email</b><span>nexlyr.solutions@gmail.com</span></div></a>
+        <div class="crow"><span class="ci" style="background:var(--cy-soft);border:1px solid var(--line2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Hours</b><span>12:00 PM – 12:00 AM, daily</span></div></div>
       </div>
     </div>
   </div>
@@ -823,7 +824,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
     <h2 data-reveal>Ready to Build Your <span class="cy">Next Layer?</span></h2>
     <p class="sub" data-reveal>One message. Every digital need handled. Free consultation, fixed prices, fast delivery.</p>
     <div class="cwrap">
-      <form class="cform" id="leadForm" data-reveal action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form class="cform" id="leadForm" data-reveal>
         <div class="fmsg" id="fmsg"></div>
         <label for="fn">Your name</label><input id="fn" name="name" type="text" placeholder="e.g. Ahmed Khan" required/>
         <label for="fp">Phone / WhatsApp</label><input id="fp" name="phone" type="text" placeholder="e.g. 0300 1234567"/>
@@ -839,9 +840,9 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
           <h3>Talk to a human</h3>
           <p>We reply within minutes during working hours, every day of the week.</p>
           <a class="crow" href="https://wa.me/923053687680?text=Hi%20Nexlyr!"><span class="ci" style="background:rgba(37,211,102,.14);border:1px solid rgba(37,211,102,.4)"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm-2.7 6c.2 0 .4 0 .6.5.2.5.8 1.8.8 2 .1.1 0 .3-.1.4l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.4.1.6-.1.1-.1.6-.7.8-1 .2-.2.4-.2.6-.1.3.1 1.6.7 1.9.9.3.1.5.2.6.3 0 .1 0 .7-.2 1.3-.2.7-1.3 1.3-1.8 1.3-.5.1-1 .3-3.4-.7-3-1.1-4.8-4-5-4.2-.1-.2-1.1-1.6-1.1-2.9 0-1.3.6-1.9.9-2.3.2-.4.5-.4.7-.4h.3z"/></svg></span><div><b>WhatsApp</b><span>+92 305 3687680</span></div></a>
-          <a class="crow" href="mailto:mhenterprises10609@gmail.com"><span class="ci" style="background:rgba(234,67,53,.12);border:1px solid rgba(234,67,53,.4)"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></span><div><b>Email</b><span>mhenterprises10609@gmail.com</span></div></a>
+          <a class="crow" href="mailto:nexlyr.solutions@gmail.com"><span class="ci" style="background:rgba(234,67,53,.12);border:1px solid rgba(234,67,53,.4)"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></span><div><b>Email</b><span>nexlyr.solutions@gmail.com</span></div></a>
           <a class="crow" href="https://www.instagram.com/mh.enterprises10/"><span class="ci" style="background:linear-gradient(135deg,rgba(240,148,51,.18),rgba(188,42,141,.18),rgba(64,93,230,.18));border:1px solid rgba(188,42,141,.4)"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5.5" stroke="#e1306c" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="#e1306c" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="#e1306c"/></svg></span><div><b>Instagram</b><span>@mh.enterprises10</span></div></a>
-          <div class="crow"><span class="ci" style="background:var(--cy-soft);border:1px solid var(--line2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Hours</b><span>11:00 AM – 2:00 AM, daily</span></div></div>
+          <div class="crow"><span class="ci" style="background:var(--cy-soft);border:1px solid var(--line2)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Hours</b><span>12:00 PM – 12:00 AM, daily</span></div></div>
         </div>
       </div>
     </div>
@@ -857,17 +858,17 @@ footer{border-top:1px solid var(--line);padding:52px 0 32px;font-size:.86rem;col
         <div class="social-row">
           <a href="https://wa.me/923053687680" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm-2.7 6c.2 0 .4 0 .6.5.2.5.8 1.8.8 2 .1.1 0 .3-.1.4l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.4.1.6-.1.1-.1.6-.7.8-1 .2-.2.4-.2.6-.1.3.1 1.6.7 1.9.9.3.1.5.2.6.3 0 .1 0 .7-.2 1.3-.2.7-1.3 1.3-1.8 1.3-.5.1-1 .3-3.4-.7-3-1.1-4.8-4-5-4.2-.1-.2-1.1-1.6-1.1-2.9 0-1.3.6-1.9.9-2.3.2-.4.5-.4.7-.4h.3z"/></svg></a>
           <a href="https://www.instagram.com/mh.enterprises10/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5.5" stroke="#e1306c" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="#e1306c" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="#e1306c"/></svg></a>
-          <a href="mailto:mhenterprises10609@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></a>
+          <a href="mailto:nexlyr.solutions@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="#ea4335" stroke-width="1.7"/><path d="m3 6 9 6 9-6" stroke="#ea4335" stroke-width="1.7"/></svg></a>
           <a href="tel:+923053687680" aria-label="Call"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 14l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 0-2z"/></svg></a>
         </div>
       </div>
       <div class="foot-col"><b>Services</b><a href="#s-web">Website Development</a><a href="#s-video">Video &amp; Reels</a><a href="#s-brand">Logo &amp; Branding</a><a href="#s-ai">AI Chatbots</a><a href="#s-social">Social Media</a><a href="#s-ads">Ads Management</a></div>
       <div class="foot-col"><b>Company</b><a href="#why">Why Us</a><a href="#work">Our Work</a><a href="#industries">Industries</a><a href="#process">Process</a><a href="#pricing">Pricing</a><a href="#reviews">Reviews</a></div>
-      <div class="foot-col"><b>Get in touch</b><a href="https://wa.me/923053687680">WhatsApp</a><a href="mailto:mhenterprises10609@gmail.com">Email</a><a href="https://www.instagram.com/mh.enterprises10/">Instagram</a><a href="#contact">Contact Form</a><a href="#faq">FAQ</a></div>
+      <div class="foot-col"><b>Get in touch</b><a href="https://wa.me/923053687680">WhatsApp</a><a href="mailto:nexlyr.solutions@gmail.com">Email</a><a href="https://www.instagram.com/mh.enterprises10/">Instagram</a><a href="#contact">Contact Form</a><a href="#faq">FAQ</a></div>
     </div>
     <div class="foot-bot">
       <span>&copy; <span id="yr">2026</span> Nexlyr — Digital Agency · Karachi, Pakistan</span>
-      <span>Open daily 11:00 AM – 2:00 AM</span>
+      <span>Open daily 12:00 PM – 12:00 AM</span>
     </div>
   </div>
 </footer>
@@ -965,25 +966,36 @@ document.querySelectorAll('.q').forEach(q=>{
   });
 });
 
-/* ── Lead form → backend (Formspree) with graceful fallback ── */
+/* ── Lead form → Supabase backend (saves to Nexlyr admin panel) ──
+   Paste your Supabase URL + anon key below. Until then, or if the DB
+   is unreachable, the form falls back to WhatsApp so no lead is lost. */
+const NX_SUPABASE_URL = "YOUR_SUPABASE_URL";      // e.g. https://abcxyz.supabase.co
+const NX_SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"; // anon public key
 const form=document.getElementById('leadForm'),fmsg=document.getElementById('fmsg');
+let nxSB=null;
+if(NX_SUPABASE_URL!=="YOUR_SUPABASE_URL" && window.supabase){
+  try{nxSB=window.supabase.createClient(NX_SUPABASE_URL,NX_SUPABASE_KEY);}catch(e){}
+}
+function waFallback(d,note){
+  const t=`Hi Nexlyr!%0A%0AName: ${d.name||'-'}%0APhone: ${d.phone||'-'}%0ABusiness: ${d.business||'-'}%0AService: ${d.service}%0ADetails: ${d.message||'-'}`;
+  open('https://wa.me/923053687680?text='+encodeURIComponent(decodeURIComponent(t)),'_blank');
+  fmsg.className='fmsg ok';fmsg.textContent=note||'Opening WhatsApp to send your request…';
+}
 form.addEventListener('submit',async e=>{
   e.preventDefault();SFX.send();
-  const action=form.getAttribute('action');
-  const data=new FormData(form);
-  // If backend not configured yet, fall back to WhatsApp so no lead is ever lost
-  if(action.includes('YOUR_FORM_ID')){
-    const t=`Hi Nexlyr!%0A%0AName: ${data.get('name')||'-'}%0APhone: ${data.get('phone')||'-'}%0ABusiness: ${data.get('business')||'-'}%0AService: ${data.get('service')}%0ADetails: ${data.get('message')||'-'}`;
-    open('https://wa.me/923053687680?text='+encodeURIComponent(decodeURIComponent(t)),'_blank');
-    fmsg.className='fmsg ok';fmsg.textContent='Opening WhatsApp to send your request…';
-    form.reset();return;
-  }
+  const fd=new FormData(form);
+  const d={name:fd.get('name'),phone:fd.get('phone'),business:fd.get('business'),service:fd.get('service'),message:fd.get('message')};
+  if(!nxSB){ waFallback(d); form.reset(); return; }
+  fmsg.className='fmsg ok';fmsg.textContent='Sending…';
   try{
-    const r=await fetch(action,{method:'POST',body:data,headers:{'Accept':'application/json'}});
-    if(r.ok){fmsg.className='fmsg ok';fmsg.textContent='✅ Thanks! Your request was sent — we’ll reply shortly.';form.reset();}
-    else{throw new Error('bad');}
+    const {error}=await nxSB.from('leads').insert([d]);
+    if(error) throw error;
+    fmsg.className='fmsg ok';fmsg.textContent='✅ Thanks! Your request was received — we’ll reply shortly on WhatsApp.';
+    form.reset();
   }catch(err){
-    fmsg.className='fmsg err';fmsg.textContent='Something went wrong. Please WhatsApp us at +92 305 3687680.';
+    // DB failed → don't lose the lead, send to WhatsApp instead
+    waFallback(d,'Saved to WhatsApp instead — we’ll get right back to you.');
+    form.reset();
   }
 });
 
@@ -1037,7 +1049,7 @@ const KB=[
  {k:['time','delivery','fast','how long','deadline','urgent','kab','when'],
   a:"We move fast \u26A1\n\n\u2022 Websites \u2014 from 3 days\n\u2022 Reels / Shorts \u2014 24\u201348 hours\n\u2022 Thumbnails \u2014 same day possible\n\u2022 Full campaigns \u2014 planned to your launch date\n\nUrgent deadline? Tell us on WhatsApp and we'll prioritize."},
  {k:['contact','whatsapp','number','call','email','reach','talk','human','quote','phone','timing','hours','open'],
-  a:"Let's talk \uD83D\uDCAC\n\n\u2022 WhatsApp: +92 305 3687680 \u2192 https://wa.me/923053687680\n\u2022 Email: mhenterprises10609@gmail.com\n\u2022 Instagram: @mh.enterprises10\n\nOpen daily 11:00 AM \u2013 2:00 AM. Free consultation, always."},
+  a:"Let's talk \uD83D\uDCAC\n\n\u2022 WhatsApp: +92 305 3687680 \u2192 https://wa.me/923053687680\n\u2022 Email: nexlyr.solutions@gmail.com\n\u2022 Instagram: @mh.enterprises10\n\nOpen daily 12:00 PM \u2013 12:00 AM. Free consultation, always."},
  {k:['where','location','karachi','office','based','city'],
   a:"Based in Karachi, Pakistan \uD83C\uDDF5\uD83C\uDDF0 \u2014 serving clients worldwide \uD83C\uDF0D\n\nEverything runs over WhatsApp: briefing, previews, revisions and delivery. No office visit needed."},
  {k:['revision','change','edit again','fix','refund','guarantee','satisfy'],
@@ -1047,7 +1059,7 @@ const KB=[
  {k:['maintenance','update','support','retainer','monthly'],
   a:"Ongoing support \uD83D\uDEE0\uFE0F\n\nAfter launch we offer a monthly maintenance retainer \u2014 content updates, fixes, backups and small feature additions. Ask us for a rate based on your site size."},
  {k:['why','choose','best','different','trust','portfolio','work','experience'],
-  a:"Why Nexlyr? \uD83D\uDC99\n\n\u2022 One team for everything \u2014 no juggling 5 freelancers\n\u2022 40+ projects delivered\n\u2022 Fixed prices & fast delivery (from 3 days)\n\u2022 Support daily 11 AM\u20132 AM on WhatsApp\n\u2022 We build, edit, post AND manage \u2014 start to finish"},
+  a:"Why Nexlyr? \uD83D\uDC99\n\n\u2022 One team for everything \u2014 no juggling 5 freelancers\n\u2022 40+ projects delivered\n\u2022 Fixed prices & fast delivery (from 3 days)\n\u2022 Support daily 12 PM\u201312 AM on WhatsApp\n\u2022 We build, edit, post AND manage \u2014 start to finish"},
  {k:['name','nexlyr','mean','brand','who are you'],
   a:"Nexlyr = \"next layer\" \uD83E\uDDE9\n\nEvery brand has layers \u2014 website, content, ads, community. We build the next one, whichever it is for you.\n\nTagline: The Next Layer of Digital."},
  {k:['thank','thanks','shukria','great','nice','love','awesome'],
