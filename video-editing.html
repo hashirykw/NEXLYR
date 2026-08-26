@@ -32,9 +32,10 @@
 <meta name="geo.position" content="24.8607;67.0011"/>
 <meta name="ICBM" content="24.8607, 67.0011"/>
 <meta name="view-transition" content="same-origin"/>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23070B10'/><g fill='none' stroke='%2318C8F0' stroke-width='1.1'><circle cx='16' cy='16' r='5.5' fill='%2318C8F0' stroke='none'/><circle cx='16' cy='16' r='8.6'/><circle cx='16' cy='16' r='11.4' stroke-dasharray='1.5 2'/></g></svg>"/>
-<link rel="icon" href="/favicon.ico" sizes="any"/>
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png"/>
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png"/>
+<link rel="icon" type="image/png" sizes="128x128" href="/assets/icon-128.png"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -42,7 +43,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/lenis@1.3.25/dist/lenis.min.js" defer></script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://nexlyr.solutions/#org",
+{"@context":"https://schema.org","@type":"ProfessionalService","geo":{"@type":"GeoCoordinates","latitude":24.8607,"longitude":67.0011},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"10:00","closes":"19:00"}],"priceRange":"$$","currenciesAccepted":"PKR","knowsLanguage":["en","ur"],"logo":{"@type":"ImageObject","url":"https://nexlyr.solutions/assets/logo-full.png","width":1024,"height":1024},"image":"https://nexlyr.solutions/assets/og-home.jpg","@id":"https://nexlyr.solutions/#org",
 "name":"Nexlyr Solutions","alternateName":"Nexlyr","slogan":"The Next Layer of Digital",
 "url":"https://nexlyr.solutions/",
 "description":"Karachi digital agency building custom websites, web apps, AI chatbots, AI calling agents, video editing, branding and paid ads.",
@@ -1164,6 +1165,51 @@ select.inp option{background:#0F141C;color:var(--text)}
   .grid.g2>*:last-child:nth-child(2n+1){grid-column:2 / span 2}
 }
 
+/* ══════════════ RAISED CARD — 50% transparent panel ══════════════ */
+.card.popping{
+  background:linear-gradient(155deg,
+      rgba(26,32,46,.5) 0%, rgba(13,17,26,.5) 55%, rgba(9,12,19,.5) 100%)!important;
+  backdrop-filter:blur(26px) saturate(1.25);
+  -webkit-backdrop-filter:blur(26px) saturate(1.25);
+}
+.popveil{background:rgba(4,5,9,.62)}
+.card.popping p{-webkit-line-clamp:unset!important;display:block!important;
+  max-height:none!important;overflow:visible!important}
+.card.popping .thumb{height:clamp(150px,26vw,230px)!important}
+.card.popping .featin{grid-template-columns:1fr!important;gap:20px!important}
+.card.popping .ticks{columns:2;column-gap:20px}
+@media(max-width:620px){.card.popping .ticks{columns:1}}
+.card.popping .pophint{position:static;left:auto;right:auto;bottom:auto;
+  display:block;margin:15px 0 1px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+
+/* ══════════════ BLUR BUDGET ══════════════
+   The page was compositing 117 backdrop-filter layers. The 31 cards alone
+   blurred ~4.8 million px² of backdrop every frame — and they sit on a flat
+   dark gradient, so almost none of that blur is visible.
+
+   backdrop-filter is kept only where something genuinely overlays moving
+   content: the nav, the drawer, modals, the select menu, the chat window,
+   the veil and the raised card. Everything else gets a slightly more opaque
+   pane instead, which is visually near-identical over this background and
+   costs nothing to composite. */
+.card,.glass.card{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background:linear-gradient(158deg,
+      rgba(30,36,50,.72) 0%, rgba(17,21,32,.74) 55%, rgba(12,15,23,.76) 100%);
+}
+/* small chrome: a blur under a 100px pill is invisible and still costs a layer */
+.eyebrow,.iconbtn,.btn.p,.btn.g,.btn.wa,.seg,.inp,.selbtn,.acc,.rk{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.eyebrow,.seg,.acc,.rk{background:rgba(255,255,255,.045)}
+.iconbtn{background:rgba(255,255,255,.07)}
+.inp,.selbtn{background:rgba(10,13,20,.62)}
+/* the raised card keeps its blur — it is the one thing sitting over the page */
+.card.popping{
+  backdrop-filter:blur(26px) saturate(1.25)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(1.25)!important;
+}
+
 </style>
 </head>
 <body>
@@ -2174,7 +2220,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
    Press a project and it leaves the grid toward the viewer. A placeholder
    holds its slot so nothing reflows. Any pixel on the page sends it back. */
 (function(){
-  const grid=document.getElementById('workgrid'); if(!grid)return;
+  const grid=document.getElementById('workgrid');
   const veil=document.createElement('div'); veil.className='popveil';
   document.body.appendChild(veil);
   let live=null, ph=null, prev='', t0=0, sy=0;
@@ -2196,7 +2242,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     /* FLIP: place it where it should end up, then invert to where it was,
        then let the transition play the difference. */
     const vw=innerWidth, vh=innerHeight, pad=vw<620?16:40;
-    const W=Math.min(vw-pad*2, 560);
+    /* the two-column feature cards need more room than a plain card, or the
+       headline wraps mid-word and the tick list squeezes into slivers */
+    const wide=card.classList.contains('feat')||card.classList.contains('seoband');
+    const W=Math.min(vw-pad*2, wide?680:560);
     const L=Math.round((vw-W)/2);
     card.style.position='fixed';
     card.style.left=L+'px';
@@ -2249,14 +2298,30 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     setTimeout(()=>{if(!live&&card.classList.contains('popping'))done()},900);
   }
 
-  grid.querySelectorAll('[data-proj]').forEach(card=>{
+  /* Every card on the page raises, not just the projects. Cards that are
+     links keep their destination: the first press raises them so the whole
+     description can be read, the second press follows the href — the same
+     two-step the project cards already used for their live previews. */
+  document.querySelectorAll('.card').forEach(card=>{
+    if(card.dataset.nopop!==undefined) return;
+    const proj=card.dataset.proj;
+    const href=card.tagName==='A'?card.getAttribute('href'):null;
+    const ext=href&&(card.target==='_blank'||/^https?:/.test(href));
+
     const hint=document.createElement('span');
-    hint.className='pophint'; hint.textContent='Tap anywhere to close  ·  open for the live preview';
+    hint.className='pophint';
+    hint.textContent = proj ? 'Tap anywhere to close  ·  press again for the live preview'
+                    : href ? 'Tap anywhere to close  ·  press again to open this page'
+                           : 'Tap anywhere to close';
     card.appendChild(hint);
+
     card.addEventListener('click',e=>{
-      if(live===card){                 // second press on the raised card
-        e.stopPropagation(); e.stopImmediatePropagation(); back();
-        setTimeout(()=>openProject(card.dataset.proj),340);
+      if(live===card){                              // second press, raised
+        e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault();
+        back();
+        if(proj) setTimeout(()=>openProject(proj),340);
+        else if(ext) window.open(href,'_blank','noopener');
+        else if(href) setTimeout(()=>{location.href=href},340);
         return;
       }
       e.stopPropagation(); e.stopImmediatePropagation(); e.preventDefault();
