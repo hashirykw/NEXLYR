@@ -1,0 +1,77 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate sitemap and manifest are well formed
+        run: |
+          python3 -c "import xml.dom.minidom as m; m.parse('sitemap.xml'); print('sitemap ok')"
+          python3 -c "import json; json.load(open('site.webmanifest')); print('manifest ok')"
+
+      - name: Validate every JSON-LD block parses
+        run: |
+          python3 - <<'PY'
+          import re, json, glob, sys
+          bad = 0
+          for f in sorted(glob.glob('*.html')):
+              blocks = re.findall(
+                  r'<script type="application/ld\+json">(.*?)</script>',
+                  open(f, encoding='utf-8').read(), re.S)
+              for i, b in enumerate(blocks):
+                  try:
+                      json.loads(b)
+                  except Exception as e:
+                      bad += 1
+                      print(f'{f} block {i}: {e}')
+              print(f'{f}: {len(blocks)} JSON-LD blocks ok')
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Every internal link must resolve to a file that exists
+        run: |
+          python3 - <<'PY'
+          import re, glob, os, sys
+          missing = []
+          for f in sorted(glob.glob('*.html')):
+              html = open(f, encoding='utf-8').read()
+              for href in re.findall(r'(?:href|src)="([^"]+)"', html):
+                  if href.startswith(('http', 'mailto:', 'tel:', 'data:', '#', '//')):
+                      continue
+                  # skip hrefs built inside JS template strings / concatenation
+                  if '${' in href or "'+" in href or '"+' in href:
+                      continue
+                  path = href.split('#')[0].split('?')[0].lstrip('/')
+                  if path and not os.path.exists(path):
+                      missing.append(f'{f} -> {href}')
+          for m in missing:
+              print('MISSING', m)
+          print(f'{len(missing)} broken internal links')
+          sys.exit(1 if missing else 0)
+          PY
+
+      - name: Each page needs exactly one h1, a title and an og:image
+        run: |
+          python3 - <<'PY'
+          import re, glob, sys
+          bad = 0
+          for f in sorted(glob.glob('*.html')):
+              if f == '404.html':
+                  continue
+              h = open(f, encoding='utf-8').read()
+              n = len(re.findall(r'<h1[\s>]', h))
+              t = bool(re.search(r'<title>.+?</title>', h, re.S))
+              og = 'property="og:image"' in h
+              ok = n == 1 and t and og
+              print(f'{f}: h1={n} title={t} og:image={og} {"ok" if ok else "FAIL"}')
+              if not ok:
+                  bad += 1
+          sys.exit(1 if bad else 0)
+          PY
