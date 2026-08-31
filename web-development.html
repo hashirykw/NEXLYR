@@ -8058,7 +8058,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     var a = document.createElement('a');
     a.className = 'btn p blk';
     a.id = 'p-deep';
-    a.href = 'web-software-hosting.html';
+    a.href = 'web-development.html';
     a.innerHTML = 'The web development experience' + ARROW;
     traceIt(a);
     row.insertBefore(a, row.firstChild);
@@ -8075,7 +8075,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
           var hit = window.PROJECTS.filter(function(p){ return p.name === name.textContent; })[0];
           if(hit) slug = hit.slug;
         }
-        a.href = 'web-software-hosting.html' + (slug ? '#' + slug : '');
+        a.href = 'web-development.html' + (slug ? '#' + slug : '');
       }).observe(name, {childList:true, characterData:true, subtree:true});
     }
   }
@@ -8157,11 +8157,12 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
      a list of tests rather than an object so the anchor variants
      (#apps, #chatbots, #ads) resolve without ten separate keys. */
   var ROUTES = [
-    [/^web-development\.html#(chatbots|calling)/, 'ai.html'],
-    [/^web-development\.html/,                    'web-software-hosting.html'],
-    [/^design-and-ads\.html#ads/,                 'growth.html'],
-    [/^design-and-ads\.html/,                     'design.html'],
-    [/^video-editing\.html/,                      'video-editing.html']
+    [/^web-software-hosting\.html#work/,       'web-development.html#projects'],
+    [/^web-software-hosting\.html#industries/, 'web-development.html#industries'],
+    [/^web-software-hosting\.html/,            'web-development.html'],
+    [/^ai\.html/,                              'web-development.html#chatbots'],
+    [/^growth\.html/,                          'design-and-ads.html#ads'],
+    [/^design\.html/,                          'design-and-ads.html']
   ];
 
   function reroute(){
@@ -8200,7 +8201,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
   function featureCard(){
     var grid = document.getElementById('services');
     if(!grid) return;
-    var card = grid.querySelector('.card[href*="web-software-hosting"]');
+    var card = grid.querySelector('.card[href*="web-development"]');
     if(!card || card.classList.contains('solid')) return;
     card.classList.add('solid');
     card.classList.remove('glass');
@@ -8252,7 +8253,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
           'with the stack behind each one.' +
         '</p>' +
       '</div>' +
-      '<a class="btn p" href="web-software-hosting.html#work">' +
+      '<a class="btn p" href="web-development.html#work">' +
         'Read every project in detail' + ARROW +
       '</a>';
 
@@ -8286,7 +8287,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
      listener per card: the process steps are re-rendered by the
      existing script, and per-card handlers would be lost each time. */
   var GOTO = {
-    industries:'web-software-hosting.html#industries',
+    industries:'web-development.html#industries',
     process   :'index.html#contact'
   };
 
