@@ -1,8 +1,0 @@
-# robots.txt for nexlyr.solutions
-User-agent: *
-Allow: /
-
-# Block nothing — every page here is meant to be indexed.
-# Add Disallow lines below if you ever put up staging or client-only pages.
-
-Sitemap: https://nexlyr.solutions/sitemap.xml
