@@ -7125,8 +7125,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     if(live)return;
     const first=card.getBoundingClientRect();
 
+    mark(card);                       /* remember the exact slot to return to */
     ph=document.createElement('div'); ph.className='popph';
-    ph.style.cssText='width:'+first.width+'px;height:'+first.height+'px';
+    ph.style.cssText='width:'+first.width+'px;height:'+first.height+'px;'+
+                     'min-width:'+first.width+'px;min-height:'+first.height+'px';
     card.parentNode.insertBefore(ph,card);
 
     /* A perspective or transform on any ancestor makes IT the containing
@@ -7138,11 +7140,14 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
 
     /* FLIP: place it where it should end up, then invert to where it was,
        then let the transition play the difference. */
-    const vw=innerWidth, vh=innerHeight, pad=vw<620?16:40;
+    const vw=innerWidth, vh=innerHeight, pad=vw<620?14:40;
     /* the two-column feature cards need more room than a plain card, or the
        headline wraps mid-word and the tick list squeezes into slivers */
     const wide=card.classList.contains('feat')||card.classList.contains('seoband');
-    const W=Math.min(vw-pad*2, wide?680:560);
+    /* On a phone the card should take the width it is given. Capping it at
+       560 left a narrow column with a wide gutter, which is what made the
+       raised card look smaller than the one it came from. */
+    const W=vw<620?(vw-pad*2):Math.min(vw-pad*2, wide?680:560);
     const L=Math.round((vw-W)/2);
     card.style.position='fixed';
     card.style.left=L+'px';
@@ -7177,22 +7182,73 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
   function back(){
     if(!live)return;
     const card=live; live=null;
+    const slot=ph, restore=prev, home=homeOf(card);
+    ph=null;                                   /* nothing else may claim it */
+
     const now=card.getBoundingClientRect();
-    const target=ph?ph.getBoundingClientRect():now;
-    const k=target.width/now.width;
+    const target=slot?slot.getBoundingClientRect():now;
+    const k=now.width?target.width/now.width:1;
     card.style.transform='translate('+(target.left-now.left)+'px,'+
                           (target.top-now.top)+'px) scale('+k+')';
     veil.classList.remove('on');
     document.body.style.overflow='';
+
+    /* The card transitions transform, box-shadow AND border-color, and each
+       one fires its own transitionend — border-color lands first, at .5s,
+       and used to tear the card out of the air mid-flight. Children bubble
+       their transitions up here too. Only the card's own transform counts
+       as "landed". */
+    let settledOnce=false;
     const done=()=>{
+      if(settledOnce)return; settledOnce=true;
+      card.removeEventListener('transitionend',guard);
       card.classList.remove('popping');
-      card.setAttribute('style',prev);
-      if(ph&&ph.parentNode){ph.parentNode.insertBefore(card,ph);ph.parentNode.removeChild(ph)}
-      ph=null;
-      card.removeEventListener('transitionend',done);
+      card.removeAttribute('style');
+      if(restore)card.setAttribute('style',restore);
+      /* Preferred: the placeholder still holding the slot. Failing that, the
+         parent and next sibling recorded on the way out — without this a lost
+         placeholder stranded the card on <body> and left a dead gap in the
+         grid, which is exactly what the empty cards were. */
+      if(slot&&slot.parentNode){
+        slot.parentNode.insertBefore(card,slot);
+        slot.parentNode.removeChild(slot);
+      } else if(home.parent&&home.parent.isConnected){
+        if(home.next&&home.next.parentNode===home.parent)
+          home.parent.insertBefore(card,home.next);
+        else home.parent.appendChild(card);
+      }
+      sweep();
     };
-    card.addEventListener('transitionend',done);
-    setTimeout(()=>{if(!live&&card.classList.contains('popping'))done()},900);
+    const guard=e=>{
+      if(e.target!==card||e.propertyName!=='transform')return;
+      done();
+    };
+    card.addEventListener('transitionend',guard);
+    setTimeout(done,900);
+  }
+
+  /* Where the card lives when it is at rest. Read before it is moved. */
+  const homes=new WeakMap();
+  function mark(card){ homes.set(card,{parent:card.parentNode,next:card.nextElementSibling}); }
+  function homeOf(card){ return homes.get(card)||{parent:null,next:null}; }
+
+  /* Belt and braces: after every return, make sure the page is not left with
+     an orphan spacer or a card parked on <body>. Whatever raced, this puts
+     the section back exactly as it was. */
+  function sweep(){
+    /* With nothing raised there is no slot left to hold, so any spacer
+       still in the page is a leftover and is taking up a grid cell. */
+    if(!live) document.querySelectorAll('.popph').forEach(p=>p.remove());
+    document.querySelectorAll('body > .card').forEach(c=>{
+      if(c===live)return;
+      const h=homeOf(c);
+      c.classList.remove('popping');
+      c.removeAttribute('style');
+      if(h.parent&&h.parent.isConnected){
+        if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(c,h.next);
+        else h.parent.appendChild(c);
+      } else c.remove();
+    });
   }
 
   /* Every card on the page raises, not just the projects. Cards that are
@@ -7499,7 +7555,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     var href=card.tagName==='A'?card.getAttribute('href'):null;
     if(href){
       var tag=document.createElement('span');
-      tag.className='gotag'; tag.innerHTML='Press for details'+GO;
+      tag.className='gotag'; tag.setAttribute('aria-hidden','true');
+      tag.innerHTML='<i class="gotxt">Press for details</i>'+GO;
       card.appendChild(tag);
     } else {
       card.style.cursor='pointer'; card.setAttribute('tabindex','0');
@@ -9696,12 +9753,21 @@ html.lenis,html.lenis body{height:auto}
       (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
 
       /* anything with its own scrollbar keeps it */
-      ['#workgrid','.rack','.wzbox','.mvbox','#qv','.drawerin','.chatbody','.offerin']
+      ['.rack','.wzbox','.mvbox','#qv','.drawerin','.chatbody','.offerin']
         .forEach(function(sel){
           [].forEach.call(document.querySelectorAll(sel), function(el){
             el.setAttribute('data-lenis-prevent','');
           });
         });
+
+      /* The projects rail only scrolls sideways, so a full prevent was too
+         blunt: it handed vertical wheel back to the browser the moment the
+         pointer crossed the rail, and the page dropped out of the smooth
+         scroller mid-section. Prevent the horizontal axis only. */
+      [].forEach.call(document.querySelectorAll('#workgrid'), function(el){
+        el.removeAttribute('data-lenis-prevent');
+        el.setAttribute('data-lenis-prevent-horizontal','');
+      });
 
       /* in-page anchors go through Lenis so they ease instead of jumping */
       document.addEventListener('click', function(e){
@@ -9747,6 +9813,290 @@ html.lenis,html.lenis body{height:auto}
       grid.addEventListener(t, release, {passive:true});
     });
   }
+})();
+</script>
+
+<!-- ══════════════ LAYER 11 — badge, rail, category art ══════════════ -->
+<style id="nexlyr-layer11">
+
+/* ═══════════ 1. THE HINT STOPS SITTING ON THE HEADLINE ═══════════
+   "Press for details" was a full pill parked over the card, and on a
+   phone the card is narrow enough that the pill and the kicker line
+   claimed the same row of pixels. The label was never the useful part
+   — the arrow is. Shrink it to a quiet round badge, keep the words for
+   screen readers, and nothing can collide with the copy again. */
+.bento .card > .gotag,
+#services .bento > .card > .gotag{
+  width:29px;height:29px;padding:0!important;border-radius:999px;
+  display:grid;place-items:center;
+  font-size:0!important;letter-spacing:0!important;line-height:0;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(var(--acs),.26);
+  color:rgba(var(--acs),.9);
+  opacity:.62;transform:none!important;
+  transition:opacity .45s var(--ez),background .45s,border-color .45s;
+}
+.bento .card > .gotag .gotxt{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
+}
+.bento .card > .gotag svg,
+#services .bento > .card > .gotag svg{
+  width:12px!important;height:12px!important;display:block;
+}
+.bento a.card:hover > .gotag,
+.bento a.card:focus-visible > .gotag{
+  opacity:1;background:rgba(var(--acs),.13);border-color:rgba(var(--acs),.5);
+}
+.bento .card > .gotag,
+#services .bento > .card > .gotag{top:12px!important;right:12px!important;bottom:auto!important;left:auto!important}
+/* the featured card wears its flag on the top edge, so the badge drops
+   to the far corner — and the card grows a little floor for it to sit on
+   instead of landing on the line of copy */
+#services .bento > .card.solid > .gotag{top:auto!important;bottom:14px!important;right:14px!important}
+#services .bento > .card.solid{padding-bottom:56px!important}
+@media(max-width:620px){
+  .bento .card > .gotag,
+  #services .bento > .card > .gotag{width:26px;height:26px;top:10px!important;right:10px!important}
+  .bento .card > .gotag svg{width:11px!important;height:11px!important}
+  #services .bento > .card.solid > .gotag{top:auto!important;bottom:11px!important;right:11px!important}
+  #services .bento > .card.solid{padding-bottom:48px!important}
+}
+
+/* ═══════════ 2. THE RAIL GLIDES ═══════════════════════════════════
+   Three things were fighting each other: the browser's own scrolling,
+   the per-card rake transition re-running on every frame of that
+   scroll, and the watermark repainting behind it. */
+#workgrid{
+  scroll-behavior:smooth;
+  scroll-padding-inline:clamp(12px,4vw,28px);
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+/* while the rail is moving, the cards hold still — no transition is
+   allowed to re-time itself sixty times a second */
+#workgrid.is-railing > .card,
+#workgrid.is-railing > .card:nth-child(even){transition:none!important}
+#workgrid.is-railing > .card .wmark{opacity:.04}
+#workgrid.is-railing > .card:hover{transform:none}
+@media(prefers-reduced-motion:reduce){#workgrid{scroll-behavior:auto}}
+
+/* step controls — one card per press, eased by the browser */
+.railnav{
+  display:flex;gap:10px;align-items:center;justify-content:flex-end;
+  margin:14px auto 0;max-width:var(--wrap,1180px);
+  padding-inline:clamp(16px,5vw,40px);
+}
+.railbtn{
+  width:40px;height:40px;border-radius:999px;display:grid;place-items:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--edge);
+  color:var(--text);cursor:pointer;
+  transition:background .35s var(--ez),border-color .35s,opacity .35s,transform .35s var(--out);
+}
+.railbtn svg{width:17px;height:17px}
+.railbtn:hover{background:rgba(24,200,240,.12);border-color:rgba(24,200,240,.4)}
+.railbtn:active{transform:scale(.94)}
+.railbtn[disabled]{opacity:.28;pointer-events:none}
+.railprog{
+  flex:1;height:2px;border-radius:2px;margin-right:6px;
+  background:rgba(255,255,255,.08);overflow:hidden;
+}
+.railprog i{
+  display:block;height:100%;width:20%;border-radius:2px;
+  background:linear-gradient(90deg,var(--brand2,#18C8F0),rgba(24,200,240,.35));
+  transform-origin:left;transition:transform .3s var(--ez),width .3s var(--ez);
+}
+@media(max-width:620px){.railbtn{width:36px;height:36px}}
+
+/* ═══════════ 3. THE INDUSTRY CARDS GET A FACE ════════════════════
+   Six identical dark rectangles with a 16px icon read as a list, not a
+   set of fields. Each one now opens with its own piece of line art in
+   its own accent, so the row scans as six different things. */
+#industries .grid.g3{align-items:stretch}
+#industries .card{
+  overflow:hidden;position:relative;
+  --ia:#18C8F0;--ias:24,200,240;
+  --ipad:clamp(17px,1.9vw,23px);   /* mirrors the card's own padding */
+}
+@media(max-width:1024px){#industries .card{--ipad:16px}}
+@media(max-width:700px) {#industries .card{--ipad:13px}}
+@media(max-width:620px) {#industries .card{--ipad:11px}}
+#industries .card .indart{
+  display:block;position:relative;
+  width:calc(100% + var(--ipad) * 2);
+  margin:calc(var(--ipad) * -1) calc(var(--ipad) * -1) 14px;
+  flex:0 0 auto;aspect-ratio:16/7;
+  border-radius:18px 18px 4px 4px;overflow:hidden;
+  background:
+    radial-gradient(120% 140% at 82% 12%, rgba(var(--ias),.20), transparent 62%),
+    linear-gradient(160deg, rgba(255,255,255,.035), rgba(255,255,255,0) 58%),
+    #0A0D14;
+  border:1px solid rgba(var(--ias),.16);
+  transition:border-color .5s var(--ez),transform .6s var(--out);
+}
+#industries .card .indart svg{position:absolute;inset:0;width:100%;height:100%}
+#industries .card:hover .indart{border-color:rgba(var(--ias),.34)}
+#industries .card .ico{
+  border-color:rgba(var(--ias),.3)!important;
+  color:var(--ia)!important;
+  background:rgba(var(--ias),.09)!important;
+}
+#industries .card .cardgo{color:var(--ia)!important}
+#industries .card::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(var(--ias),0);
+  transition:box-shadow .5s var(--ez);
+}
+#industries .card:hover::after{box-shadow:inset 0 0 0 1px rgba(var(--ias),.22)}
+@media(max-width:620px){
+  #industries .card .indart{aspect-ratio:16/6;margin-bottom:11px;border-radius:11px 11px 4px 4px}
+}
+@media(prefers-reduced-motion:reduce){
+  #industries .card .indart,#industries .card::after{transition:none}
+}
+</style>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   LAYER 11 — rail controls and category artwork
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ── the rail ─────────────────────────────────────────────────── */
+  function rail(){
+    var grid = document.getElementById('workgrid');
+    if(!grid || grid._railed) return;
+    grid._railed = true;
+
+    /* Freeze the per-card transitions for the length of the gesture.
+       Without this every frame of the scroll restarts the rake's own
+       .5s transition and the row shimmers instead of gliding. */
+    var t = 0;
+    grid.addEventListener('scroll', function(){
+      grid.classList.add('is-railing');
+      clearTimeout(t);
+      t = setTimeout(function(){ grid.classList.remove('is-railing'); update(); }, 150);
+      update();
+    }, {passive:true});
+
+    var nav = document.createElement('div');
+    nav.className = 'railnav';
+    nav.innerHTML =
+      '<span class="railprog"><i></i></span>' +
+      '<button class="railbtn" type="button" data-d="-1" aria-label="Previous project">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+        'stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+      '<button class="railbtn" type="button" data-d="1" aria-label="Next project">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" ' +
+        'stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>';
+    grid.insertAdjacentElement('afterend', nav);
+
+    var bar  = nav.querySelector('.railprog i');
+    var btns = [].slice.call(nav.querySelectorAll('.railbtn'));
+
+    function step(){
+      var c = grid.querySelector(':scope > .card');
+      if(!c) return grid.clientWidth * .8;
+      var gap = parseFloat(getComputedStyle(grid).columnGap) || 18;
+      return c.getBoundingClientRect().width + gap;
+    }
+    function update(){
+      var max = grid.scrollWidth - grid.clientWidth;
+      var p   = max > 0 ? grid.scrollLeft / max : 0;
+      var seen = Math.min(1, grid.clientWidth / (grid.scrollWidth || 1));
+      bar.style.width = Math.max(12, seen * 100) + '%';
+      var travel = seen >= 1 ? 0 : (100 / Math.max(seen, .12) - 100);
+      bar.style.transform = 'translateX(' + (p * travel) + '%)';
+      btns[0].disabled = grid.scrollLeft < 6;
+      btns[1].disabled = grid.scrollLeft > max - 6;
+    }
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        grid.scrollBy({ left: step() * (+b.dataset.d), behavior: RM ? 'auto' : 'smooth' });
+      });
+    });
+    addEventListener('resize', update, {passive:true});
+    update();
+  }
+
+  /* ── category artwork ─────────────────────────────────────────────
+     Drawn rather than fetched: six inline scenes, no request, no
+     layout shift, and each one recolours itself from the card's own
+     accent so the section stays inside the palette. */
+  var ART = [
+    { key:'education', ac:'#7FA8FF', rgb:'127,168,255', d:
+      '<path d="M52 62 108 40l56 22-56 22z"/>' +
+      '<path d="M74 71v20c0 7 15 12 34 12s34-5 34-12V71"/>' +
+      '<path d="M164 62v26"/><circle cx="164" cy="92" r="3.5"/>' +
+      '<path d="M206 46h58M206 60h44M206 74h58M206 88h34" opacity=".55"/>' },
+    { key:'fitness', ac:'#5AE9BE', rgb:'90,233,190', d:
+      '<path d="M60 50v40M80 42v56M186 50v40M166 42v56"/>' +
+      '<path d="M80 70h86"/><path d="M44 60v20M202 60v20"/>' +
+      '<path d="M230 92l14-22 12 14 14-26" opacity=".6"/>' },
+    { key:'food', ac:'#FF9FC4', rgb:'255,159,196', d:
+      '<circle cx="112" cy="70" r="34"/><circle cx="112" cy="70" r="21" opacity=".5"/>' +
+      '<path d="M186 38v34a10 10 0 0020 0V38"/><path d="M196 72v30"/>' +
+      '<path d="M234 38c8 6 12 14 12 22s-4 12-12 12v30"/>' +
+      '<path d="M46 44v22M56 44v22M51 66v36" opacity=".6"/>' },
+    { key:'sport', ac:'#FFC978', rgb:'255,201,120', d:
+      '<path d="M112 30l40 14v26c0 24-17 42-40 48-23-6-40-24-40-48V44z"/>' +
+      '<path d="M96 70l11 11 22-24" opacity=".8"/>' +
+      '<path d="M182 58h84M182 58l-14 14M266 58l14 14" opacity=".55"/>' +
+      '<rect x="196" y="72" width="56" height="16" rx="4" opacity=".7"/>' },
+    { key:'clinic', ac:'#5FE1FF', rgb:'95,225,255', d:
+      '<circle cx="104" cy="52" r="17"/><path d="M74 102a30 30 0 0160 0"/>' +
+      '<path d="M156 40a15 15 0 010 26"/><path d="M162 74a26 26 0 0117 28"/>' +
+      '<path d="M226 44v40M206 64h40" opacity=".7"/>' +
+      '<circle cx="226" cy="64" r="30" opacity=".35"/>' },
+    { key:'brand', ac:'#C9A6FF', rgb:'201,166,255', d:
+      '<circle cx="112" cy="66" r="38"/><circle cx="112" cy="66" r="22" opacity=".6"/>' +
+      '<circle cx="112" cy="66" r="6" opacity=".9"/>' +
+      '<path d="M112 14v16M112 102v16M60 66h16M148 66h16" opacity=".7"/>' +
+      '<path d="M212 34l7 18 18 7-18 7-7 18-7-18-18-7 18-7z" opacity=".75"/>' +
+      '<path d="M262 66l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" opacity=".5"/>' }
+  ];
+
+  function scene(a){
+    return '<svg viewBox="0 0 320 140" fill="none" aria-hidden="true" ' +
+             'preserveAspectRatio="xMidYMid slice">' +
+             '<defs>' +
+               '<linearGradient id="g_' + a.key + '" x1="0" y1="0" x2="1" y2="1">' +
+                 '<stop offset="0" stop-color="' + a.ac + '" stop-opacity=".85"/>' +
+                 '<stop offset="1" stop-color="' + a.ac + '" stop-opacity=".25"/>' +
+               '</linearGradient>' +
+               '<pattern id="p_' + a.key + '" width="16" height="16" patternUnits="userSpaceOnUse">' +
+                 '<circle cx="1" cy="1" r="1" fill="' + a.ac + '" fill-opacity=".13"/>' +
+               '</pattern>' +
+             '</defs>' +
+             '<rect width="320" height="140" fill="url(#p_' + a.key + ')"/>' +
+             '<g transform="translate(0,4)" stroke="url(#g_' + a.key + ')" stroke-width="2.6" ' +
+                'stroke-linecap="round" stroke-linejoin="round" fill="none">' + a.d + '</g>' +
+           '</svg>';
+  }
+
+  function art(){
+    var sec = document.getElementById('industries');
+    if(!sec) return;
+    [].slice.call(sec.querySelectorAll('.grid.g3 > .card')).forEach(function(card, i){
+      if(card.querySelector('.indart')) return;
+      var a = ART[i % ART.length];
+      card.style.setProperty('--ia', a.ac);
+      card.style.setProperty('--ias', a.rgb);
+      var box = document.createElement('span');
+      box.className = 'indart';
+      box.setAttribute('aria-hidden','true');
+      box.innerHTML = scene(a);
+      card.insertBefore(box, card.firstChild);
+    });
+  }
+
+  function boot(){ rail(); art(); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+  /* the work grid is written by an earlier script, so try again once it has */
+  addEventListener('load', boot);
 })();
 </script>
 
