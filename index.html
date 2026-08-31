@@ -4245,7 +4245,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
 
     <div class="slab" data-rv style="margin-top:46px;padding:28px;--i:4">
       <div class="grid g4" style="gap:20px">
-        <div class="stat"><div class="n grad"><span data-count="10" data-suf="+"></span></div><div class="l">Live builds shipped</div></div>
+        <div class="stat"><div class="n grad"><span data-count="55" data-suf="+"></span></div><div class="l">Projects delivered</div></div>
         <div class="stat"><div class="n grad"><span data-count="9" data-suf=""></span></div><div class="l">Services under one roof</div></div>
         <div class="stat"><div class="n grad"><span data-count="100" data-suf="%"></span></div><div class="l">Hand-written code</div></div>
         <div class="stat"><div class="n grad"><span data-count="24" data-suf="h"></span></div><div class="l">Typical first reply</div></div>
@@ -4419,7 +4419,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
   <div class="wrap">
     <div class="sec-head" data-rv>
       <span class="eyebrow"><i></i>Selected work</span>
-      <h2>Ten builds. All live.<br/>All open in a new tab.</h2>
+      <h2>55+ delivered.<br/>These ones you can open.</h2>
       <p class="lede">
         Every project below is a real, deployed site you can click into right now &mdash; not a mockup and not a
         case study of something that never launched. Education platforms, gyms, restaurants and brand sites.
@@ -4920,53 +4920,28 @@ select.inp option{background:#10141D;color:#E8EDF5}
     </div>
 
     <div class="grid" style="grid-template-columns:1.35fr .95fr;gap:22px;align-items:start">
-      <form class="slab" data-nx novalidate style="padding:34px" data-rv>
-        <h3 style="margin-bottom:6px">Project brief</h3>
-        <p class="muted small" style="margin-bottom:26px">Five fields, thirty seconds. We&rsquo;ll ask the rest on WhatsApp.</p>
+      <div class="slab briefcta" data-rv>
+        <span class="eyebrow sm"><i></i>Project brief</span>
+        <h3>Tell us what you need &mdash; in three short steps.</h3>
+        <p class="muted small briefcta-lede">No long form to scroll. We ask for the basics first, then a little
+          about the business, then what you actually want built. Around thirty seconds.</p>
 
-        <div class="grid g2" style="gap:0 18px">
-          <div class="field">
-            <label for="f-name">Your name<span class="req">*</span></label>
-            <input class="inp" id="f-name" name="name" data-rule="name" maxlength="50" placeholder="M. Hashir" autocomplete="name"/>
-            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
-          </div>
-          <div class="field">
-            <label for="f-biz">Business / brand<span class="req">*</span></label>
-            <input class="inp" id="f-biz" name="biz" data-rule="biz" maxlength="70" placeholder="Nexlyr Solutions" autocomplete="organization"/>
-            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
-          </div>
-          <div class="field">
-            <label for="f-phone">WhatsApp number<span class="req">*</span></label>
-            <input class="inp" id="f-phone" name="phone" data-rule="phone" maxlength="20" inputmode="tel" placeholder="03001234567" autocomplete="tel"/>
-            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
-          </div>
-          <div class="field">
-            <label for="f-email">Email<span class="req">*</span></label>
-            <input class="inp" id="f-email" name="email" data-rule="email" maxlength="80" inputmode="email" placeholder="you@company.com" autocomplete="email"/>
-            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
-          </div>
-          <div class="field">
-            <label for="f-svc">What do you need?<span class="req">*</span></label>
-            <select class="inp" id="f-svc" name="svc" data-rule="svc"><option value="Web Development" selected>Web Development</option><option value="Web App / Portal">Web App / Portal</option><option value="AI Chatbot">AI Chatbot</option><option value="AI Calling Agent">AI Calling Agent</option><option value="Video Editing">Video Editing</option><option value="Logo & Branding">Logo &amp; Branding</option><option value="Graphic Design">Graphic Design</option><option value="Ads & Social Media">Ads &amp; Social Media</option><option value="Not sure yet">Not sure yet</option></select>
-            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
-          </div>
+        <ol class="wzpre">
+          <li><span class="n">1</span><span class="t"><b>You</b>Name and WhatsApp number</span></li>
+          <li><span class="n">2</span><span class="t"><b>Your business</b>Brand name and email</span></li>
+          <li><span class="n">3</span><span class="t"><b>The project</b>What you need and any detail</span></li>
+        </ol>
+
+        <div class="briefcta-act">
+          <button class="btn p lg blk line" type="button" data-wz-open><i class="ring" aria-hidden="true"></i>Start the brief<svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
+          <a class="btn wa blk" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6a8.4 8.4 0 1115.5-4.3z"/><path d="M8.6 9.2c0 4 3.1 6.3 5.6 6.6.9.1 1.6-.6 1.7-1.3l-1.9-1-.9.9c-1.2-.5-2.1-1.4-2.6-2.6l.9-.9-1-1.9c-.8.1-1.8.6-1.8 1.6z"/></svg>Or just message us</a>
         </div>
 
-        <div class="field">
-          <label for="f-msg">Anything else? <span class="opt">optional</span></label>
-          <textarea class="inp short" id="f-msg" name="msg" maxlength="600" rows="3"
-            placeholder="One line about what you need is enough &mdash; we&rsquo;ll ask the rest on WhatsApp."></textarea>
-        </div>
-
-        <input class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" name="company_website"/>
-
-        <button class="btn p lg blk line" type="submit" style="margin-top:8px"><i class="ring" aria-hidden="true"></i>Send project brief<svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
-        <div class="fmsg"></div>
         <p class="formnote">
           Submitting opens WhatsApp with your brief already written out, so nothing gets lost in an inbox.
-          Prefer email? Everything above works just as well sent to nexlyr.solutions@gmail.com.
+          Prefer email? Everything works just as well sent to nexlyr.solutions@gmail.com.
         </p>
-      </form>
+      </div>
 
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="glass card" data-rv style="--i:1">
@@ -5014,6 +4989,76 @@ select.inp option{background:#10141D;color:#E8EDF5}
     </div>
   </div>
 </section>
+
+<!-- ══════════════ PROJECT BRIEF — STEPPED MODAL ══════════════ -->
+<div class="wzv" id="wzv" role="dialog" aria-modal="true" aria-labelledby="wz-title" aria-hidden="true">
+  <div class="wzbox" role="document">
+    <button class="wzx" id="wz-close" type="button" aria-label="Close the brief"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+
+    <div class="wzhead">
+      <div class="wzticks" aria-hidden="true">
+        <span class="on"></span><span></span><span></span>
+      </div>
+      <span class="wzcount" id="wz-count">Step 1 of 3</span>
+      <h3 id="wz-title">Who are we talking to?</h3>
+      <p class="wzsub" id="wz-sub">Just your name and the number you use on WhatsApp.</p>
+    </div>
+
+    <form class="wzform" data-nx novalidate>
+      <div class="wzscroll">
+        <div class="wzstep is-on" data-step="1">
+          <div class="field">
+            <label for="f-name">Your name<span class="req">*</span></label>
+            <input class="inp" id="f-name" name="name" data-rule="name" maxlength="50" placeholder="M. Hashir" autocomplete="name"/>
+            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
+          </div>
+          <div class="field">
+            <label for="f-phone">WhatsApp number<span class="req">*</span></label>
+            <input class="inp" id="f-phone" name="phone" data-rule="phone" maxlength="20" inputmode="tel" placeholder="03001234567" autocomplete="tel"/>
+            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
+          </div>
+        </div>
+
+        <div class="wzstep" data-step="2">
+          <div class="field">
+            <label for="f-biz">Business / brand<span class="req">*</span></label>
+            <input class="inp" id="f-biz" name="biz" data-rule="biz" maxlength="70" placeholder="Nexlyr Solutions" autocomplete="organization"/>
+            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
+          </div>
+          <div class="field">
+            <label for="f-email">Email<span class="req">*</span></label>
+            <input class="inp" id="f-email" name="email" data-rule="email" maxlength="80" inputmode="email" placeholder="you@company.com" autocomplete="email"/>
+            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
+          </div>
+        </div>
+
+        <div class="wzstep" data-step="3">
+          <div class="field">
+            <label for="f-svc">What do you need?<span class="req">*</span></label>
+            <select class="inp" id="f-svc" name="svc" data-rule="svc"><option value="Web Development" selected>Web Development</option><option value="Web App / Portal">Web App / Portal</option><option value="AI Chatbot">AI Chatbot</option><option value="AI Calling Agent">AI Calling Agent</option><option value="Video Editing">Video Editing</option><option value="Logo &amp; Branding">Logo &amp; Branding</option><option value="Meta / Google Ads">Meta / Google Ads</option><option value="Social Media Management">Social Media Management</option><option value="Something else">Something else</option></select>
+            <span class="err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg><span></span></span>
+          </div>
+          <div class="field">
+            <label for="f-msg">Anything else? <span class="opt">optional</span></label>
+            <textarea class="inp short" id="f-msg" name="msg" maxlength="600" rows="3"
+              placeholder="One line about what you need is enough &mdash; we&rsquo;ll ask the rest on WhatsApp."></textarea>
+          </div>
+          <div class="wzrecap" id="wz-recap" aria-live="polite"></div>
+        </div>
+
+        <input class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" name="company_website"/>
+        <div class="fmsg"></div>
+      </div>
+
+      <div class="wzfoot">
+        <button class="btn g wzbtn-back" id="wz-back" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>Back</button>
+        <button class="btn p blk line wzbtn-next" id="wz-next" type="button"><i class="ring" aria-hidden="true"></i>Continue<svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
+        <button class="btn p blk line wzbtn-send" id="wz-send" type="submit" hidden><i class="ring" aria-hidden="true"></i>Send project brief<svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="pmodal" id="pmodal" role="dialog" aria-modal="true" aria-labelledby="p-name">
   <div class="pmodalin">
     <div class="phead">
@@ -6491,7 +6536,7 @@ const KB=[
  {k:['call','calling','voice','phone agent','cold call','appointment'],
   a:`AI calling agents handle inbound and outbound calls in a natural voice — qualifying leads, booking slots, chasing no-shows and logging everything. Ask about it on ${WAL}.`},
  {k:['work','portfolio','project','example','sample','built','made','case'],
-  a:`Ten live builds so far — education platforms, restaurants, gyms and brand sites. Scroll to the <a href="index.html#work">Work</a> section to open any of them live.`},
+  a:`55+ projects delivered so far — education platforms, restaurants, gyms and brand sites. Scroll to the <a href="index.html#work">Work</a> section to open a selection of them live.`},
  {k:['team','who','about','founder','hashir','raza','raahym','member'],
   a:`Three of us: <b>M. Hashir</b> (founder — web development, brand and logo design, ads, podcast-level editing), <b>Syed M. Raza</b> (video editor and graphic designer) and <b>Raahym Nouman</b> (leads operator).<br><br>Full profiles in the <a href="index.html#about">About</a> section.`},
  {k:['contact','whatsapp','number','email','reach','talk','connect','hire'],
@@ -7884,15 +7929,15 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     tail.className = 'glass card worktail';
     tail.innerHTML =
       '<div>' +
-        '<p class="wt-n">' + total + ' live builds, not three</p>' +
+        '<p class="wt-n">55+ delivered, ' + total + ' of them open here</p>' +
         '<p class="muted small" style="line-height:1.7">' +
-          'These are the three we point at first. Every other build &mdash; education ' +
+          'These are the ones we point at first. Every other build &mdash; education ' +
           'platforms, gyms, restaurants and brand sites &mdash; is on the web page, ' +
           'with the stack behind each one.' +
         '</p>' +
       '</div>' +
       '<a class="btn p" href="web-software-hosting.html#work">' +
-        'See all ' + total + ' builds' + ARROW +
+        'See the full catalogue' + ARROW +
       '</a>';
 
     grid.insertAdjacentElement('afterend', tail);
@@ -7909,7 +7954,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
 
     /* The heading promised ten. */
     var head = document.querySelector('#work .sec-head h2');
-    if(head) head.innerHTML = 'Three we point at first.<br/>All of them live.';
+    if(head) head.innerHTML = '55+ delivered.<br/>These ones you can open.';
     var lede = document.querySelector('#work .sec-head .lede');
     if(lede) lede.innerHTML =
       'Every project below is a real, deployed site you can click into right now &mdash; ' +
@@ -8582,5 +8627,629 @@ window.OFFERS = [
 .iconbtn,.seg button,.rk,button.chip{min-height:36px}
 .seg button{min-height:38px;padding-inline:14px}
 </style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     NEXLYR // LAYER 6 — density, alignment, stepped brief
+     Everything below is a patch layer: it is the last stylesheet in
+     the document, so it wins on specificity ties and nothing above
+     it had to be unpicked.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+
+/* ═══════════ 1. CARD DENSITY ═══════════════════════════════════
+   The complaint was structural, not cosmetic: on a phone every card
+   was tall enough that only one fitted the viewport, so the page read
+   as a slideshow you scrubbed rather than a grid you scanned. Each
+   family below is rebuilt to a fixed rhythm — icon, title, two to
+   four clamped lines — so at least two, usually three, land on screen
+   together. Copy is clamped rather than deleted: the full text is
+   still in the DOM for search engines and for the wider layouts. */
+
+/* ── 1a. Industries — two up on a phone ───────────────────────── */
+@media(max-width:700px){
+  #industries .grid.g3{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  #industries .grid.g3 > *{grid-column:auto!important}
+  #industries .card{
+    padding:14px 13px 16px!important;
+    border-radius:16px;
+  }
+  #industries .card .ico{
+    width:34px;height:34px;border-radius:10px;margin-bottom:0;
+  }
+  #industries .card .ico svg{width:16px;height:16px}
+  #industries .card h4{
+    font-size:.855rem;line-height:1.3;margin-top:11px;letter-spacing:-.01em;
+  }
+  #industries .card p{
+    font-size:.715rem!important;line-height:1.52!important;margin-top:7px!important;
+    display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+    /* the clamp shortens the paragraph but the flex child was still
+       growing to the old height, which parked the link 60px below the
+       last line of copy */
+    flex:0 0 auto!important;
+  }
+  #industries .card{display:flex;flex-direction:column}
+  /* the double-press hint is invisible but was still reserving a line
+     between the copy and the link */
+  #industries .card .pophint{display:none!important}
+  #industries .card .cardgo{padding-top:11px!important;font-size:.78rem}
+  #industries .card .cardgo svg{width:14px;height:14px}
+}
+@media(max-width:380px){
+  #industries .grid.g3{gap:8px!important}
+  #industries .card{padding:12px 11px 13px!important}
+  #industries .card h4{font-size:.79rem}
+  #industries .card p{-webkit-line-clamp:3;font-size:.69rem!important}
+}
+
+/* ── 1b. Process — the number, icon and title share one line ────
+   Stacking them cost ~90px of vertical per card for no information.
+   Laid out as a header row the card halves in height and the five
+   steps read as a sequence instead of five separate pages. */
+@media(max-width:760px){
+  #process .grid.g3{gap:10px!important}
+  /* two columns: the marker rail on the left, everything readable on
+     the right. The number and icon stop owning a whole line of their own. */
+  #process .stepcard{
+    display:grid!important;
+    /* the rail is a fixed track on purpose: an `auto` track gets sized by
+       whichever child has not been placed (the pop hint), which blew the
+       left column out to almost the full card */
+    grid-template-columns:38px minmax(0,1fr);
+    column-gap:13px;row-gap:0;align-items:start;
+    padding:15px 15px 16px!important;border-radius:17px;
+  }
+  #process .stepcard > *{grid-column:2}
+  /* invisible hint text was reserving a whole empty row under every step */
+  #process .stepcard .pophint{display:none!important}
+  #process .stepcard > div:first-child{
+    grid-column:1;grid-row:1 / span 3;
+    flex-direction:column!important;align-items:center!important;
+    gap:9px!important;margin:0!important;
+  }
+  #process .stepcard > div:first-child .mono{font-size:1.05rem!important}
+  #process .stepcard > div:first-child .ico{
+    width:32px!important;height:32px!important;border-radius:9px!important;
+  }
+  #process .stepcard > div:first-child .ico svg{width:15px;height:15px}
+  #process .stepcard h4{
+    grid-column:2;grid-row:1;
+    font-size:.93rem;line-height:1.3;margin:0 0 7px;
+  }
+  #process .stepcard p{
+    grid-column:2;grid-row:2;
+    font-size:.775rem!important;line-height:1.58!important;margin:0!important;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  #process .steplink{
+    grid-column:2;grid-row:3;
+    margin-top:11px;font-size:.775rem;opacity:1;
+  }
+  #process .steplink svg{width:15px;height:15px}
+}
+
+/* ── 1c. Team — the portrait goes sideways ─────────────────────
+   A 4:5 portrait at full column width is 430px of photograph before
+   a single word of the profile. Below 720px the card becomes a row:
+   a square crop on the left, the name, role and one line of copy on
+   the right. Three people, one screen. */
+/* 1000px, not 720: at tablet widths the founder card spans two columns,
+   so it was a full-width portrait — the tallest single card on the page */
+@media(max-width:1000px){
+  .teamgrid{grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
+  .teamgrid > .founder{grid-column:span 1!important}
+  .teamgrid > .pcard{
+    flex-direction:row!important;align-items:stretch;
+    border-radius:17px;height:auto!important;
+  }
+  .teamgrid .pshot{
+    aspect-ratio:auto!important;
+    width:clamp(104px,30vw,132px);flex:0 0 auto;align-self:stretch;
+  }
+  .teamgrid .founder .pshot{aspect-ratio:auto!important}
+  .teamgrid .pshot img{object-position:center 18%}
+  /* the caption block came out of the photo — at this width it sat on
+     top of the face and was unreadable against a busy crop */
+  .teamgrid .pshot::after{
+    background:linear-gradient(180deg,rgba(6,7,11,0) 40%,rgba(6,7,11,.5));
+  }
+  .teamgrid .pshot .cap{display:none}
+  .teamgrid .pshot .badge{
+    top:auto;bottom:8px;left:8px;right:8px;
+    font-size:.52rem!important;padding:.26rem .5rem!important;
+    justify-content:center;
+  }
+  .teamgrid .pmeta{
+    padding:13px 14px 14px!important;justify-content:center;min-width:0;
+    display:flex!important;flex-direction:column!important;
+  }
+  /* pseudo-elements can only sit first or last in the box, so flex order
+     is what puts the name and role above the bio rather than under the link */
+  .teamgrid .pmeta::before{order:-2}
+  .teamgrid .pmeta::after{order:-1}
+  .teamgrid .pmeta p{order:0}
+  .teamgrid .pmore{order:1}
+  /* the role now reads as text, so the badge on the photo is a repeat */
+  .teamgrid .pshot .badge{display:none!important}
+  /* name and role, restored as text now that the photo caption is gone */
+  .teamgrid .pmeta::before{
+    content:attr(data-name);display:block;
+    font-family:var(--dsp);font-weight:700;font-size:1.02rem;letter-spacing:-.02em;
+    color:var(--text);line-height:1.2;
+  }
+  .teamgrid .pmeta::after{
+    content:attr(data-role);display:block;
+    font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--brand2);margin:5px 0 9px;line-height:1.35;
+  }
+  .teamgrid .pmeta p{
+    font-size:.755rem!important;line-height:1.55;flex:0 1 auto;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .teamgrid .pmore{margin-top:10px;font-size:.775rem}
+  .teamgrid .pmore svg{width:15px;height:15px}
+  .teamnote{font-size:.75rem;line-height:1.6}
+}
+
+/* ── 1d. Contact side panels ───────────────────────────────────── */
+@media(max-width:760px){
+  #contact .grid[style*="1.35fr"]{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+  #contact .crow{padding:9px 0!important}
+  #contact .crow .ci{width:32px!important;height:32px!important}
+  #contact .crow .ci svg{width:15px;height:15px}
+  #contact .crow .k{font-size:9px!important}
+  #contact .crow .v{font-size:.8rem!important}
+  #contact .ticks li{font-size:.78rem!important;line-height:1.5}
+}
+
+
+/* ═══════════ 2. SELECTED WORK — the interior, unstacked ════════
+   Two things were colliding. The open-in-new-tab button sat in the
+   same row as a title that wraps to two lines, so on a narrow card
+   the circle rode over the second line; and the thumbnail's bottom
+   margin was small enough that a two-line title touched its frame.
+   Fixing it is a matter of giving the row a real baseline and the
+   copy a real gutter, not of shrinking the text. */
+
+#workgrid > .card{
+  padding:clamp(13px,1.5vw,17px)!important;
+}
+#workgrid > .card > .thumb{
+  margin-bottom:clamp(14px,1.6vw,18px)!important;
+}
+/* header row: the title owns the space, the button never overlaps it */
+#workgrid > .card > div:first-of-type{
+  display:flex!important;align-items:flex-start!important;
+  gap:12px!important;margin-bottom:11px!important;
+}
+#workgrid > .card > div:first-of-type > span:first-child{
+  flex:1 1 auto!important;min-width:0!important;
+}
+#workgrid > .card h3{
+  margin:0;overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+#workgrid > .card .urlline{
+  display:block;margin-top:6px!important;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+}
+#workgrid > .card .iconbtn{
+  width:32px!important;height:32px!important;flex:0 0 32px!important;
+  margin-top:1px;position:relative;z-index:3;
+}
+/* the kicker and the body copy get a fixed rhythm so every card in the
+   rail has its chip row on the same line */
+#workgrid > .card p.mono{margin:0 0 9px!important}
+#workgrid > .card p.muted{
+  margin:0!important;
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;
+}
+#workgrid > .card .row{margin-top:auto!important;padding-top:15px!important}
+/* ── the actual cause of the collision ──────────────────────────
+   A blanket `#workgrid>.card > *{position:relative}` was written to
+   lift card content above the corner watermark. It also caught the
+   three decorations that were meant to be out of flow: the outline
+   number, the double-press hint and the emblem. Relative-positioned,
+   they went back into the column — the number pushed the thumbnail
+   down and sat against the title, and the hint plus the emblem added
+   ~165px of invisible padding under the chip row. Pinning them back
+   fixes the overlap and the dead space in one move. */
+#workgrid > .card .pnum{
+  position:absolute!important;top:9px;right:12px;z-index:0!important;
+}
+#workgrid > .card .pophint{
+  position:absolute!important;left:0;right:0;bottom:-34px;z-index:5!important;
+}
+#workgrid > .card .wmark{
+  position:absolute!important;right:-14px;bottom:-14px;z-index:0!important;
+}
+
+/* ── the mobile rail: narrower cards, and all of them ───────────
+   The rail was capped at three projects and each card was 80vw, so
+   one filled the screen and the other two were invisible until you
+   dragged. Narrower cards put a second one in view, which is what
+   tells you the rail moves at all. */
+@media(max-width:900px){
+  #workgrid > .card:nth-child(n+4){display:flex!important}
+  #workgrid > .card{
+    width:min(268px,72vw)!important;max-width:min(268px,72vw)!important;
+    scroll-snap-align:center;
+  }
+  #workgrid{
+    gap:12px!important;
+    padding:4px 14px 20px!important;
+    scroll-snap-type:x proximity!important;
+  }
+  #workgrid > .card .thumb{height:clamp(104px,26vw,124px)!important;margin-top:6px!important}
+  #workgrid > .card h3{font-size:.95rem!important;line-height:1.28!important}
+  #workgrid > .card p.muted{font-size:.775rem!important;line-height:1.6!important;-webkit-line-clamp:4}
+  #workgrid > .card .chip{font-size:.545rem;padding:.3rem .58rem}
+  #workgrid > .card .pnum{font-size:1.6rem!important}
+  .wmark{width:92px!important;height:92px!important}
+}
+@media(max-width:420px){
+  #workgrid > .card{width:min(246px,76vw)!important;max-width:min(246px,76vw)!important}
+}
+
+
+/* ═══════════ 3. SERVICE POPUP — footer alignment ═══════════════
+   The two actions live inside a .row, so the existing rule that made
+   the footer a column never reached them: they stayed side by side in
+   a 300px dialog and the label ran past its own pill. They stack now,
+   full width, and the pills are matched height so the pair reads as
+   one control group. */
+.qvbox{width:min(560px,100%)}
+.qvfoot .row{align-items:stretch;gap:10px}
+.qvfoot .btn{
+  min-width:0!important;flex:1 1 0;
+  justify-content:center;text-align:center;
+  min-height:48px;padding-inline:16px;
+  white-space:nowrap;
+}
+.qvfoot .btn .arw,.qvfoot .btn svg{flex:0 0 auto}
+.qvnote{margin-top:12px!important}
+
+@media(max-width:560px){
+  .qvfoot .row{flex-direction:column!important;gap:9px}
+  .qvfoot .btn{width:100%;flex:0 0 auto;font-size:.87rem}
+  .qvbox{padding-inline:16px!important}
+  .qvbox h3{padding-right:46px}
+  .qvkick{padding-right:46px}
+  .qvbox .qvclose{top:12px;right:12px}
+}
+
+
+/* ═══════════ 4. THE PROJECT BRIEF ═════════════════════════════
+   The old form asked for five fields and a paragraph in one column.
+   On a phone that is four screens of scrolling before anything is
+   submittable, and the abandon happens somewhere in the middle. It
+   is now a launcher on the page and a three-step dialog over it, so
+   the visitor only ever sees two fields at a time and always knows
+   how many are left. */
+
+/* ── 4a. the launcher panel ─────────────────────────────────── */
+.briefcta{
+  padding:clamp(22px,3.4vw,36px)!important;
+  display:flex;flex-direction:column;
+}
+.eyebrow.sm{font-size:9px;padding:.34rem .7rem}
+.briefcta h3{
+  font-family:var(--serif);font-weight:600;letter-spacing:-.02em;
+  font-size:clamp(1.25rem,2.6vw,1.62rem);line-height:1.24;
+  margin:15px 0 10px;
+}
+.briefcta-lede{line-height:1.68;margin-bottom:22px}
+
+.wzpre{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:9px}
+.wzpre li{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 13px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.028);
+}
+.wzpre .n{
+  flex:0 0 26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--brand2);
+  border:1px solid rgba(24,200,240,.3);
+  background:rgba(24,200,240,.1);
+}
+.wzpre .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wzpre .t b{
+  font-family:var(--dsp);font-weight:600;font-size:.85rem;color:var(--text);
+  letter-spacing:-.01em;
+}
+.wzpre .t{font-size:.755rem;color:var(--dim);line-height:1.45}
+
+.briefcta-act{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.briefcta-act .btn{flex:1 1 190px;justify-content:center;min-height:52px}
+.briefcta .formnote{margin-top:18px}
+
+@media(max-width:560px){
+  .wzpre li{padding:10px 11px;gap:10px}
+  .wzpre .t b{font-size:.8rem}
+  .briefcta-act .btn{flex:1 1 100%}
+}
+
+/* ── 4b. the dialog ─────────────────────────────────────────── */
+.wzv{
+  position:fixed;inset:0;z-index:960;
+  display:grid;place-items:center;
+  padding:clamp(10px,3vw,28px);
+  background:rgba(5,8,14,.6);
+  backdrop-filter:blur(20px) saturate(1.3);
+  -webkit-backdrop-filter:blur(20px) saturate(1.3);
+  opacity:0;visibility:hidden;
+  transition:opacity .36s var(--ez),visibility .36s;
+}
+.wzv.on{opacity:1;visibility:visible}
+
+.wzbox{
+  position:relative;
+  width:min(540px,100%);
+  max-height:min(90vh,780px);
+  display:flex;flex-direction:column;
+  border-radius:clamp(19px,3vw,26px);
+  overflow:hidden;
+  background:linear-gradient(158deg,
+    rgba(255,255,255,.115),rgba(255,255,255,.035) 46%,rgba(24,200,240,.055) 100%);
+  backdrop-filter:blur(44px) saturate(2);
+  -webkit-backdrop-filter:blur(44px) saturate(2);
+  border:1px solid rgba(255,255,255,.20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.44),
+             0 44px 100px -40px rgba(0,0,0,.85),
+             0 0 90px -34px rgba(24,200,240,.6);
+  transform:translateY(20px) scale(.975);
+  transition:transform .5s cubic-bezier(.22,.9,.28,1);
+}
+.wzv.on .wzbox{transform:none}
+
+.wzx{
+  position:absolute;top:13px;right:13px;z-index:5;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);
+  color:var(--text);
+  transition:background .3s,border-color .3s;
+}
+.wzx:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.3)}
+.wzx svg{width:16px;height:16px}
+
+.wzhead{padding:clamp(22px,3.4vw,30px) clamp(18px,3vw,30px) 0;flex:0 0 auto}
+.wzticks{display:flex;gap:5px;margin-bottom:16px;padding-right:44px}
+.wzticks span{
+  height:3px;flex:1;border-radius:99px;
+  background:rgba(255,255,255,.13);
+  transition:background .45s var(--ez);
+}
+.wzticks span.on{background:var(--brand)}
+.wzcount{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--brand2);
+}
+.wzhead h3{
+  font-family:var(--serif);font-weight:600;letter-spacing:-.02em;
+  font-size:clamp(1.28rem,3vw,1.72rem);line-height:1.22;
+  margin:9px 44px 8px 0;
+}
+.wzsub{color:var(--dim);font-size:.83rem;line-height:1.6;margin-bottom:4px}
+
+.wzform{display:flex;flex-direction:column;flex:1;min-height:0}
+.wzscroll{
+  flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;
+  padding:clamp(16px,2.6vw,22px) clamp(18px,3vw,30px) 6px;
+}
+.wzstep{display:none}
+.wzstep.is-on{display:block;animation:wzin .42s var(--out) both}
+@keyframes wzin{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.wzstep .field{margin-bottom:16px}
+.wzstep .field:last-child{margin-bottom:2px}
+
+.wzrecap{
+  margin-top:16px;padding:13px 14px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.028);
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  color:var(--dim);line-height:1.85;
+}
+.wzrecap b{color:var(--text);font-weight:500}
+.wzrecap:empty{display:none}
+
+.wzfoot{
+  flex:0 0 auto;
+  display:flex;align-items:stretch;gap:10px;
+  padding:14px clamp(18px,3vw,30px) clamp(18px,3vw,24px);
+  border-top:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.05) 40%,rgba(255,255,255,.075));
+}
+.wzfoot .btn{
+  min-height:52px;justify-content:center;text-align:center;
+  min-width:0;white-space:nowrap;
+}
+.wzbtn-back{flex:0 0 auto;padding-inline:18px}
+.wzbtn-next,.wzbtn-send{flex:1 1 auto}
+.wzfoot .btn[hidden]{display:none!important}
+
+/* the validation message sits with the fields, not under the buttons */
+.wzform .fmsg{margin-top:4px}
+
+@media(max-width:520px){
+  .wzbox{max-height:94vh;width:100%}
+  .wzhead h3{font-size:1.2rem}
+  .wzsub{font-size:.79rem}
+  .wzfoot{padding-bottom:max(18px,env(safe-area-inset-bottom))}
+  .wzfoot .btn{min-height:50px;font-size:.87rem}
+}
+
+/* the page behind a dialog must not scroll under it */
+body.wz-locked{overflow:hidden}
+</style>
+
+<script>
+/* ═══════════ STEPPED PROJECT BRIEF ═══════════════════════════
+   The wizard only handles navigation and focus. Validation and the
+   WhatsApp hand-off are the page's existing form logic — the dialog
+   contains a real form[data-nx], so the submit handler that was
+   already bound picks it up untouched. */
+(function(){
+  var v  = document.getElementById('wzv');
+  if(!v) return;
+  var box   = v.querySelector('.wzbox'),
+      form  = v.querySelector('form[data-nx]'),
+      steps = [].slice.call(v.querySelectorAll('.wzstep')),
+      ticks = [].slice.call(v.querySelectorAll('.wzticks span')),
+      back  = document.getElementById('wz-back'),
+      next  = document.getElementById('wz-next'),
+      send  = document.getElementById('wz-send'),
+      count = document.getElementById('wz-count'),
+      title = document.getElementById('wz-title'),
+      sub   = document.getElementById('wz-sub'),
+      recap = document.getElementById('wz-recap'),
+      shut  = document.getElementById('wz-close');
+
+  var COPY = [
+    {t:'Who are we talking to?',   s:'Just your name and the number you use on WhatsApp.'},
+    {t:'And the business?',        s:'So the reply lands with the right context, not a cold quote.'},
+    {t:'What are we building?',    s:'Pick the closest fit — one line of detail is plenty.'}
+  ];
+
+  var i = 0, lastFocus = null;
+  var RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function fieldsIn(step){ return [].slice.call(step.querySelectorAll('.field')); }
+
+  /* reuse the page's own validator when it is available, so the rules
+     never drift apart from the ones the submit handler enforces */
+  function stepValid(step){
+    var ok = true, first = null;
+    fieldsIn(step).forEach(function(f){
+      f.dataset.touched = '1';
+      var inp = f.querySelector('.inp');
+      if(!inp) return;
+      var good = true;
+      if(typeof window.vField === 'function'){
+        good = window.vField(f);
+      }else{
+        /* the validator is scoped inside the page module; fall back to
+           firing the events it listens to and reading the class it sets */
+        inp.dispatchEvent(new Event('blur'));
+        good = !f.classList.contains('bad');
+      }
+      if(!good){ ok = false; if(!first) first = inp; }
+    });
+    if(first){ first.focus({preventScroll:true}); first.scrollIntoView({block:'center',behavior:RM?'auto':'smooth'}); }
+    return ok;
+  }
+
+  function val(n){
+    var el = form.querySelector('[name="'+n+'"]');
+    return el ? el.value.trim() : '';
+  }
+
+  function drawRecap(){
+    if(!recap) return;
+    var rows = [
+      ['Name', val('name')], ['WhatsApp', val('phone')],
+      ['Business', val('biz')], ['Email', val('email')]
+    ].filter(function(r){ return r[1]; });
+    recap.innerHTML = rows.length
+      ? rows.map(function(r){ return r[0]+': <b>'+r[1].replace(/[<>&]/g,'')+'</b>'; }).join('<br/>')
+      : '';
+  }
+
+  function show(n){
+    i = Math.max(0, Math.min(steps.length-1, n));
+    steps.forEach(function(s,k){ s.classList.toggle('is-on', k===i); });
+    ticks.forEach(function(t,k){ t.classList.toggle('on', k<=i); });
+    count.textContent = 'Step '+(i+1)+' of '+steps.length;
+    title.textContent = COPY[i].t;
+    sub.textContent   = COPY[i].s;
+    back.hidden = i===0;
+    next.hidden = i===steps.length-1;
+    send.hidden = i!==steps.length-1;
+    if(i===steps.length-1) drawRecap();
+    var box2 = v.querySelector('.wzscroll'); if(box2) box2.scrollTop = 0;
+    var msg = form.querySelector('.fmsg'); if(msg) msg.className = 'fmsg';
+    var f = steps[i].querySelector('.inp');
+    if(f && !matchMedia('(hover:none)').matches) setTimeout(function(){ f.focus({preventScroll:true}); }, 220);
+  }
+
+  function open(){
+    lastFocus = document.activeElement;
+    v.classList.add('on');
+    v.setAttribute('aria-hidden','false');
+    document.body.classList.add('wz-locked');
+    show(0);
+  }
+  function close(){
+    v.classList.remove('on');
+    v.setAttribute('aria-hidden','true');
+    document.body.classList.remove('wz-locked');
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.querySelectorAll('[data-wz-open]').forEach(function(b){
+    b.addEventListener('click', function(e){ e.preventDefault(); open(); });
+  });
+  /* Any link that meant "go to the form" now means "open the dialog".
+     Delegated, because the service popup writes its own Get a quote
+     button at open time and would never be caught by a static query. */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href$="#brief"], .qvfoot a[href*="#contact"]');
+    if(!a) return;
+    e.preventDefault();
+    var q = document.getElementById('qv');
+    if(q && q.classList.contains('on')){
+      q.classList.remove('on');
+      document.body.style.overflow='';
+    }
+    setTimeout(open, 120);
+  });
+
+  next.addEventListener('click', function(){ if(stepValid(steps[i])) show(i+1); });
+  back.addEventListener('click', function(){ show(i-1); });
+  shut.addEventListener('click', close);
+  v.addEventListener('click', function(e){ if(e.target===v) close(); });
+  addEventListener('keydown', function(e){
+    if(e.key==='Escape' && v.classList.contains('on')) close();
+  });
+
+  /* Enter advances rather than submitting a half-finished brief */
+  form.addEventListener('keydown', function(e){
+    if(e.key!=='Enter') return;
+    if(e.target.tagName==='TEXTAREA') return;
+    if(i < steps.length-1){ e.preventDefault(); next.click(); }
+  });
+
+  /* keep focus inside the dialog while it is open */
+  v.addEventListener('keydown', function(e){
+    if(e.key!=='Tab' || !v.classList.contains('on')) return;
+    var f = [].slice.call(box.querySelectorAll(
+      'button:not([hidden]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )).filter(function(el){ return el.offsetParent !== null; });
+    if(!f.length) return;
+    var a = f[0], z = f[f.length-1];
+    if(e.shiftKey && document.activeElement===a){ e.preventDefault(); z.focus(); }
+    else if(!e.shiftKey && document.activeElement===z){ e.preventDefault(); a.focus(); }
+  });
+})();
+
+/* ── team cards: feed the name and role to the mobile row layout ──
+   Below 720px the caption comes out of the photograph, so the text is
+   handed to the meta block as data attributes and printed there. */
+(function(){
+  document.querySelectorAll('.teamgrid .pcard').forEach(function(c){
+    var n = c.querySelector('.cap h3'), r = c.querySelector('.cap .role'),
+        m = c.querySelector('.pmeta');
+    if(!m) return;
+    if(n) m.setAttribute('data-name', n.textContent.trim());
+    if(r) m.setAttribute('data-role', r.textContent.trim());
+  });
+})();
+</script>
+
 </body>
 </html>
