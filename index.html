@@ -7119,135 +7119,134 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
   const grid=document.getElementById('workgrid');
   const veil=document.createElement('div'); veil.className='popveil';
   document.body.appendChild(veil);
-  let live=null, ph=null, prev='', t0=0, sy=0;
+  let live=null, ghost=null, ph=null, prev='', t0=0, sy=0;
 
   function out(card){
     if(live)return;
     const first=card.getBoundingClientRect();
+    if(!first.width) return;
 
-    mark(card);                       /* remember the exact slot to return to */
-    ph=document.createElement('div'); ph.className='popph';
-    ph.style.cssText='width:'+first.width+'px;height:'+first.height+'px;'+
-                     'min-width:'+first.width+'px;min-height:'+first.height+'px';
-    card.parentNode.insertBefore(ph,card);
+    /* The card used to be torn out of the grid and parked on <body>, which
+       is why it came back crooked: the section it belonged to reflowed
+       around a stand-in, and every rule scoped to that section — padding,
+       accent, artwork sizing — stopped matching the moment it left. It
+       stays exactly where it is now. A clone does the flying, and the
+       original only turns invisible, so the grid never moves a pixel. */
+    const g=card.cloneNode(true);
+    g.removeAttribute('id');
+    g.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+    g.querySelectorAll('[data-rv]').forEach(n=>n.removeAttribute('data-rv'));
+    g.removeAttribute('data-rv');
+    g.className=(card.className+' popping popghost')
+                  .replace(/\b(tilt3d|is-hot|live)\b/g,'').trim();
+    g.setAttribute('data-ctx',(card.closest('section')&&card.closest('section').id)||'');
+    g.setAttribute('data-lenis-prevent','');
 
-    /* A perspective or transform on any ancestor makes IT the containing
-       block for position:fixed children, so the card has to leave the grid
-       entirely to be positioned against the viewport. The placeholder holds
-       its slot so nothing behind it reflows. */
-    document.body.appendChild(card);
-    prev=card.getAttribute('style')||'';
-
-    /* FLIP: place it where it should end up, then invert to where it was,
-       then let the transition play the difference. */
     const vw=innerWidth, vh=innerHeight, pad=vw<620?14:40;
     /* the two-column feature cards need more room than a plain card, or the
        headline wraps mid-word and the tick list squeezes into slivers */
     const wide=card.classList.contains('feat')||card.classList.contains('seoband');
-    /* On a phone the card should take the width it is given. Capping it at
-       560 left a narrow column with a wide gutter, which is what made the
-       raised card look smaller than the one it came from. */
-    const W=vw<620?(vw-pad*2):Math.min(vw-pad*2, wide?680:560);
+    const W=vw<620?(vw-pad*2):Math.min(vw-pad*2, wide?720:600);
     const L=Math.round((vw-W)/2);
-    card.style.position='fixed';
-    card.style.left=L+'px';
-    card.style.top=pad+'px';
-    card.style.width=W+'px';
-    card.style.maxHeight=(vh-pad*2)+'px';
-    card.style.overflowY='auto';
-    card.style.margin='0';
-    card.style.transformOrigin='top left';
-    card.classList.add('popping');
 
-    const last=card.getBoundingClientRect();
+    g.style.cssText=(card.getAttribute('style')||'')+
+      ';position:fixed;z-index:940;margin:0;box-sizing:border-box;'+
+      'left:'+L+'px;top:'+pad+'px;width:'+W+'px;'+
+      'max-height:'+(vh-pad*2)+'px;overflow-y:auto;overflow-x:hidden;'+
+      'transform-origin:top left;opacity:1;visibility:visible;';
+    document.body.appendChild(g);
+
+    /* A close control, because "tap anywhere" is a hint, not an affordance.
+       It sits outside the clone so it cannot scroll away with the copy. */
+    const x=document.createElement('button');
+    x.type='button'; x.className='popx'; x.setAttribute('aria-label','Close');
+    x.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '+
+      'stroke-width="1.9" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    x.addEventListener('click',e=>{e.stopPropagation();back();});
+    document.body.appendChild(x);
+
+    /* FLIP: it is already where it should land, so invert it back to the
+       card's own box and let the transition play the difference. */
+    const last=g.getBoundingClientRect();
     const k=first.width/W;
-    card.style.transition='none';
-    card.style.transform='translate('+(first.left-last.left)+'px,'+
-                          (first.top-last.top)+'px) scale('+k+')';
-    void card.offsetWidth;
-    card.style.transition='';
+    g.style.transition='none';
+    g.style.transform='translate('+(first.left-last.left)+'px,'+
+                       (first.top-last.top)+'px) scale('+k+')';
+    void g.offsetWidth;
+    g.style.transition='';
+
+    card.style.visibility='hidden';       /* layout held, ink removed */
     veil.classList.add('on');
-    live=card;
+    live=card; ghost=g;
 
     requestAnimationFrame(()=>{
-      /* nudge it to the vertical centre if it is shorter than the viewport */
-      const h=card.scrollHeight;
-      if(h<vh-pad*2) card.style.top=Math.round((vh-Math.min(h,vh-pad*2))/2)+'px';
-      card.style.transform='none';
+      /* centre it vertically when it is shorter than the viewport */
+      const h=g.scrollHeight;
+      if(h<vh-pad*2) g.style.top=Math.round((vh-Math.min(h,vh-pad*2))/2)+'px';
+      g.style.transform='none';
     });
-    document.body.style.overflow='hidden';
+
+    /* The page is pinned through the shared reference-counted lock rather
+       than body.overflow, so the raised card keeps its own scrollbar and a
+       long one can be read all the way down without the page moving. */
+    document.body.classList.add('wz-locked');
     t0=performance.now(); sy=scrollY;
+
+    /* Every gesture that lands on the raised card stays on it. Without
+       this the page-wide dismiss listener read the first touch of a scroll
+       as "tap anywhere to close", so a long card shut the moment you tried
+       to read past the fold. */
+    ['touchstart','touchmove','pointerdown','mousedown','wheel','click']
+      .forEach(ev=>g.addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
+
+    /* a press on the clone is a press on the card it came from */
+    g.addEventListener('click',e=>{
+      if(e.target.closest('.popx'))return;
+      card.click();
+    });
   }
 
   function back(){
     if(!live)return;
-    const card=live; live=null;
-    const slot=ph, restore=prev, home=homeOf(card);
-    ph=null;                                   /* nothing else may claim it */
+    const card=live, g=ghost; live=null; ghost=null;
 
-    const now=card.getBoundingClientRect();
-    const target=slot?slot.getBoundingClientRect():now;
-    const k=now.width?target.width/now.width:1;
-    card.style.transform='translate('+(target.left-now.left)+'px,'+
-                          (target.top-now.top)+'px) scale('+k+')';
     veil.classList.remove('on');
-    document.body.style.overflow='';
+    if(!g){ document.body.classList.remove('wz-locked'); card.style.visibility=''; return; }
 
-    /* The card transitions transform, box-shadow AND border-color, and each
-       one fires its own transitionend — border-color lands first, at .5s,
-       and used to tear the card out of the air mid-flight. Children bubble
-       their transitions up here too. Only the card's own transform counts
-       as "landed". */
-    let settledOnce=false;
+    /* The original never left the grid, so its box is still the truth —
+       measure it and fly the clone straight back onto it. */
+    const home=card.getBoundingClientRect();
+    const now=g.getBoundingClientRect();
+    const k=now.width?home.width/now.width:1;
+    g.scrollTop=0;
+    g.style.transform='translate('+(home.left-now.left)+'px,'+
+                       (home.top-now.top)+'px) scale('+k+')';
+    g.style.pointerEvents='none';
+
+    let gone=false;
     const done=()=>{
-      if(settledOnce)return; settledOnce=true;
-      card.removeEventListener('transitionend',guard);
-      card.classList.remove('popping');
-      card.removeAttribute('style');
-      if(restore)card.setAttribute('style',restore);
-      /* Preferred: the placeholder still holding the slot. Failing that, the
-         parent and next sibling recorded on the way out — without this a lost
-         placeholder stranded the card on <body> and left a dead gap in the
-         grid, which is exactly what the empty cards were. */
-      if(slot&&slot.parentNode){
-        slot.parentNode.insertBefore(card,slot);
-        slot.parentNode.removeChild(slot);
-      } else if(home.parent&&home.parent.isConnected){
-        if(home.next&&home.next.parentNode===home.parent)
-          home.parent.insertBefore(card,home.next);
-        else home.parent.appendChild(card);
-      }
+      if(gone)return; gone=true;
+      if(g.parentNode)g.parentNode.removeChild(g);
+      document.querySelectorAll('.popx').forEach(n=>n.remove());
+      card.style.visibility='';
+      /* released only now: while the clone is in the air the page must not
+         move, or it lands somewhere the card no longer is */
+      document.body.classList.remove('wz-locked');
       sweep();
     };
-    const guard=e=>{
-      if(e.target!==card||e.propertyName!=='transform')return;
-      done();
-    };
-    card.addEventListener('transitionend',guard);
-    setTimeout(done,900);
+    g.addEventListener('transitionend',e=>{
+      if(e.target===g&&e.propertyName==='transform')done();
+    });
+    setTimeout(done,820);
   }
 
-  /* Where the card lives when it is at rest. Read before it is moved. */
-  const homes=new WeakMap();
-  function mark(card){ homes.set(card,{parent:card.parentNode,next:card.nextElementSibling}); }
-  function homeOf(card){ return homes.get(card)||{parent:null,next:null}; }
-
-  /* Belt and braces: after every return, make sure the page is not left with
-     an orphan spacer or a card parked on <body>. Whatever raced, this puts
-     the section back exactly as it was. */
+  /* Nothing should survive a close: no stray clone, and no card left
+     invisible because a second press raced the first. */
   function sweep(){
-    /* With nothing raised there is no slot left to hold, so any spacer
-       still in the page is a leftover and is taking up a grid cell. */
-    if(!live) document.querySelectorAll('.popph').forEach(p=>p.remove());
-    document.querySelectorAll('body > .card').forEach(c=>{
-      if(c===live)return;
-      const h=homeOf(c);
-      c.classList.remove('popping');
-      c.removeAttribute('style');
-      if(h.parent&&h.parent.isConnected){
-        if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(c,h.next);
-        else h.parent.appendChild(c);
-      } else c.remove();
+    if(live)return;
+    document.querySelectorAll('.popghost,.popx,.popph').forEach(n=>n.remove());
+    document.querySelectorAll('.card').forEach(c=>{
+      if(c.style.visibility==='hidden')c.style.visibility='';
     });
   }
 
@@ -10100,5 +10099,159 @@ html.lenis,html.lenis body{height:auto}
 })();
 </script>
 
+<!-- ══════════════ LAYER 12 — the raised card, and the projects rail ══════════════ -->
+<style id="nexlyr-layer12">
+
+/* ═══════════ 1. THE RAISED CARD ══════════════════════════════════
+   It is a clone now, parked on <body>, so every rule that was scoped
+   to the section it came from — padding, accent, artwork, thumbnail
+   height — no longer reaches it. This is that card's own dress, and
+   it is the same dress whichever section it came from. */
+.popghost{
+  --ipad:clamp(20px,4.4vw,30px);
+  display:flex!important;flex-direction:column;text-align:left;
+  padding:var(--ipad)!important;
+  border-radius:22px!important;
+  background:
+    linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.018) 58%),
+    rgba(11,14,21,.985)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  contain:none!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent;
+}
+.popghost::-webkit-scrollbar{width:8px}
+.popghost::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:8px}
+.popghost::-webkit-scrollbar-track{background:transparent}
+.popghost::after,.popghost::before{display:none!important}
+
+/* The card in the grid clamps its copy to three lines. The whole point
+   of raising it is to read the rest, so the clamp comes off. */
+.popghost p,.popghost h3,.popghost h4,.popghost li{
+  -webkit-line-clamp:unset!important;
+  display:block!important;
+  overflow:visible!important;
+  max-height:none!important;
+}
+.popghost h3,.popghost h4{
+  font-size:clamp(1.16rem,3.6vw,1.52rem)!important;
+  line-height:1.22!important;margin-bottom:9px!important;
+}
+.popghost p{
+  font-size:clamp(.86rem,2.9vw,.96rem)!important;
+  line-height:1.74!important;
+  -webkit-line-clamp:unset!important;
+}
+.popghost p.mono{font-size:10.5px!important;line-height:1.6!important;margin-bottom:12px!important}
+.popghost .ico{
+  width:48px!important;height:48px!important;border-radius:15px!important;
+  margin-bottom:16px!important;flex:0 0 auto;
+}
+.popghost .ico svg{width:22px!important;height:22px!important}
+.popghost .row{gap:8px!important;margin-top:18px!important;flex-wrap:wrap}
+.popghost .chip{font-size:10.5px!important;padding:.4rem .72rem!important}
+.popghost .gotag{display:none!important}
+.popghost .cardgo,.popghost .steplink{
+  margin-top:20px!important;padding-top:14px!important;opacity:1!important;
+  border-top:1px solid rgba(255,255,255,.09);font-size:.86rem!important;
+}
+.popghost .pophint{
+  position:static!important;opacity:1!important;display:block!important;
+  margin:18px 0 0!important;padding-top:14px!important;
+  border-top:1px solid rgba(255,255,255,.09);
+}
+.popghost .pnum{opacity:.16!important;font-size:3.4rem!important;top:8px!important;right:16px!important}
+
+/* full-bleed media, whether it is a category illustration or a mockup */
+.popghost .indart{
+  display:block;position:relative;flex:0 0 auto;
+  width:calc(100% + var(--ipad) * 2)!important;
+  margin:calc(var(--ipad) * -1) calc(var(--ipad) * -1) 20px!important;
+  aspect-ratio:16/6!important;
+  border-radius:22px 22px 6px 6px!important;overflow:hidden;
+}
+.popghost .thumb{
+  height:clamp(170px,30vh,270px)!important;flex:0 0 auto;
+  width:calc(100% + var(--ipad) * 2)!important;
+  margin:calc(var(--ipad) * -1) calc(var(--ipad) * -1) 18px!important;
+  border-radius:22px 22px 8px 8px!important;
+}
+.popghost[data-ctx="industries"] .ico{
+  border-color:rgba(var(--ias),.34)!important;
+  color:var(--ia)!important;background:rgba(var(--ias),.1)!important;
+}
+.popghost[data-ctx="industries"] .cardgo{color:var(--ia)!important}
+.popghost .featin{grid-template-columns:1fr!important;gap:20px!important}
+.popghost .ticks{columns:2;column-gap:22px}
+@media(max-width:620px){.popghost .ticks{columns:1}}
+
+/* ── the close control ── */
+.popx{
+  position:fixed;z-index:948;
+  top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;
+  width:38px;height:38px;border-radius:999px;
+  display:grid;place-items:center;
+  background:rgba(10,13,20,.78);border:1px solid rgba(255,255,255,.18);
+  color:#E8EDF5;cursor:pointer;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:background .3s var(--ez),border-color .3s,transform .3s var(--out);
+  animation:popxin .35s var(--out) both;
+}
+.popx:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.34)}
+.popx:active{transform:scale(.92)}
+.popx svg{width:16px;height:16px}
+@keyframes popxin{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.popx{animation:none}}
+
+/* ═══════════ 2. THE PROJECT LIST READS AS A LIST ═════════════════
+   The deck overlapped by 62px, which buried a third of every card
+   behind the next one and left the titles fighting for the same
+   sliver. Less overlap, wider cards, and the destination label is
+   always on so a touch user can see where a press goes. */
+#workgrid>.card{
+  width:min(408px,86vw);
+  margin-right:-34px;
+  min-height:0;
+}
+#workgrid>.card:hover,
+#workgrid>.card:focus-visible,
+#workgrid>.card.is-hot{transform:rotateY(0deg) translateZ(46px) translateY(-8px)}
+#workgrid:hover>.card:not(:hover){opacity:.7!important}
+
+#workgrid>.card h3{
+  font-size:clamp(1rem,1.25vw,1.12rem)!important;
+  line-height:1.24!important;letter-spacing:-.01em;
+}
+#workgrid>.card p.muted{
+  font-size:.815rem!important;line-height:1.66!important;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;
+}
+#workgrid>.card .urlline{font-size:10px!important;opacity:.72}
+#workgrid>.card .chip{
+  font-size:9.4px!important;padding:.32rem .6rem!important;
+  border-color:rgba(255,255,255,.13);
+}
+
+@media(hover:none){
+  /* no hover to reveal it, so the route label stays put */
+  #workgrid>.card::after{opacity:1;transform:none}
+  #workgrid>.card{padding-bottom:34px!important}
+}
+@media(max-width:900px){
+  #workgrid{gap:12px!important;padding:14px 16px 30px!important}
+  #workgrid>.card{
+    width:min(340px,84vw);margin-right:0;
+    scroll-snap-align:center;
+  }
+  #workgrid>.card .thumb{height:clamp(128px,34vw,168px)!important}
+  #workgrid>.card p.muted{-webkit-line-clamp:3}
+}
+@media(max-width:620px){
+  #workgrid>.card{width:min(310px,82vw)}
+  #workgrid>.card h3{font-size:.98rem!important}
+}
+</style>
 </body>
 </html>
