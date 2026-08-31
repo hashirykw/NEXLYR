@@ -9752,7 +9752,8 @@ html.lenis,html.lenis body{height:auto}
       (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(0);
 
       /* anything with its own scrollbar keeps it */
-      ['.rack','.wzbox','.mvbox','#qv','.drawerin','.chatbody','.offerin']
+      ['.rack','.wzbox','.mvbox','#qv','.drawerin','.chatbody','.offerin',
+       '.pmodalin','#tmodal .tgrid','#tmodal .tinfo']
         .forEach(function(sel){
           [].forEach.call(document.querySelectorAll(sel), function(el){
             el.setAttribute('data-lenis-prevent','');
@@ -10253,5 +10254,276 @@ html.lenis,html.lenis body{height:auto}
   #workgrid>.card h3{font-size:.98rem!important}
 }
 </style>
+<!-- ══════════════ LAYER 13 — the reference card layout, and the team modal ══════════════ -->
+<style id="nexlyr-layer13">
+
+/* ═══════════ 1. THE TEAM MODAL SCROLLS ═══════════════════════════
+   The panel carried overflow-y:auto, but it is also the flex column
+   that holds the header, and the photo/copy grid inside it has no
+   min-height:0 — so the grid refused to shrink, the panel never
+   overflowed, and the bio below the fold was simply unreachable.
+   The scroll moves onto the part that actually has the overflow. */
+#tmodal .pmodalin{
+  overflow:hidden!important;
+  display:flex!important;flex-direction:column;
+}
+#tmodal .phead{flex:0 0 auto;position:sticky;top:0;z-index:6}
+#tmodal .tgrid{
+  flex:1 1 auto;min-height:0;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+@media(max-width:760px){
+  /* one column, so the photo scrolls up out of the way with the copy */
+  #tmodal .tgrid{overflow-y:auto}
+  #tmodal .tshot{flex:0 0 auto}
+  #tmodal .tinfo{padding-bottom:56px!important}
+}
+@media(min-width:761px){
+  /* two columns: the portrait holds, only the copy travels */
+  #tmodal .tgrid{overflow:hidden}
+  #tmodal .tshot{overflow:hidden;min-height:0}
+  #tmodal .tinfo{
+    min-height:0;overflow-y:auto;
+    overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent;
+  }
+  #tmodal .tinfo::-webkit-scrollbar{width:7px}
+  #tmodal .tinfo::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+}
+
+/* ═══════════ 2. THE PROJECT CARD, ON A PHONE ═════════════════════
+   Lifted wholesale from the stream cards on the Cambridge Online
+   build: one card at a time on a mandatory snap rail, the level chip
+   and the numeral sharing a top row, the copy in the middle, the
+   chips on a floor at the bottom, and the emblem etched into the
+   corner. The device mockup is a desktop luxury — on a 352px card it
+   was eating half the height and leaving the copy three lines. */
+@media(max-width:900px){
+  #workgrid{
+    display:flex;gap:12px;min-height:0;overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    /* a swipe at the edge otherwise fires the browser's back gesture */
+    overscroll-behavior-x:contain;
+    /* touch-action stays auto on purpose: pan-x would let the rail
+       swallow a vertical swipe and trap the thumb */
+    justify-content:flex-start;
+    padding:14px max(12px,calc((100% - min(352px,90vw)) / 2 + 14px)) 20px!important;
+    margin-inline:-16px;
+    perspective:none!important;
+    transform:none!important;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    cursor:grab;
+  }
+  #workgrid::-webkit-scrollbar{display:none}
+  #workgrid.is-drag{scroll-snap-type:none;cursor:grabbing;scroll-behavior:auto}
+
+  #workgrid>.card{
+    width:min(352px,90vw)!important;margin-right:0!important;
+    flex:0 0 auto;scroll-snap-align:center;
+    display:flex!important;flex-direction:column;text-align:left;
+    border-radius:22px!important;
+    min-height:min(430px,116vw);
+    padding:22px 20px 20px!important;
+    transform:none!important;
+    overflow:hidden;
+  }
+  #workgrid>.card .thumb{display:none!important}
+  #workgrid>.card .wmark{
+    display:block!important;
+    width:134px;height:134px;right:-14px;bottom:-14px;
+    opacity:.15;
+  }
+  #workgrid>.card:hover .wmark,
+  #workgrid>.card.is-hot .wmark{opacity:.24;transform:translate(-5px,-5px) rotate(-4deg)}
+
+  #workgrid>.card .wcode{font-size:.58rem!important;padding:6px 10px!important}
+  #workgrid>.card .pnum{font-size:2.65rem!important}
+  #workgrid>.card>div:first-of-type{
+    gap:12px!important;margin:14px 0 0!important;align-items:flex-start;
+  }
+  #workgrid>.card h3{
+    font-size:1.22rem!important;line-height:1.18!important;
+    margin:0 0 6px!important;letter-spacing:-.012em;
+  }
+  #workgrid>.card .urlline{font-size:9.5px!important;opacity:.7}
+  #workgrid>.card .iconbtn{width:32px!important;height:32px!important;flex:0 0 auto}
+  #workgrid>.card p.mono{
+    font-size:9.5px!important;margin:10px 0 8px!important;letter-spacing:.11em;
+  }
+  #workgrid>.card p.muted{
+    font-size:.855rem!important;line-height:1.56!important;
+    margin:0 0 14px!important;flex:0 0 auto;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden;
+  }
+  /* a floor under the chip row, so the copy can never crowd it */
+  #workgrid>.card .row{
+    margin-top:auto!important;padding-top:14px;
+    gap:7px!important;flex-wrap:wrap;
+  }
+  #workgrid>.card .chip{
+    font-size:.58rem!important;letter-spacing:.11em;
+    padding:5px 10px!important;white-space:nowrap;
+  }
+  #workgrid>.card::after{display:none!important}
+}
+@media(max-width:620px){
+  #workgrid>.card h3{font-size:1.14rem!important}
+}
+
+/* Chip and numeral share a flex row at every width, so a long label can
+   never run underneath the numeral no matter how the copy changes. The
+   row is a positioned child, so the numeral has to leave absolute
+   positioning with it or it would anchor to the row's box. */
+#workgrid>.card .wtop{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12px;margin-bottom:2px;
+}
+#workgrid>.card .wcode{
+  letter-spacing:.11em;flex:0 1 auto;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;
+}
+#workgrid>.card .pnum{
+  position:static!important;flex:0 0 auto;
+  top:auto!important;right:auto!important;
+  line-height:.86;opacity:.42;
+}
+
+/* ── the dots, in place of the arrows ── */
+.raildots{display:none}
+@media(max-width:900px){
+  .railnav{display:none!important}
+  .raildots{display:flex;justify-content:center;gap:2px;margin-top:4px}
+  .raildots button{
+    width:32px;height:32px;display:grid;place-items:center;
+    border:0;padding:0;cursor:pointer;background:none;
+  }
+  .raildots button::after{
+    content:"";display:block;width:6px;height:6px;border-radius:50%;
+    background:rgba(255,255,255,.22);transition:.3s var(--ez);
+  }
+  .raildots button.on::after{
+    background:var(--brand2,#18C8F0);width:18px;border-radius:99px;
+  }
+  .raildots button:focus-visible{outline:2px solid var(--brand2,#18C8F0);outline-offset:-4px;border-radius:50%}
+}
+@media(prefers-reduced-motion:reduce){
+  #workgrid>.card{transition:none!important}
+}
+
+/* ═══════════ 3. THE RAISED PROJECT CARD ══════════════════════════
+   Same anatomy, given room: the mockup comes back, the copy loses its
+   clamp, and the chip row keeps its floor. */
+.popghost .wtop{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:14px;margin-bottom:4px;
+}
+.popghost .pnum{
+  position:static!important;flex:0 0 auto;
+  font-size:2.9rem!important;line-height:.86!important;
+  top:auto!important;right:auto!important;opacity:.4!important;
+}
+.popghost .wcode{
+  font-size:.6rem!important;letter-spacing:.13em;padding:6px 11px!important;
+  flex:0 1 auto;min-width:0;
+}
+.popghost .thumb{
+  display:block!important;
+  margin:16px calc(var(--ipad) * -1) 18px!important;
+  border-radius:16px!important;
+}
+.popghost .wmark{opacity:.1!important;width:150px;height:150px}
+.popghost>div:first-of-type{gap:14px!important;margin-bottom:10px!important}
+.popghost .urlline{font-size:10.5px!important;opacity:.75}
+.popghost .row{margin-top:auto!important;padding-top:16px!important}
+</style>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   LAYER 13 — top row on the project cards, and dot pagination
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  var RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function cards(g){ return [].slice.call(g.querySelectorAll(':scope > .card')); }
+
+  /* The level chip and the numeral used to be an inline-flow span and an
+     absolutely positioned one. Sharing a flex row is what stops a long
+     label from sliding underneath the numeral. */
+  function topRow(g){
+    cards(g).forEach(function(c){
+      var code = c.querySelector(':scope > .wcode');
+      var num  = c.querySelector(':scope > .pnum');
+      var row  = c.querySelector(':scope > .wtop');
+      if(!row){
+        if(!code && !num) return;
+        row = document.createElement('div');
+        row.className = 'wtop';
+        c.insertBefore(row, code || num);
+      }
+      /* the card-dressing script runs on its own schedule and re-inserts
+         the chip as a first child, so strays are re-adopted rather than
+         assumed away */
+      if(code) row.appendChild(code);
+      if(num)  row.appendChild(num);
+      if(c.firstElementChild !== row) c.insertBefore(row, c.firstElementChild);
+    });
+  }
+
+  function dots(g){
+    if(g._dotted) return;
+    var list = cards(g);
+    if(list.length < 2) return;
+    g._dotted = true;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'raildots';
+    wrap.setAttribute('role','tablist');
+    wrap.setAttribute('aria-label','Projects');
+
+    list.forEach(function(c, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      var t = c.querySelector('h3');
+      b.setAttribute('aria-label', 'Go to ' + (t ? t.textContent.trim() : 'project ' + (i + 1)));
+      b.addEventListener('click', function(){
+        var left = c.offsetLeft - (g.clientWidth - c.offsetWidth) / 2;
+        g.scrollTo({ left: left, behavior: RM ? 'auto' : 'smooth' });
+      });
+      wrap.appendChild(b);
+    });
+
+    var nav = g.parentNode.querySelector('.railnav');
+    if(nav) nav.insertAdjacentElement('afterend', wrap);
+    else g.insertAdjacentElement('afterend', wrap);
+
+    var btns = [].slice.call(wrap.children);
+    function mark(){
+      var mid = g.scrollLeft + g.clientWidth / 2, best = 0, d = Infinity;
+      list.forEach(function(c, i){
+        var cx = c.offsetLeft + c.offsetWidth / 2;
+        var gap = Math.abs(cx - mid);
+        if(gap < d){ d = gap; best = i; }
+      });
+      btns.forEach(function(b, i){ b.classList.toggle('on', i === best); });
+    }
+    g.addEventListener('scroll', mark, {passive:true});
+    addEventListener('resize', mark, {passive:true});
+    mark();
+  }
+
+  function boot(){
+    var g = document.getElementById('workgrid');
+    if(!g) return;
+    topRow(g);
+    dots(g);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+  addEventListener('load', boot);
+})();
+</script>
+
 </body>
 </html>
