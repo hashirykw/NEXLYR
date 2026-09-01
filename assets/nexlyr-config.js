@@ -30,6 +30,12 @@ window.NEXLYR_CONFIG = {
   // Set true to show it to everyone.
   CONSENT_BANNER_EVERYWHERE: false,
 
+  // Open WhatsApp with the enquiry pre-filled after submitting?
+  // false = the lead is saved to Supabase only, and the visitor goes
+  // straight to the thank-you page. WhatsApp stays available as a
+  // separate button elsewhere on the site.
+  OPEN_WHATSAPP: false,
+
   THANK_YOU_URL: 'thank-you.html',
 
   // Set false while testing locally so you don't pollute real analytics.
