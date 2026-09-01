@@ -184,8 +184,8 @@ footer{padding:28px 24px;border-top:1px solid rgba(255,255,255,.06);
     <span class="kick">Enquiry received</span>
     <h1>Got it — <em>we have your details.</em></h1>
     <p class="lede" id="lede">
-      Your enquiry is saved and on its way to Hashir. If WhatsApp opened in another
-      tab, finishing that message gets you an answer fastest.
+      Your enquiry is saved and on its way to Hashir. Nothing else is needed
+      from you — we will come back to you on the number or email you gave us.
     </p>
 
     <div class="steps">
@@ -247,8 +247,8 @@ document.getElementById('yr').textContent = new Date().getFullYear();
      letting someone assume we have their details. */
   if (q.get('saved') === '0') {
     document.getElementById('lede').innerHTML =
-      'Your message is on its way through WhatsApp. Our server did not confirm the ' +
-      'backup copy, so if you do not hear back within a day please email ' +
+      'We could not confirm your enquiry saved. Please message us on WhatsApp ' +
+      'below, or email ' +
       '<a href="mailto:nexlyr.solutions@gmail.com" style="color:#5FE1FF">nexlyr.solutions@gmail.com</a>.';
   }
 
