@@ -4174,6 +4174,80 @@ select.inp option{background:#10141D;color:#E8EDF5}
   max-width:64ch;margin-inline:auto;font-family:var(--bdy)}
 @media(max-width:620px){.teamnote{font-size:.77rem}}
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   PERFORMANCE LAYER — appended last so it wins without editing
+   anything above it. Four things cost real milliseconds on this site:
+   off-screen section painting, stacked backdrop-filters on phones,
+   the three drifting orbs, and layers left permanently promoted by
+   will-change. Each is handled below.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Skip layout + paint for sections that are still off screen.
+      contain-intrinsic-size holds a placeholder height so the
+      scrollbar never jumps as they come into view. The hero and the
+      first section are excluded — they are above the fold. ───────── */
+section.sec:not(#home):not(:first-of-type),
+section.sec-t:not(#home){
+  content-visibility:auto;
+  contain-intrinsic-size:auto 820px;
+}
+/* the footer is deliberately NOT content-visibility:auto — it is small,
+   the saving is negligible, and a reserved placeholder taller than the
+   real compact mobile footer causes a scrollbar jump on arrival. */
+
+/* ── 2. Backdrop-filter is the single most expensive thing here: each
+      pane forces the compositor to re-sample everything behind it.
+      Desktop keeps the full effect. Phones step it down hard, and
+      low-power devices drop it to a flat tinted pane. ───────────── */
+@media(max-width:760px){
+  :root{
+    --fx1:blur(18px) saturate(1.35);
+    --fx2:blur(12px) saturate(1.3);
+    --fx3:blur(8px) saturate(1.2);
+  }
+  /* only the panes actually resting on top of moving light need it */
+  .glass.card::after,.glass::before{will-change:auto}
+}
+@media(max-width:760px) and (max-resolution:1.5dppx){
+  .glass,.card,.eyebrow{
+    backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    background-color:rgba(16,20,30,.86);
+  }
+}
+
+/* ── 3. The orbs are three 400–520px blurred circles animating
+      forever, on every page, whether or not anyone can see them.
+      Two is plenty on a laptop and one is plenty on a phone. ────── */
+@media(max-width:900px){.orb.c{display:none}}
+@media(max-width:620px){
+  .orb.b{display:none}
+  .orb{filter:blur(64px);opacity:.4}
+  .orb.a{width:320px;height:320px}
+}
+
+/* ── 4. will-change left on permanently is a memory leak in slow
+      motion — the layer never gets released. Scope it to the moment
+      of interaction instead. ────────────────────────────────────── */
+.card,.btn,.tile,.proj{will-change:auto}
+.card:hover,.btn:hover,.tile:hover,.proj:hover{will-change:transform}
+
+/* ── 5. Images and iframes below the fold never block the first
+      paint, and reserved boxes stop cumulative layout shift. ────── */
+img{content-visibility:auto}
+img[loading="lazy"]{contain-intrinsic-size:auto 300px}
+
+/* ── 6. Reduced motion: kill the ambient animation entirely rather
+      than merely shortening it. ────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  .orb{animation:none!important}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+}
+
+@media(min-width:1081px) and (max-width:1240px){.navlinks a{padding:.5rem .58rem;font-size:.815rem}.navlinks{gap:2px}}
 </style>
 </head>
 <body>
@@ -4183,7 +4257,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
 <header class="nav" id="nav">
   <div class="navin">
     <a class="brand" href="index.html"><span class="mark"><img src="logo-icon-128.webp" alt="" width="26" height="26" decoding="async" fetchpriority="high"/></span>Nexlyr</a>
-    <nav class="navlinks"><a href="index.html" class="on">Home</a><a href="web-development.html">Web Development</a><a href="social-media-marketing.html">Social Media</a><a href="video-editing.html">Video Editing</a><a href="index.html#work">Work</a><a href="index.html#about">About</a></nav>
+    <nav class="navlinks"><a href="index.html" class="on">Home</a><a href="web-development.html">Web Development</a><a href="business-software.html">Software</a><a href="social-media-marketing.html">Social Media</a><a href="video-editing.html">Video Editing</a><a href="index.html#work">Work</a><a href="index.html#about">About</a></nav>
     <div class="navcta">
       <a class="btn g sm hide-sm" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6A8.4 8.4 0 1120.5 11.6z"/><path d="M8.9 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.5l-.4.5a.4.4 0 00-.1.5 6 6 0 002.9 2.6c.2.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4a1.8 1.8 0 01-1.2 1.6c-.5.2-1.2.2-3.4-.9a8.4 8.4 0 01-3.4-3.6c-.6-1.2-.6-2 0-2.8z"/></svg>WhatsApp</a>
       <a class="btn p sm line" href="index.html#contact"><i class="ring" aria-hidden="true"></i>Contact Us</a>
@@ -4198,7 +4272,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
       <span class="brand"><span class="mark"><img src="logo-icon-128.webp" alt="" width="26" height="26" decoding="async" fetchpriority="high"/></span>Nexlyr</span>
       <button class="iconbtn" id="dclose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
-    <a class="dl" href="index.html">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="web-development.html">Web Development <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="social-media-marketing.html">Social Media Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="video-editing.html">Video Editing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#work">Work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+    <a class="dl" href="index.html">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="web-development.html">Web Development <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="business-software.html">Business Software <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="social-media-marketing.html">Social Media Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="video-editing.html">Video Editing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#work">Work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     <div class="hr" style="margin:20px 0"></div>
     <div class="row">
       <a class="btn wa blk" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6A8.4 8.4 0 1120.5 11.6z"/><path d="M8.9 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.5l-.4.5a.4.4 0 00-.1.5 6 6 0 002.9 2.6c.2.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4a1.8 1.8 0 01-1.2 1.6c-.5.2-1.2.2-3.4-.9a8.4 8.4 0 01-3.4-3.6c-.6-1.2-.6-2 0-2.8z"/></svg>WhatsApp us</a>
@@ -4262,6 +4336,17 @@ select.inp option{background:#10141D;color:#E8EDF5}
 </section>
 
 <div class="ribwrap" aria-hidden="true"><div class="mq"><div class="mqt"><span>Web Development</span><span>AI Chatbots</span><span>AI Calling Agents</span><span>Video Editing</span><span>Logo Design</span><span>Meta &amp; Google Ads</span><span>Web Apps</span><span>Three.js &amp; WebGL</span><span>Social Media</span><span>Branding</span><span>Dedicated Software</span><span>Admin Panels</span><span>Supabase Backends</span><span>Reels &amp; Shorts</span><span>SEO Built In</span><span>WhatsApp Integration</span><span>Web Development</span><span>AI Chatbots</span><span>AI Calling Agents</span><span>Video Editing</span><span>Logo Design</span><span>Meta &amp; Google Ads</span><span>Web Apps</span><span>Three.js &amp; WebGL</span><span>Social Media</span><span>Branding</span><span>Dedicated Software</span><span>Admin Panels</span><span>Supabase Backends</span><span>Reels &amp; Shorts</span><span>SEO Built In</span><span>WhatsApp Integration</span></div></div></div>
+
+<!-- ══ SERVICE ADS — phone version of the side rail ══ -->
+<section class="sec-t sstrip" aria-label="Services we deliver" style="padding-top:30px;padding-bottom:4px">
+  <div class="wrap">
+    <div class="sstrip-head">
+      <b>Everything we deliver</b>
+      <a href="#services">See all &rarr;</a>
+    </div>
+    <div class="sscroll" id="sscroll"></div>
+  </div>
+</section>
 
 <!-- ══════════════ SERVICES ══════════════ -->
 <section class="sec hasorb" id="services">
@@ -6213,6 +6298,9 @@ select.inp option{background:#10141D;color:#E8EDF5}
         <ul>
           <li><a href="web-development.html">Web Development</a></li>
           <li><a href="web-development.html#apps">Web Apps &amp; Portals</a></li>
+          <li><a href="business-software.html">Business Software</a></li>
+          <li><a href="business-software.html#systems">Stock &amp; POS Systems</a></li>
+          <li><a href="business-software.html#panel">Admin Panels</a></li>
           <li><a href="web-development.html#chatbots">AI Chatbots</a></li>
           <li><a href="web-development.html#calling">AI Calling Agents</a></li>
           <li><a href="web-development.html#seo">SEO</a></li>
@@ -6272,8 +6360,8 @@ select.inp option{background:#10141D;color:#E8EDF5}
       or connect you straight to Hashir. What are you looking to build?</div>
   </div>
   <div class="quicks">
-    <button>Web development</button><button>Video editing</button>
-    <button>AI calling agents</button><button>See your work</button><button>Contact</button>
+    <button>Web development</button><button>Business software</button>
+    <button>Video editing</button><button>See your work</button><button>Contact</button>
   </div>
   <div class="botfoot">
     <input id="botinput" placeholder="Ask anything&hellip;" aria-label="Message"/>
@@ -6529,6 +6617,12 @@ const WAL=`<a href="${WA}" target="_blank" rel="noopener">WhatsApp Hashir</a>`;
 const KB=[
  {k:['price','pricing','cost','rate','charge','budget','kitna','paisa','fee','quote','quotation'],
   a:`We don't publish fixed rates — every build is scoped differently. A five-page brochure site and a Supabase-backed portal are not the same job.<br><br>Tell us what you need and you'll get a straight number within a day. ${WAL} or fill the form below.`},
+ {k:['stock','inventory','pos','billing','invoice','barcode','warehouse','godown','purchase entry','supplier'],
+  a:`Stock and inventory systems are one of our main builds: live stock counts, low-stock alerts, purchase and sale entry, barcode support, supplier ledgers and one-tap reports.<br><br>Full breakdown on the <a href="business-software.html#systems">Business Software</a> page.`},
+ {k:['admin panel','admin','dashboard','cms','backend','back office','control panel','manage content'],
+  a:`Every system we build ships with an admin panel — role-based logins, a dashboard of the numbers that matter, add/edit/delete for all your content, image uploads, CSV export and an audit log of who changed what.<br><br>See the <a href="business-software.html#panel">anatomy of an admin panel</a>.`},
+ {k:['barber','salon','saloon','haircut','spa','parlour','parlor','clinic','gym','restaurant','school','pharmacy','custom software','dedicated software','erp','booking system'],
+  a:`We build dedicated software for a single business rather than selling a generic package — stock and POS, barber and salon booking, clinic records, gym memberships, school admin, restaurant orders and property listings.<br><br>Start on the <a href="business-software.html#systems">Business Software</a> page.`},
  {k:['web','website','site','develop','landing','portal','next','html','frontend','front-end'],
   a:`Web development is our core. Custom-built front-ends, business sites, booking portals, admin panels with Supabase, and full 3D/WebGL experiences — all hand-coded, no page-builder templates.<br><br>See the full breakdown on the <a href="web-development.html">Web Development</a> page.`},
  {k:['video','edit','reel','reels','short','shorts','podcast','youtube','tiktok','montage','vfx'],
@@ -10524,6 +10618,372 @@ html.lenis,html.lenis body{height:auto}
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
   addEventListener('load', boot);
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SERVICE RAIL — the side ads.
+     Desktop: a slim glass rail pinned to the right gutter. One chip
+     lifts itself every few seconds so the rail reads as a rotating
+     ad unit rather than a static menu. Phones get the same nine
+     services as a swipeable strip instead, because a fixed rail on a
+     390px screen is just an obstruction.
+     Every chip opens the same popup, and every popup lands on the
+     exact section of the exact page that sells that service.
+     ══════════════════════════════════════════════════════════════ -->
+<style id="nexlyr-srail">
+.srail{
+  position:fixed;right:14px;top:50%;transform:translateY(-50%);
+  z-index:880;display:flex;flex-direction:column;gap:7px;
+  padding:11px 10px;border-radius:24px;
+  background:var(--pane);border:1px solid var(--edge);
+  backdrop-filter:var(--fx2);-webkit-backdrop-filter:var(--fx2);
+  box-shadow:var(--s3),var(--rim);
+  opacity:0;pointer-events:none;transition:opacity .5s var(--ez),transform .5s var(--out);
+}
+.srail.ready{opacity:1;pointer-events:auto}
+.srail-lbl{
+  font-family:var(--mono);font-size:8px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--dim);text-align:center;padding-bottom:7px;margin-bottom:2px;
+  border-bottom:1px solid var(--edge);
+}
+.schip{
+  position:relative;display:flex;align-items:center;gap:0;
+  width:42px;height:42px;border-radius:14px;flex:none;
+  border:1px solid transparent;background:var(--g1);
+  color:var(--muted);cursor:pointer;overflow:hidden;
+  transition:width .42s var(--out),background .3s var(--ez),
+             color .3s var(--ez),border-color .3s var(--ez);
+}
+.schip .si{width:42px;flex:none;display:grid;place-items:center}
+.schip .si svg{width:18px;height:18px}
+.schip .sn{
+  white-space:nowrap;font-size:.78rem;font-weight:500;letter-spacing:-.01em;
+  opacity:0;padding-right:15px;transition:opacity .3s var(--ez);
+}
+.schip:hover,.schip:focus-visible,.schip.pulse{
+  width:206px;background:var(--g3);color:var(--text);
+  border-color:rgba(95,225,255,.3);
+}
+.schip:hover .sn,.schip:focus-visible .sn,.schip.pulse .sn{opacity:1}
+.schip.pulse{box-shadow:0 0 0 1px rgba(95,225,255,.16),0 10px 34px -18px rgba(24,200,240,.7)}
+.schip::before{
+  content:'';position:absolute;left:0;top:9px;bottom:9px;width:2px;border-radius:2px;
+  background:rgb(var(--acs,95,225,255));opacity:0;transition:opacity .3s var(--ez);
+}
+.schip:hover::before,.schip.pulse::before{opacity:1}
+.srail-more{
+  margin-top:3px;padding-top:8px;border-top:1px solid var(--edge);
+  font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);text-align:center;transition:color .3s var(--ez)
+}
+.srail-more:hover{color:var(--cy)}
+@media(max-width:1180px),(hover:none){.srail{display:none}}
+
+/* ── the phone strip ── */
+.sstrip{display:none}
+@media(max-width:1180px),(hover:none){
+  .sstrip{
+    display:block;position:relative;margin:0 0 6px;
+    padding:0;
+  }
+  .sstrip-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-bottom:13px;
+  }
+  .sstrip-head b{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.19em;text-transform:uppercase;
+    color:var(--dim);font-weight:400;
+  }
+  .sstrip-head a{font-size:.78rem;color:var(--cy)}
+  .sscroll{
+    display:flex;gap:9px;overflow-x:auto;padding:2px 0 12px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .sscroll::-webkit-scrollbar{display:none}
+  .scard{
+    scroll-snap-align:start;flex:none;width:154px;
+    padding:13px 13px 14px;border-radius:17px;text-align:left;
+    background:var(--pane);border:1px solid var(--edge);
+    backdrop-filter:var(--fx3);-webkit-backdrop-filter:var(--fx3);
+    box-shadow:var(--s2);color:var(--text);cursor:pointer;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .scard .si{
+    width:32px;height:32px;border-radius:10px;display:grid;place-items:center;
+    background:rgba(var(--acs,95,225,255),.13);
+    border:1px solid rgba(var(--acs,95,225,255),.24);
+    color:rgb(var(--acs,95,225,255));
+  }
+  .scard .si svg{width:16px;height:16px}
+  .scard .sn{font-size:.83rem;font-weight:600;letter-spacing:-.015em;line-height:1.28}
+  .scard .sd{font-size:.71rem;color:var(--dim);line-height:1.45}
+}
+
+/* ── the popup ── */
+.spop{
+  position:fixed;inset:0;z-index:960;display:grid;place-items:center;
+  padding:20px;opacity:0;visibility:hidden;
+  transition:opacity .4s var(--ez),visibility .4s;
+}
+.spop.open{opacity:1;visibility:visible}
+.spop-bd{position:absolute;inset:0;background:rgba(4,6,11,.76);backdrop-filter:blur(9px)}
+.spop-box{
+  position:relative;width:min(100%,520px);max-height:86vh;overflow-y:auto;
+  padding:28px 26px 26px;border-radius:28px;
+  background:linear-gradient(158deg,rgba(22,28,40,.97),rgba(10,13,20,.98));
+  border:1px solid rgba(var(--acs,95,225,255),.24);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,1),
+             0 0 90px -44px rgba(var(--acs,95,225,255),.66);
+  transform:translateY(16px) scale(.975);
+  transition:transform .48s var(--spring);
+}
+.spop.open .spop-box{transform:none}
+.spop-box::after{
+  content:'';position:absolute;left:50%;bottom:-150px;transform:translateX(-50%);
+  width:400px;height:300px;pointer-events:none;z-index:-1;
+  background:radial-gradient(closest-side,rgba(var(--acs,95,225,255),.4),transparent 72%);
+  filter:blur(10px);
+}
+.spop-x{
+  position:absolute;top:15px;right:15px;width:34px;height:34px;border-radius:11px;
+  display:grid;place-items:center;border:1px solid var(--edge);
+  background:var(--g2);color:var(--muted);cursor:pointer;
+  transition:background .3s,color .3s
+}
+.spop-x:hover{background:var(--g3);color:var(--text)}
+.spop-ico{
+  width:50px;height:50px;border-radius:16px;display:grid;place-items:center;
+  background:rgba(var(--acs,95,225,255),.13);
+  border:1px solid rgba(var(--acs,95,225,255),.26);
+  color:rgb(var(--acs,95,225,255));margin-bottom:16px;
+}
+.spop-ico svg{width:23px;height:23px}
+.spop-kick{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.19em;text-transform:uppercase;
+  color:rgb(var(--acs,95,225,255));display:block;margin-bottom:9px;
+}
+.spop-box h3{
+  font-family:var(--serif,var(--dsp));font-weight:600;
+  font-size:clamp(1.35rem,3.4vw,1.78rem);letter-spacing:-.02em;line-height:1.14;
+  margin-bottom:11px;
+}
+.spop-box p{color:var(--muted);font-size:.9rem;line-height:1.68}
+.spop-list{list-style:none;margin:18px 0 4px;display:grid;gap:9px}
+.spop-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:.845rem;color:var(--muted);line-height:1.52
+}
+.spop-list li::before{
+  content:'';width:15px;height:15px;border-radius:50%;flex:none;margin-top:3px;
+  background:rgba(var(--acs,95,225,255),.16);
+  border:1px solid rgba(var(--acs,95,225,255),.4);
+  background-image:linear-gradient(rgb(var(--acs,95,225,255)),rgb(var(--acs,95,225,255)));
+  background-size:6px 2px;background-repeat:no-repeat;background-position:center;
+}
+.spop-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.spop-cta .btn{flex:1 1 auto;justify-content:center;min-width:150px}
+.spop-note{
+  margin-top:15px;font-size:.74rem;color:var(--dim);text-align:center;
+  font-family:var(--mono);letter-spacing:.05em
+}
+@media(max-width:520px){
+  .spop{padding:14px}
+  .spop-box{padding:24px 19px 22px;border-radius:24px}
+  .spop-cta .btn{min-width:100%}
+}
+</style>
+
+<aside class="srail" id="srail" aria-label="Our services">
+  <span class="srail-lbl">Services</span>
+  <div id="srailChips"></div>
+  <a class="srail-more" href="#services">All &darr;</a>
+</aside>
+
+<div class="spop" id="spop" role="dialog" aria-modal="true" aria-labelledby="spopTitle">
+  <div class="spop-bd" data-spop-close></div>
+  <article class="spop-box">
+    <button class="spop-x" id="spopX" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div class="spop-ico" id="spopIco"></div>
+    <span class="spop-kick" id="spopKick"></span>
+    <h3 id="spopTitle"></h3>
+    <p id="spopDesc"></p>
+    <ul class="spop-list" id="spopList"></ul>
+    <div class="spop-cta">
+      <a class="btn p line" id="spopGo" href="#"><i class="ring" aria-hidden="true"></i><span id="spopGoLbl">Open the page</span><svg class="arw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
+      <a class="btn wa" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6A8.4 8.4 0 1120.5 11.6z"/><path d="M8.9 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.5l-.4.5a.4.4 0 00-.1.5 6 6 0 002.9 2.6c.2.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4a1.8 1.8 0 01-1.2 1.6c-.5.2-1.2.2-3.4-.9a8.4 8.4 0 01-3.4-3.6c-.6-1.2-.6-2 0-2.8z"/></svg>Ask about it</a>
+    </div>
+    <p class="spop-note">No price list &middot; every job quoted on a conversation</p>
+  </article>
+</div>
+
+<script>
+/* ══════════ SERVICE RAIL + POPUP ══════════════════════════════════
+   One data array drives the desktop rail, the phone strip and the
+   popup, so adding a service is a single object rather than three
+   edits in three places. `to` is the deep link — page plus the exact
+   section anchor for that service. */
+(function(){
+  const SRV=[
+    {id:'web',   ac:'95,225,255',  kick:'Most requested',
+     name:'Web Development',
+     to:'web-development.html#home', go:'Open Web Development',
+     desc:'Hand-written sites and web apps — no WordPress, no page builder, no template you share with four thousand other businesses. Built to load fast on a phone on mobile data, because that is where your customers actually are.',
+     pts:['Custom front-end, coded line by line','Mobile-first — tested down to 360px','Basic SEO built in, not sold as an add-on','Deployed to your own domain and hosting'],
+     ico:'<path d="M3 6.5A2.5 2.5 0 015.5 4h13A2.5 2.5 0 0121 6.5v11a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 17.5z"/><path d="M3 9h18"/><path d="M8.5 13l-2 2 2 2"/><path d="M13.5 13l2 2-2 2"/>'},
+
+    {id:'soft',  ac:'127,235,255', kick:'New',
+     name:'Business Software',
+     to:'business-software.html#systems', go:'Open Business Software',
+     desc:'A system built around how your business actually runs — stock and billing, salon or clinic bookings, gym memberships, school admin. Not a generic package you have to bend your process around.',
+     pts:['Stock, POS and supplier ledgers','Booking systems for barbers, salons, clinics','Works on the shop counter and on your phone','You own the data and the code, permanently'],
+     ico:'<rect x="3" y="3.5" width="18" height="17" rx="3"/><path d="M3 9h18"/><path d="M9 9v11.5"/><path d="M12.5 12.5h5"/><path d="M12.5 16h3"/>'},
+
+    {id:'panel', ac:'79,227,176',  kick:'Ships with every system',
+     name:'Admin Panels',
+     to:'business-software.html#panel', go:'See the admin panel',
+     desc:'The screen you log into to run the whole thing. Roles for you and roles for your staff, a dashboard of the numbers that matter, and an audit log so you always know who changed what.',
+     pts:['Role-based logins — owner, manager, staff','Add, edit and delete everything yourself','CSV export for your accountant','Audit trail on every change'],
+     ico:'<rect x="3" y="3.5" width="18" height="17" rx="3"/><path d="M7 8.5h4"/><path d="M7 12h7"/><path d="M7 15.5h5"/><circle cx="17" cy="8.5" r="1.4"/>'},
+
+    {id:'bot',   ac:'127,168,255', kick:'Free with a website this month',
+     name:'AI Chatbots',
+     to:'web-development.html#chatbots', go:'Open AI Chatbots',
+     desc:'A chatbot trained on your business — your services, your hours, your policies — answering visitors at 2am and handing the serious ones straight to your WhatsApp instead of losing them.',
+     pts:['Trained on your real business information','Answers instantly, around the clock','Passes warm leads to WhatsApp','Sits on every page of your site'],
+     ico:'<rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4"/><circle cx="12" cy="3" r="1.4"/><path d="M8.5 13.5v1.5M15.5 13.5v1.5"/>'},
+
+    {id:'call',  ac:'255,201,120', kick:'Voice',
+     name:'AI Calling Agents',
+     to:'web-development.html#calling', go:'Open AI Calling Agents',
+     desc:'A voice agent that rings new leads within minutes of them enquiring, qualifies them in real conversation, books the appointment and chases the ones who went quiet. Every call transcribed.',
+     pts:['Calls new leads within minutes','Books straight into your calendar','Follows up on no-shows automatically','Full transcript and log of every call'],
+     ico:'<path d="M4.5 5.5A1.9 1.9 0 016.4 3.6h2.1c.5 0 1 .4 1.1.9l.8 3a1.2 1.2 0 01-.4 1.2l-1.3 1a12 12 0 005.6 5.6l1-1.3a1.2 1.2 0 011.2-.4l3 .8c.5.1.9.6.9 1.1v2.1a1.9 1.9 0 01-1.9 1.9A15.6 15.6 0 014.5 5.5z"/>'},
+
+    {id:'apps',  ac:'95,225,255',  kick:'Logins &amp; databases',
+     name:'Web Apps &amp; Portals',
+     to:'web-development.html#apps', go:'Open Web Apps',
+     desc:'When a website is not enough — student portals, member areas, order tracking, dashboards. Real accounts, a real database, and permissions that hold up.',
+     pts:['Secure logins and user accounts','Supabase backend with row-level security','Dashboards built for your numbers','Scales as you add staff and customers'],
+     ico:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9.5h18"/><circle cx="6.2" cy="6.7" r=".9"/><path d="M7 14h6"/><path d="M7 17h9"/>'},
+
+    {id:'video', ac:'127,212,255', kick:'24–72h turnaround',
+     name:'Video Editing',
+     to:'video-editing.html#formats', go:'Open Video Editing',
+     desc:'Reels, Shorts, YouTube, podcasts and ads — cut for retention first. Where the hook lands, where the pace drops, where a viewer would have scrolled away.',
+     pts:['Reels and Shorts with captions and sound design','Podcast multicam and long-form YouTube','Colour grading and motion graphics','Turnaround in 24–72 hours'],
+     ico:'<rect x="2.5" y="5" width="14" height="14" rx="3"/><path d="M16.5 10l5-3v10l-5-3z"/>'},
+
+    {id:'brand', ac:'255,201,120', kick:'Identity',
+     name:'Logo &amp; Branding',
+     to:'web-development.html#brand', go:'Open Design &amp; Branding',
+     desc:'A mark, a palette, a typeface and the rules that hold them together — so the website, the shopfront, the packaging and the Instagram grid all look like one business.',
+     pts:['Logo design with full source files','Colour and typography system','Social templates and post creatives','Packaging, menus and print collateral'],
+     ico:'<path d="M12 3.2l2.5 5.4 5.9.7-4.4 4 1.2 5.8L12 16.2 6.8 19.1 8 13.3l-4.4-4 5.9-.7z"/>'},
+
+    {id:'ads',   ac:'127,168,255', kick:'Paid reach',
+     name:'Social Media &amp; Ads',
+     to:'social-media-marketing.html#paid', go:'Open Social Media',
+     desc:'Meta and Google campaigns run end to end — creative, targeting, testing, reporting — plus the day-to-day account management that keeps the page alive between campaigns.',
+     pts:['Meta and Instagram ad campaigns','Creative built for the platform, not resized','Weekly reporting in plain language','Account management and content calendar'],
+     ico:'<path d="M4 9.5v5a1.5 1.5 0 001.5 1.5H8l6 4V5.5l-6 4H5.5A1.5 1.5 0 004 11z"/><path d="M17.5 9a4.5 4.5 0 010 6"/><path d="M20 6.5a8 8 0 010 11"/>'},
+
+    {id:'seo',   ac:'79,227,176',  kick:'Included',
+     name:'Basic SEO',
+     to:'web-development.html#seo', go:'Open SEO',
+     desc:'Titles, descriptions, schema, sitemaps and clean structure on every build — the groundwork that decides whether Google can even understand what your business does.',
+     pts:['Structured data and rich results','Sitemap, robots and canonical setup','Local SEO for Karachi searches','Page speed treated as an SEO problem'],
+     ico:'<circle cx="10.6" cy="10.6" r="6.6"/><path d="M15.4 15.4L21 21"/><path d="M8 10.6h5.2"/>'}
+  ];
+
+  const svg=p=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
+
+  /* ── build the desktop rail ── */
+  const chips=document.getElementById('srailChips');
+  if(chips){
+    chips.innerHTML=SRV.map(s=>
+      '<button class="schip" type="button" data-srv="'+s.id+'" style="--acs:'+s.ac+'" '+
+      'aria-label="'+s.name.replace(/&amp;/g,'and')+'">'+
+      '<span class="si">'+svg(s.ico)+'</span><span class="sn">'+s.name+'</span></button>'
+    ).join('');
+  }
+
+  /* ── build the phone strip ── */
+  const scroll=document.getElementById('sscroll');
+  if(scroll){
+    scroll.innerHTML=SRV.map(s=>
+      '<button class="scard" type="button" data-srv="'+s.id+'" style="--acs:'+s.ac+'">'+
+      '<span class="si">'+svg(s.ico)+'</span>'+
+      '<span class="sn">'+s.name+'</span>'+
+      '<span class="sd">'+s.kick+'</span></button>'
+    ).join('');
+  }
+
+  /* ── the popup ── */
+  const pop=document.getElementById('spop');
+  const RMO=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let lastFocus=null;
+
+  function open(id){
+    const s=SRV.find(x=>x.id===id); if(!s||!pop)return;
+    lastFocus=document.activeElement;
+    const box=pop.querySelector('.spop-box');
+    box.style.setProperty('--acs',s.ac);
+    document.getElementById('spopIco').innerHTML=svg(s.ico);
+    document.getElementById('spopKick').innerHTML=s.kick;
+    document.getElementById('spopTitle').innerHTML=s.name;
+    document.getElementById('spopDesc').textContent=s.desc;
+    document.getElementById('spopList').innerHTML=s.pts.map(p=>'<li>'+p+'</li>').join('');
+    const go=document.getElementById('spopGo');
+    go.href=s.to;
+    document.getElementById('spopGoLbl').innerHTML=s.go;
+    pop.classList.add('open');
+    document.body.style.overflow='hidden';
+    setTimeout(()=>go.focus(),RMO?0:340);
+  }
+  function close(){
+    if(!pop)return;
+    pop.classList.remove('open');
+    document.body.style.overflow='';
+    lastFocus&&lastFocus.focus&&lastFocus.focus();
+  }
+
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('[data-srv]');
+    if(t){e.preventDefault();open(t.dataset.srv);return}
+    if(e.target.closest('[data-spop-close]')||e.target.closest('#spopX'))close();
+  });
+  addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+
+  /* ── the rotation: one chip opens itself every few seconds so the
+       rail reads as an ad unit. It stops the moment the pointer is
+       anywhere near it, and never runs for reduced-motion users. ── */
+  const rail=document.getElementById('srail');
+  if(rail&&!RMO){
+    setTimeout(()=>rail.classList.add('ready'),900);
+    const all=()=>[...rail.querySelectorAll('.schip')];
+    let i=0,paused=false,timer;
+    rail.addEventListener('pointerenter',()=>{paused=true;all().forEach(c=>c.classList.remove('pulse'))});
+    rail.addEventListener('pointerleave',()=>{paused=false});
+    function tick(){
+      if(!paused){
+        const cs=all();
+        cs.forEach(c=>c.classList.remove('pulse'));
+        cs[i%cs.length]&&cs[i%cs.length].classList.add('pulse');
+        i++;
+        setTimeout(()=>{if(!paused)cs.forEach(c=>c.classList.remove('pulse'))},2400);
+      }
+      timer=setTimeout(tick,5200);
+    }
+    /* hold off until the visitor has actually started reading */
+    let started=false;
+    addEventListener('scroll',()=>{
+      if(started||scrollY<300)return; started=true; setTimeout(tick,1200);
+    },{passive:true});
+  }else if(rail){
+    rail.classList.add('ready');
+  }
 })();
 </script>
 
