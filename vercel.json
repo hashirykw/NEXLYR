@@ -1,0 +1,39 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/seo", "destination": "/web-development.html#seo", "permanent": true },
+    { "source": "/branding", "destination": "/web-development.html#brand", "permanent": true },
+    { "source": "/logo-design", "destination": "/web-development.html#brand", "permanent": true },
+    { "source": "/contact", "destination": "/index.html#contact", "permanent": true },
+    { "source": "/portfolio", "destination": "/index.html#work", "permanent": true },
+    { "source": "/work", "destination": "/index.html#work", "permanent": true },
+    { "source": "/about", "destination": "/index.html#about", "permanent": true },
+    { "source": "/services", "destination": "/index.html#services", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(webp|png|jpg|jpeg|mp4|ico|woff2)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+      ]
+    }
+  ]
+}
