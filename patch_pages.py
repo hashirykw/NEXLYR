@@ -16,6 +16,7 @@ PAGES = [
     "business-software.html",
     "social-media-marketing.html",
     "video-editing.html",
+    "design-and-ads.html",
 ]
 
 # ═══════════════════════════════════════════════════════════════════
