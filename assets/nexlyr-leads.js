@@ -4,7 +4,6 @@
    blocked popup or a desktop visitor without WhatsApp never costs
    you the lead.
 
-   Covers audit items 5 and 7.
    Requires nexlyr-config.js. Uses nx.track() if analytics is loaded.
    ═══════════════════════════════════════════════════════════════ */
 (function () {
@@ -13,7 +12,23 @@
   var CFG = window.NEXLYR_CONFIG || {};
   var URL_ = (CFG.SUPABASE_URL || '').replace(/\/$/, '');
   var KEY = CFG.SUPABASE_ANON_KEY || '';
-  var LIVE = URL_.indexOf('xxxx') === -1 && KEY.indexOf('REPLACE_ME') === -1;
+  var LIVE = URL_.indexOf('xxxx') === -1 && KEY && KEY.indexOf('REPLACE_ME') === -1;
+
+  /* New-style publishable keys (sb_publishable_…) are NOT JWTs and must
+     travel in the apikey header only. Sending them as a Bearer token
+     makes Supabase try to parse them as a JWT and reject the request.
+     Legacy anon keys (eyJ…) still expect both headers. */
+  var IS_NEW_KEY = /^sb_(publishable|secret)_/.test(KEY);
+
+  function headers() {
+    var h = {
+      'apikey': KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    };
+    if (!IS_NEW_KEY) h['Authorization'] = 'Bearer ' + KEY;
+    return h;
+  }
 
   /* ── attribution: where did this person actually come from ──── */
   function attribution() {
@@ -26,7 +41,7 @@
       utm_medium: q.get('utm_medium') || stored.utm_medium || null,
       utm_campaign: q.get('utm_campaign') || stored.utm_campaign || null,
       utm_content: q.get('utm_content') || stored.utm_content || null,
-      // Meta and Google click IDs — these are what make ad attribution work
+      // Meta and Google click IDs — these make ad attribution work
       fbclid: q.get('fbclid') || stored.fbclid || null,
       gclid: q.get('gclid') || stored.gclid || null,
       referrer: stored.referrer || document.referrer || null,
@@ -61,15 +76,16 @@
 
     return fetch(URL_ + '/rest/v1/leads', {
       method: 'POST',
-      headers: {
-        'apikey': KEY,
-        'Authorization': 'Bearer ' + KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
+      headers: headers(),
       body: JSON.stringify(row)
     }).then(function (r) {
-      return { ok: r.ok, status: r.status };
+      if (!r.ok) {
+        return r.text().then(function (t) {
+          console.error('[nexlyr-leads] Supabase rejected the insert', r.status, t);
+          return { ok: false, status: r.status };
+        });
+      }
+      return { ok: true, status: r.status };
     }).catch(function (err) {
       console.error('[nexlyr-leads] save failed', err);
       return { ok: false, reason: 'network' };
@@ -84,8 +100,10 @@
 
     onStatus('Saving your details…', 'ok');
 
-    // A 6s ceiling: a slow network must never block the WhatsApp handoff.
-    var guard = new Promise(function (res) { setTimeout(function () { res({ ok: false, reason: 'timeout' }); }, 6000); });
+    // 6s ceiling: a slow network must never block the WhatsApp handoff.
+    var guard = new Promise(function (res) {
+      setTimeout(function () { res({ ok: false, reason: 'timeout' }); }, 6000);
+    });
 
     return Promise.race([save(values), guard]).then(function (res) {
 
@@ -119,26 +137,31 @@
         '_blank', 'noopener'
       );
 
-      // Popup blocked and nothing was stored — the one case worth shouting about
+      // Popup blocked AND nothing stored — the one case worth shouting about
       if (!win && !res.ok) {
         onStatus(
           'WhatsApp could not open and we could not reach the server. ' +
-          'Please email ' + (CFG.EMAIL || '') + ' or message ' + (CFG.WHATSAPP || '') + ' directly.',
+          'Please email ' + (CFG.EMAIL || '') + ' or message us directly.',
           'err'
         );
         done(false);
         return;
       }
 
-      // Send them somewhere that confirms it worked — and fires the conversion
       setTimeout(function () {
         var t = CFG.THANK_YOU_URL || 'thank-you.html';
-        location.href = t + '?ref=' + encodeURIComponent(values.svc || 'general') + (res.ok ? '' : '&saved=0');
+        location.href = t + '?ref=' + encodeURIComponent(values.svc || 'general') +
+                        (res.ok ? '' : '&saved=0');
       }, win ? 1400 : 700);
 
       done(true);
     });
   }
 
-  window.NexlyrLeads = { save: save, submit: submit, attribution: attribution, configured: LIVE };
+  window.NexlyrLeads = {
+    save: save,
+    submit: submit,
+    attribution: attribution,
+    configured: LIVE
+  };
 })();
