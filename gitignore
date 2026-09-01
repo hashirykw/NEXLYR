@@ -1,4 +1,7 @@
-# OS
+# Backups written by patch_pages.py
+*.bak
+
+# OS noise
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -7,26 +10,8 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 
-# Node (only if tooling is ever added — the site itself needs none)
-node_modules/
-npm-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# Env / secrets
+# Never commit these
 .env
-.env.*
-!.env.example
-
-# Host build output
-.netlify/
-.vercel/
-dist/
-build/
-
-# Local scratch
-*.log
-tmp/
+.env.local
+*.secret
