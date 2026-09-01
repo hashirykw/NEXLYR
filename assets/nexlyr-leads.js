@@ -117,31 +117,32 @@
         });
       }
 
-      var text =
-        'New enquiry — Nexlyr Solutions\n\n' +
-        'Name: ' + (values.name || '') + '\n' +
-        'Business: ' + (values.biz || '') + '\n' +
-        'Phone: ' + (values.phone || '') + '\n' +
-        'Email: ' + (values.email || '') + '\n' +
-        'Service: ' + (values.svc || '') +
-        (values.msg ? '\n\nNotes:\n' + values.msg : '');
+      // Toggle in nexlyr-config.js. Off by default: the lead is already
+      // saved, so opening WhatsApp is optional convenience, not the record.
+      if (CFG.OPEN_WHATSAPP) {
+        var text =
+          'New enquiry — Nexlyr Solutions\n\n' +
+          'Name: ' + (values.name || '') + '\n' +
+          'Business: ' + (values.biz || '') + '\n' +
+          'Phone: ' + (values.phone || '') + '\n' +
+          'Email: ' + (values.email || '') + '\n' +
+          'Service: ' + (values.svc || '') +
+          (values.msg ? '\n\nNotes:\n' + values.msg : '');
 
-      if (res.ok) {
-        onStatus('Saved. Opening WhatsApp so it reaches Hashir straight away.', 'ok');
-      } else {
-        onStatus('Opening WhatsApp — if it does not open, email ' + (CFG.EMAIL || '') + '.', 'ok');
+        window.open(
+          (CFG.WHATSAPP || 'https://wa.me/923053687680') + '?text=' + encodeURIComponent(text),
+          '_blank', 'noopener'
+        );
       }
 
-      var win = window.open(
-        (CFG.WHATSAPP || 'https://wa.me/923053687680') + '?text=' + encodeURIComponent(text),
-        '_blank', 'noopener'
-      );
-
-      // Popup blocked AND nothing stored — the one case worth shouting about
-      if (!win && !res.ok) {
+      if (res.ok) {
+        onStatus('Thanks — your enquiry is with us. Redirecting…', 'ok');
+      } else {
+        // Nothing was stored and we are not opening WhatsApp, so this is
+        // the one case the visitor genuinely needs to act on.
         onStatus(
-          'WhatsApp could not open and we could not reach the server. ' +
-          'Please email ' + (CFG.EMAIL || '') + ' or message us directly.',
+          'We could not reach our server. Please email ' + (CFG.EMAIL || '') +
+          ' or message us on WhatsApp so this does not get lost.',
           'err'
         );
         done(false);
@@ -150,9 +151,8 @@
 
       setTimeout(function () {
         var t = CFG.THANK_YOU_URL || 'thank-you.html';
-        location.href = t + '?ref=' + encodeURIComponent(values.svc || 'general') +
-                        (res.ok ? '' : '&saved=0');
-      }, win ? 1400 : 700);
+        location.href = t + '?ref=' + encodeURIComponent(values.svc || 'general');
+      }, 900);
 
       done(true);
     });
