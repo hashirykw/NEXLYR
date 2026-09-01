@@ -1,0 +1,59 @@
+# ═══════════════════════════════════════════════════════════════
+# nexlyr.solutions — robots.txt
+# ═══════════════════════════════════════════════════════════════
+
+User-agent: *
+Allow: /
+
+# Confirmation page — no reason for it to appear in results
+Disallow: /thank-you.html
+
+# Never index query-string variants of the same page
+Disallow: /*?utm_
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+Disallow: /*?ref=
+
+# ── AI crawlers ────────────────────────────────────────────────
+# Allowed on purpose. When someone asks an assistant for a web
+# developer in Karachi, we want to be in the answer.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ── Scrapers we get nothing from ───────────────────────────────
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+Sitemap: https://nexlyr.solutions/sitemap.xml
