@@ -4181,6 +4181,137 @@ select.inp option{background:#10141D;color:#E8EDF5}
   max-width:64ch;margin-inline:auto;font-family:var(--bdy)}
 @media(max-width:620px){.teamnote{font-size:.77rem}}
 
+
+/* ══════════════════════════════════════════════════════════════════
+   FOOTER — ported from the home page so every page matches.
+   Desktop: the service list runs in two columns instead of one long
+   ladder, and every band of padding comes in. Mobile: the two link
+   ladders and the studio blurb drop entirely — a phone footer only
+   needs the mark, the two ways to reach us, and the line of legal.
+   ══════════════════════════════════════════════════════════════════ */
+@media(min-width:901px){
+  .foot .footgrid{
+    grid-template-columns:1.5fr 1.15fr .85fr 1.2fr;
+    gap:34px;padding:44px 0 28px;
+  }
+  .foot .footgrid>div:nth-child(2) ul{columns:2;column-gap:22px}
+  .foot .footgrid>div:nth-child(2) ul li{break-inside:avoid}
+  .foot h5{margin-bottom:13px}
+  .foot ul{gap:8px}
+  .foot ul a{font-size:.83rem}
+  .foot .crow{padding:10px 12px;margin-top:8px}
+  .foot .crow .ci{width:32px;height:32px;border-radius:10px}
+  .foot .crow .v{font-size:.84rem}
+  .foot .soc{margin-top:16px!important}
+  .foot .soc a{width:34px;height:34px;border-radius:10px}
+  .foot .fbot{padding:14px 0 20px;font-size:.78rem}
+  .foot .brand{margin-bottom:10px!important}
+  .foot .footgrid>div:first-child p{margin-top:10px!important;font-size:.82rem}
+}
+@media(max-width:900px) and (min-width:621px){
+  .foot .footgrid{gap:24px;padding:34px 0 20px}
+  .foot ul{gap:8px}
+  .foot .crow{padding:10px 12px}
+  .foot .fbot{padding:14px 0 20px}
+}
+@media(max-width:620px){
+  .foot .footgrid>div:nth-child(2),
+  .foot .footgrid>div:nth-child(3){display:none}
+  .foot .footgrid>div:first-child p{display:none}
+  .foot .footgrid{
+    grid-template-columns:1fr;
+    gap:14px;padding:20px 0 10px;text-align:center;
+  }
+  .foot .brand{margin-bottom:0!important;justify-content:center}
+  .foot .soc{margin-top:12px!important;justify-content:center;gap:8px}
+  .foot .soc a{width:34px;height:34px;border-radius:10px}
+  .foot h5{margin-bottom:9px;font-size:9.5px}
+  .foot .footgrid>div:last-child{text-align:left}
+  .foot .crow{padding:9px 11px;gap:9px;margin-top:7px}
+  .foot .crow .ci{width:30px;height:30px;border-radius:9px}
+  .foot .crow .k{font-size:8.5px;letter-spacing:.13em}
+  .foot .crow .v{font-size:.8rem}
+  .foot .footgrid>div:last-child .crow:nth-of-type(3){display:none}
+  .foot .fbot{
+    padding:11px 0 16px;font-size:.72rem;gap:4px;
+    flex-direction:column;text-align:center;
+  }
+  .foot .fbot span:last-child{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PERFORMANCE LAYER — appended last so it wins without editing
+   anything above it. Four things cost real milliseconds on this site:
+   off-screen section painting, stacked backdrop-filters on phones,
+   the three drifting orbs, and layers left permanently promoted by
+   will-change. Each is handled below.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Skip layout + paint for sections that are still off screen.
+      contain-intrinsic-size holds a placeholder height so the
+      scrollbar never jumps as they come into view. The hero and the
+      first section are excluded — they are above the fold. ───────── */
+section.sec:not(#home):not(:first-of-type),
+section.sec-t:not(#home){
+  content-visibility:auto;
+  contain-intrinsic-size:auto 820px;
+}
+/* the footer is deliberately NOT content-visibility:auto — it is small,
+   the saving is negligible, and a reserved placeholder taller than the
+   real compact mobile footer causes a scrollbar jump on arrival. */
+
+/* ── 2. Backdrop-filter is the single most expensive thing here: each
+      pane forces the compositor to re-sample everything behind it.
+      Desktop keeps the full effect. Phones step it down hard, and
+      low-power devices drop it to a flat tinted pane. ───────────── */
+@media(max-width:760px){
+  :root{
+    --fx1:blur(18px) saturate(1.35);
+    --fx2:blur(12px) saturate(1.3);
+    --fx3:blur(8px) saturate(1.2);
+  }
+  /* only the panes actually resting on top of moving light need it */
+  .glass.card::after,.glass::before{will-change:auto}
+}
+@media(max-width:760px) and (max-resolution:1.5dppx){
+  .glass,.card,.eyebrow{
+    backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    background-color:rgba(16,20,30,.86);
+  }
+}
+
+/* ── 3. The orbs are three 400–520px blurred circles animating
+      forever, on every page, whether or not anyone can see them.
+      Two is plenty on a laptop and one is plenty on a phone. ────── */
+@media(max-width:900px){.orb.c{display:none}}
+@media(max-width:620px){
+  .orb.b{display:none}
+  .orb{filter:blur(64px);opacity:.4}
+  .orb.a{width:320px;height:320px}
+}
+
+/* ── 4. will-change left on permanently is a memory leak in slow
+      motion — the layer never gets released. Scope it to the moment
+      of interaction instead. ────────────────────────────────────── */
+.card,.btn,.tile,.proj{will-change:auto}
+.card:hover,.btn:hover,.tile:hover,.proj:hover{will-change:transform}
+
+/* ── 5. Images and iframes below the fold never block the first
+      paint, and reserved boxes stop cumulative layout shift. ────── */
+img{content-visibility:auto}
+img[loading="lazy"]{contain-intrinsic-size:auto 300px}
+
+/* ── 6. Reduced motion: kill the ambient animation entirely rather
+      than merely shortening it. ────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  .orb{animation:none!important}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important;
+  }
+}
+
+@media(min-width:1081px) and (max-width:1240px){.navlinks a{padding:.5rem .58rem;font-size:.815rem}.navlinks{gap:2px}}
 </style>
 </head>
 <body>
@@ -4190,7 +4321,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
 <header class="nav" id="nav">
   <div class="navin">
     <a class="brand" href="index.html"><span class="mark"><img src="logo-icon-128.webp" alt="" width="26" height="26" decoding="async" fetchpriority="high"/></span>Nexlyr</a>
-    <nav class="navlinks"><a href="index.html">Home</a><a href="web-development.html">Web Development</a><a href="social-media-marketing.html" class="on">Social Media</a><a href="video-editing.html">Video Editing</a><a href="index.html#work">Work</a><a href="index.html#about">About</a></nav>
+    <nav class="navlinks"><a href="index.html">Home</a><a href="web-development.html">Web Development</a><a href="business-software.html">Software</a><a href="social-media-marketing.html" class="on">Social Media</a><a href="video-editing.html">Video Editing</a><a href="index.html#work">Work</a><a href="index.html#about">About</a></nav>
     <div class="navcta">
       <a class="btn g sm hide-sm" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6A8.4 8.4 0 1120.5 11.6z"/><path d="M8.9 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.5l-.4.5a.4.4 0 00-.1.5 6 6 0 002.9 2.6c.2.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4a1.8 1.8 0 01-1.2 1.6c-.5.2-1.2.2-3.4-.9a8.4 8.4 0 01-3.4-3.6c-.6-1.2-.6-2 0-2.8z"/></svg>WhatsApp</a>
       <a class="btn p sm line" href="index.html#contact"><i class="ring" aria-hidden="true"></i>Contact Us</a>
@@ -4205,7 +4336,7 @@ select.inp option{background:#10141D;color:#E8EDF5}
       <span class="brand"><span class="mark"><img src="logo-icon-128.webp" alt="" width="26" height="26" decoding="async" fetchpriority="high"/></span>Nexlyr</span>
       <button class="iconbtn" id="dclose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     </div>
-    <a class="dl" href="index.html">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="web-development.html">Web Development <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="social-media-marketing.html">Social Media Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="video-editing.html">Video Editing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#work">Work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+    <a class="dl" href="index.html">Home <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="web-development.html">Web Development <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="business-software.html">Business Software <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="social-media-marketing.html">Social Media Marketing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="video-editing.html">Video Editing <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#work">Work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><a class="dl" href="index.html#about">About <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
     <div class="hr" style="margin:20px 0"></div>
     <div class="row">
       <a class="btn wa blk" href="https://wa.me/923053687680" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 01-12.3 7.5L3.5 20.5l1.5-4.6A8.4 8.4 0 1120.5 11.6z"/><path d="M8.9 8.3c.2-.4.4-.4.7-.4h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .4-.1.5l-.4.5a.4.4 0 00-.1.5 6 6 0 002.9 2.6c.2.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4a1.8 1.8 0 01-1.2 1.6c-.5.2-1.2.2-3.4-.9a8.4 8.4 0 01-3.4-3.6c-.6-1.2-.6-2 0-2.8z"/></svg>WhatsApp us</a>
@@ -5049,6 +5180,9 @@ select.inp option{background:#10141D;color:#E8EDF5}
         <ul>
           <li><a href="web-development.html">Web Development</a></li>
           <li><a href="web-development.html#apps">Web Apps &amp; Portals</a></li>
+          <li><a href="business-software.html">Business Software</a></li>
+          <li><a href="business-software.html#systems">Stock &amp; POS Systems</a></li>
+          <li><a href="business-software.html#panel">Admin Panels</a></li>
           <li><a href="web-development.html#chatbots">AI Chatbots</a></li>
           <li><a href="web-development.html#calling">AI Calling Agents</a></li>
           <li><a href="web-development.html#seo">SEO</a></li>
@@ -5543,5 +5677,136 @@ addEventListener('load',()=>{
   addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))close()});
 })();
 </script>
+<!-- ══════════════ CHATBOT ══════════════ -->
+<button class="botfab" id="botfab" aria-label="Chat with Nexlyr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="4"/><path d="M12 8V4"/><circle cx="12" cy="3" r="1.4"/><path d="M8.5 13.5v1.5M15.5 13.5v1.5"/></svg><span class="dot"></span></button>
+<div class="botwin" id="botwin" role="dialog" aria-label="Nexlyr assistant">
+  <div class="bothead">
+    <span class="av"><img src="logo-icon-128.webp" alt="" width="24" height="24" loading="lazy" decoding="async"/></span>
+    <div style="flex:1">
+      <div style="font-family:var(--dsp);font-weight:600;font-size:.92rem;letter-spacing:-.02em">Nexlyr Assistant</div>
+      <span class="live"><i></i>Online &middot; replies instantly</span>
+    </div>
+    <button class="iconbtn" id="botx" aria-label="Close chat" style="width:34px;height:34px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="botbody" id="botbody">
+    <div class="msg b">Hi, welcome to <b>Nexlyr Solutions</b>. I can explain any service, show you our work,
+      or connect you straight to Hashir. What are you looking to build?</div>
+  </div>
+  <div class="quicks">
+    <button>Web development</button><button>Business software</button>
+    <button>Video editing</button><button>See your work</button><button>Contact</button>
+  </div>
+  <div class="botfoot">
+    <input id="botinput" placeholder="Ask anything&hellip;" aria-label="Message"/>
+    <button id="botsend" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5L2.8 10.2l7.4 2.9 2.9 7.4z"/><path d="M21.5 2.5L10.2 13.1"/></svg></button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   NEXLYR ASSISTANT — self-contained.
+
+   Deliberately not sharing helpers with the rest of the page: this same
+   block is dropped into every page, and some of them define $ and RM
+   before this point while others do not. Its own closure means it never
+   depends on load order.
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  var $  = function(s){ return document.querySelector(s); };
+  var $$ = function(s){ return [].slice.call(document.querySelectorAll(s)); };
+  var RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var WA = 'https://wa.me/923053687680';
+  var WAL = '<a href="' + WA + '" target="_blank" rel="noopener">WhatsApp Hashir</a>';
+
+  var bw = $('#botwin'), bb = $('#botbody');
+  if(!bw || !bb) return;
+
+  function botOpen(){ bw.classList.add('open'); setTimeout(function(){ var i=$('#botinput'); i&&i.focus(); }, 400); }
+  function botClose(){ bw.classList.remove('open'); }
+  var fab = $('#botfab');
+  fab && fab.addEventListener('click', function(){ bw.classList.contains('open') ? botClose() : botOpen(); });
+  var bx = $('#botx');
+  bx && bx.addEventListener('click', botClose);
+
+  function say(html, who){
+    var d = document.createElement('div');
+    d.className = 'msg ' + (who || 'b'); d.innerHTML = html;
+    bb.appendChild(d); bb.scrollTop = bb.scrollHeight;
+  }
+  function think(cb){
+    var t = document.createElement('div');
+    t.className = 'msg b typing'; t.innerHTML = '<i></i><i></i><i></i>';
+    bb.appendChild(t); bb.scrollTop = bb.scrollHeight;
+    setTimeout(function(){ t.remove(); cb(); }, RM ? 60 : 520 + Math.random() * 380);
+  }
+
+  var KB = [
+   {k:['price','pricing','cost','rate','charge','budget','kitna','paisa','fee','quote','quotation'],
+    a:'We don\'t publish fixed rates — every build is scoped differently. A five-page brochure site and a Supabase-backed portal are not the same job.<br><br>Tell us what you need and you\'ll get a straight number within a day. ' + WAL + ' or fill the form on the home page.'},
+   {k:['admin panel','admin','panel','software','stock','inventory','pos','point of sale','billing','invoice','erp','dashboard','back office','backoffice'],
+    a:'Custom <b>admin panels and dedicated business software</b> — stock and inventory, billing and POS, appointment booking, staff roles, expenses and reports, plus a customer portal where you need one. Built for your trade rather than a generic package, with no monthly per-seat fee.<br><br>Full breakdown on the <a href="business-software.html">Admin Panels &amp; Software</a> page.'},
+   {k:['barber','salon','saloon','haircut','spa','parlour','parlor','booking','appointment','slot','calendar'],
+    a:'Booking systems are one of our most-requested builds — barbers, salons, clinics and studios. A chair-by-chair calendar, online booking from your own site, WhatsApp reminders and repeat-customer history.<br><br>See <a href="business-software.html#systems">Built for the trade</a>.'},
+   {k:['shop','store','kirana','retail','restaurant','cafe','gym','clinic','pharmacy','school','workshop','tailor','laundry','distributor','wholesale'],
+    a:'We build panels for exactly these trades — retail and wholesale, restaurants, gyms, clinics and pharmacies, schools, workshops, property and more. Each one starts from the same foundation and is then written for how that business actually runs.<br><br>Find yours on the <a href="business-software.html#systems">Business Software</a> page.'},
+   {k:['web','website','site','develop','landing','html','frontend','front-end','next'],
+    a:'Web development is our core. Custom-built front-ends, business sites, booking portals, admin panels with Supabase, and full 3D/WebGL experiences — all hand-coded, no page-builder templates.<br><br>See the full breakdown on the <a href="web-development.html">Web Development</a> page.'},
+   {k:['video','edit','reel','reels','short','shorts','podcast','youtube','tiktok','montage','vfx'],
+    a:'Video editing covers Reels and Shorts, podcast multicam, long-form YouTube, ads and product cuts — with proper sound design, colour and motion graphics.<br><br>Details on the <a href="video-editing.html">Video Editing</a> page.'},
+   {k:['logo','brand','branding','design','graphic','poster','identity','thumbnail','banner','creative'],
+    a:'Logo and identity design, social creatives, thumbnails, packaging and full brand kits.<br><br>See <a href="web-development.html#brand">Logo &amp; Branding</a>.'},
+   {k:['ad','ads','marketing','meta','facebook','instagram','google ad','campaign','leads','ppc','social'],
+    a:'We run Meta and Google campaigns end to end — creative, targeting, testing and reporting — and manage social accounts alongside them.<br><br>More on the <a href="social-media-marketing.html">Social Media Marketing</a> page.'},
+   {k:['chatbot','bot','ai','automation','agent','gpt','assistant'],
+    a:'Two AI products: <b>AI chatbots</b> trained on your business that answer and qualify on your site 24/7, and <b>AI calling agents</b> — a natural-sounding voice that dials leads, books appointments and follows up.<br><br>Both are covered on the <a href="web-development.html#chatbots">Web Development</a> page.'},
+   {k:['call','calling','voice','phone agent','cold call'],
+    a:'AI calling agents handle inbound and outbound calls in a natural voice — qualifying leads, booking slots, chasing no-shows and logging everything. Ask about it on ' + WAL + '.'},
+   {k:['seo','rank','google rank','search','findable','keyword'],
+    a:'Basic on-page and technical SEO ships free with every build — schema, sitemap, Core Web Vitals, Search Console. Advanced, local and ongoing SEO is separate monthly work.<br><br>See <a href="web-development.html#seo">SEO</a>.'},
+   {k:['work','portfolio','project','example','sample','built','made','case'],
+    a:'55+ projects delivered so far — education platforms, restaurants, gyms and brand sites. Open the <a href="index.html#work">Work</a> section to see a selection of them live.'},
+   {k:['team','who','about','founder','hashir','raza','raahym','member'],
+    a:'Three of us: <b>M. Hashir</b> (founder — web development, brand and logo design, ads, podcast-level editing), <b>Raahym Nouman</b> (co-founder, leads operator) and <b>Syed M. Raza</b> (video editor and graphic designer).<br><br>Full profiles in the <a href="index.html#about">About</a> section.'},
+   {k:['contact','whatsapp','number','email','reach','talk','connect','hire'],
+    a:'Fastest route is ' + WAL + ' — 0305 3687680.<br>Email: <a href="mailto:nexlyr.solutions@gmail.com">nexlyr.solutions@gmail.com</a><br>Instagram &amp; LinkedIn: nexlyr.solutions'},
+   {k:['time','long','deadline','fast','urgent','delivery','when','duration'],
+    a:'A landing page usually lands in 3–6 days, a full multi-page site in 1–3 weeks, and a portal or admin panel with a backend in 3–5 weeks. Reels turn around in 24–72 hours. Urgent work can be prioritised — just say so.'},
+   {k:['location','karachi','where','office','pakistan','city'],
+    a:'Based in Karachi, Pakistan — working with clients across Pakistan and internationally. Everything runs remotely, meetings on call or WhatsApp.'},
+   {k:['revision','change','support','maintain','after','warranty','training'],
+    a:'Revisions are built into every project until it\'s right, and we stay on for post-launch fixes, content updates and hosting help. Software builds also come with recorded training for you and your staff.'},
+   {k:['host','domain','vercel','deploy','server','supabase','data','backup','secure','security'],
+    a:'We deploy on Vercel with your own domain, and use Supabase when a project needs auth, a database or an admin panel — with row-level security, rate-limited logins and daily backups. Handover includes full ownership of everything.'},
+   {k:['hi','hello','hey','salam','assalam','yo','good morning','good evening'],
+    a:'Hello — welcome to Nexlyr. I can walk you through web development, admin panels and business software, video editing, design, ads or AI agents. What are you building?'},
+   {k:['thanks','thank','shukriya','ok','okay','great','nice','cool'],
+    a:'Anytime. When you\'re ready, ' + WAL + ' or use the form on the home page and Hashir will come back to you personally.'}
+  ];
+
+  function reply(q){
+    var s = q.toLowerCase(), best = null, score = 0;
+    KB.forEach(function(e){
+      var n = e.k.reduce(function(a, k){ return a + (s.indexOf(k) > -1 ? k.length : 0); }, 0);
+      if(n > score){ score = n; best = e; }
+    });
+    return best ? best.a :
+      'I didn\'t quite catch that. I can help with <b>web development</b>, <b>admin panels and business software</b>, <b>video editing</b>, <b>design &amp; branding</b>, <b>ads</b> or <b>AI agents</b> — or you can go straight to ' + WAL + '.';
+  }
+  function send(v){
+    v = (v || '').trim(); if(!v) return;
+    say(v.replace(/[<>]/g, ''), 'u');
+    var i = $('#botinput'); if(i) i.value = '';
+    think(function(){ say(reply(v)); });
+  }
+  var sb = $('#botsend');
+  sb && sb.addEventListener('click', function(){ send($('#botinput').value); });
+  var bi = $('#botinput');
+  bi && bi.addEventListener('keydown', function(e){ if(e.key === 'Enter') send(bi.value); });
+  $$('.quicks button').forEach(function(b){
+    b.addEventListener('click', function(){ send(b.textContent); });
+  });
+})();
+</script>
+
 </body>
 </html>
