@@ -41,7 +41,13 @@
 <link rel="preload" as="image" href="logo-icon-128.webp" type="image/webp"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Poppins:wght@300;400;500;600;700&family=Italiana&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<!-- Font CSS is fetched without blocking first paint. display=swap already
+     avoids invisible text; this removes the blocking round-trip as well.
+     Dropped the four italic Playfair cuts and Poppins 400 — nothing on the
+     page used them, and each cut was a separate file. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;500;600;700&family=Italiana&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;500;600;700&family=Italiana&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all';this.onload=null"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;500;600;700&family=Italiana&family=Jost:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"/></noscript>
 <script src="https://unpkg.com/lenis@1.3.25/dist/lenis.min.js" defer></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","geo":{"@type":"GeoCoordinates","latitude":24.8607,"longitude":67.0011},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"10:00","closes":"19:00"}],"priceRange":"$$","currenciesAccepted":"PKR","knowsLanguage":["en","ur"],"logo":{"@type":"ImageObject","url":"https://nexlyr.solutions/logo-full.png","width":1024,"height":1024},"image":"https://nexlyr.solutions/og-web-development.jpg","@id":"https://nexlyr.solutions/#org",
@@ -4452,13 +4458,13 @@ select.inp option{background:#10141D;color:#E8EDF5}
 
           <div class="serp__bar">
             <svg class="serp__mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
-            <span class="serp__q"><b class="serp__typed">nexlyr.solutions</b><i class="serp__caret"></i></span>
+            <span class="serp__q"><b class="serp__typed" id="serpTyped">nexlyr.solutions</b><i class="serp__caret"></i></span>
           </div>
 
-          <div class="serp__meta">About 41,300 results &middot; 0.38 seconds</div>
+          <div class="serp__meta"><span class="serp__kind" id="serpKind">Brand search</span><span id="serpCount">About 41,300 results &middot; 0.38 seconds</span></div>
 
           <article class="serp__hit">
-            <span class="serp__rank">01</span>
+            <span class="serp__rank" id="serpRank">01</span>
             <div class="serp__id">
               <span class="serp__fav"><img src="logo-icon-128.webp" alt="" width="26" height="26" decoding="async" onerror="this.parentNode.classList.add(&quot;is-fallback&quot;);this.remove()"/></span>
               <span class="serp__url">
@@ -7377,6 +7383,36 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     g.setAttribute('data-ctx',(card.closest('section')&&card.closest('section').id)||'');
     g.setAttribute('data-lenis-prevent','');
 
+    /* The raised card opened on a small icon with dead space beside it.
+       Service, SEO and brand cards now get a stage across the top: the card's
+       own glyph enlarged on an accent-lit grid, with the discipline named
+       along the bottom. Drawn in CSS from the card's accent, so it costs no
+       request and recolours itself per card. Put data-shot="photo.webp" on a
+       card and that image is used as the backdrop instead. */
+    var sect=(card.closest('section')&&card.closest('section').id)||'';
+    if(['services','seo','brand','industries'].indexOf(sect)>-1 && !g.querySelector('.popstage')){
+      var gi=card.querySelector('.ico'),
+          gk=card.querySelector('.mono'),
+          shot=card.getAttribute('data-shot');
+      var st=document.createElement('div');
+      st.className='popstage';
+      st.setAttribute('aria-hidden','true');
+      st.innerHTML=
+        (shot?'<img class="popshot" src="'+shot+'" alt="" loading="lazy" decoding="async" onerror="this.remove()"/>':'')+
+        '<span class="popgrid"></span><span class="popglow"></span>'+
+        (gi?'<span class="pophero">'+gi.innerHTML+'</span>':'')+
+        (gk?'<span class="popstamp">'+gk.textContent.trim()+'</span>':'');
+      g.insertBefore(st,g.firstChild);
+      /* The stage now carries the glyph and the discipline line, so drop the
+         clone's copies of both — otherwise the raised card opens saying the
+         same thing twice. Only the FIRST .mono is the kicker; later ones
+         (pricing notes, etc.) are different copy and must survive. */
+      var dupIco=g.querySelector(':scope > .ico, :scope > .featin > div > .ico');
+      if(dupIco) dupIco.remove();
+      var dupKick=g.querySelector('.mono');
+      if(dupKick && gk && dupKick.textContent.trim()===gk.textContent.trim()) dupKick.remove();
+    }
+
     const vw=innerWidth, vh=innerHeight, pad=vw<620?14:40;
     /* the two-column feature cards need more room than a plain card, or the
        headline wraps mid-word and the tick list squeezes into slivers */
@@ -7725,10 +7761,25 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
        object opening, rather than a generic panel appearing over it */
     qvBox.style.setProperty('--ac',getComputedStyle(card).getPropertyValue('--ac'));
     qvBox.style.setProperty('--acs',getComputedStyle(card).getPropertyValue('--acs'));
+    /* The dialog used to open on a bare icon with dead space above it.
+       That area is now a stage: the card's own glyph blown up on an accent-lit
+       grid, with the discipline named across the bottom. It is drawn from the
+       card's accent so the tile and the dialog read as one object opening.
+       Drop a data-shot="file.webp" on any card and that image is used instead. */
+    var shot=card.getAttribute('data-shot');
+    var stage=
+      '<div class="qvstage"'+(shot?' style="--shot:url('+JSON.stringify(shot)+')"':'')+'>'+
+        (shot?'<img class="qvshot" src="'+shot+'" alt="" loading="lazy" decoding="async" onerror="this.remove()"/>':'')+
+        '<span class="qvgrid" aria-hidden="true"></span>'+
+        '<span class="qvglow" aria-hidden="true"></span>'+
+        (ico?'<span class="qvhero" aria-hidden="true">'+ico.innerHTML+'</span>':'')+
+        '<span class="qvstamp">'+(kick?kick.textContent.trim():'Nexlyr service')+'</span>'+
+      '</div>';
+
     qvBox.innerHTML=
       '<button class="qvclose" id="qvx" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>'+
+      stage+
       '<div class="qvscroll">'+
-        (ico?'<span class="ico">'+ico.innerHTML+'</span>':'')+
         '<span class="qvkick">'+(kick?kick.textContent.trim():'Nexlyr service')+'</span>'+
         '<h3>'+(h?h.innerHTML:'Service')+'</h3>'+
         '<p class="qvbody">'+(body?body.innerHTML:'')+'</p>'+
@@ -7770,7 +7821,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     else location.href=href;
   }
 
-  document.querySelectorAll('.bento > .card').forEach(function(card){
+  /* SEO and brand cards share the same anatomy as the service cards
+     (.ico / h3 / .mono / .muted.small / ul.ticks), which is exactly what
+     openQV reads — so they only ever needed wiring, not new markup. */
+  document.querySelectorAll('.bento > .card, #seo .grid > .card, #brand .grid > .card').forEach(function(card){
     if(card.dataset.wired) return; card.dataset.wired='1';
 
     /* accent taken from the icon's existing colour class */
@@ -7787,14 +7841,13 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     card.insertBefore(edge,card.firstChild); card.insertBefore(bloom,card.firstChild);
 
     var href=card.tagName==='A'?card.getAttribute('href'):null;
-    if(href){
-      var tag=document.createElement('span');
-      tag.className='gotag'; tag.setAttribute('aria-hidden','true');
-      tag.innerHTML='<i class="gotxt">Press for details</i>'+GO;
-      card.appendChild(tag);
-    } else {
-      card.style.cursor='pointer'; card.setAttribute('tabindex','0');
-    }
+    /* Every tile now carries the affordance — previously only anchors did,
+       which left the non-linked cards looking inert. */
+    var tag=document.createElement('span');
+    tag.className='gotag'; tag.setAttribute('aria-hidden','true');
+    tag.innerHTML='<i class="gotxt">Press for details</i>'+GO;
+    card.appendChild(tag);
+    if(!href){ card.style.cursor='pointer'; card.setAttribute('tabindex','0'); }
 
     var timer=null;
     card.addEventListener('click',function(e){
@@ -10856,21 +10909,28 @@ body::before{
 }
 .serp__mag{ width:15px; height:15px; color:var(--brand); flex:none }
 .serp__q{ display:flex; align-items:center; font-size:.95rem; color:var(--text); min-width:0 }
-.serp__typed{
-  font-weight:500; white-space:nowrap; overflow:hidden;
-  animation:serpType 8s steps(16) infinite;
-}
+.serp__typed{ font-weight:500; white-space:nowrap; overflow:hidden }
 .serp__caret{
   width:1.5px; height:15px; background:var(--brand); margin-left:2px; flex:none;
   animation:serpBlink 1s step-end infinite;
 }
-@keyframes serpType{ 0%{max-width:0} 26%{max-width:11em} 92%{max-width:11em} 100%{max-width:0} }
 @keyframes serpBlink{ 0%,50%{opacity:1} 51%,100%{opacity:0} }
 
 .serp__meta{
+  display:flex; align-items:center; gap:9px; flex-wrap:wrap;
   font-family:var(--mono); font-size:8.5px; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--dim); opacity:.7; margin-bottom:13px; padding-left:2px;
+  color:var(--dim); margin-bottom:13px; padding-left:2px;
 }
+.serp__meta > span:last-child{ opacity:.7 }
+/* Labels which KIND of search is running. The point of the two-query cycle
+   is that the brand query and the commercial query both land on 01. */
+.serp__kind{
+  color:var(--gold); border:1px solid rgba(255,201,120,.32); border-radius:999px;
+  padding:.24rem .55rem; letter-spacing:.13em;
+  transition:opacity .28s ease;
+}
+.serp__rank{ transition:opacity .28s ease }
+.serp.is-swapping .serp__kind, .serp.is-swapping .serp__rank{ opacity:.2 }
 
 /* the winning result */
 .serp__hit{
@@ -10929,9 +10989,11 @@ body::before{
 .serp__scan{
   position:absolute; left:0; right:0; top:0; height:2px; pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--brand),transparent);
-  opacity:.75; animation:serpScan 8s var(--ez,ease-in-out) infinite;
+  opacity:0;
 }
-@keyframes serpScan{ 0%,30%{transform:translateY(0);opacity:0} 34%{opacity:.85} 62%{transform:translateY(148px);opacity:0} 100%{transform:translateY(148px);opacity:0} }
+/* fired once per query instead of looping on a fixed timer */
+.serp.is-scanning .serp__scan{ animation:serpScan 1.5s var(--ez,ease-in-out) }
+@keyframes serpScan{ 0%{transform:translateY(0);opacity:0} 10%{opacity:.9} 72%{transform:translateY(152px);opacity:0} 100%{transform:translateY(152px);opacity:0} }
 @keyframes serpIn{ from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:none} }
 
 /* the also-rans */
@@ -10971,6 +11033,287 @@ body::before{
   .serp__hit{ backdrop-filter:none; -webkit-backdrop-filter:none }
   .serp__bar{ backdrop-filter:none; -webkit-backdrop-filter:none }
   .serp{ backdrop-filter:blur(16px) saturate(150%); -webkit-backdrop-filter:blur(16px) saturate(150%) }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PERFORMANCE
+   Three costs were measured on this page: 70 elements running
+   backdrop-filter, ~3,000 DOM nodes all being laid out on load, and a
+   render-blocking font request (handled in <head>). This block addresses
+   the first two.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* 1. content-visibility was tried here and removed. A single intrinsic-size
+      estimate across sections of very different heights made scroll position
+      drift as each one was realised, which broke anchor jumps (#work,
+      #contact) and fought Lenis. Not worth the paint saving on this page. */
+
+/* 2. Backdrop-filter is the single most expensive property on this page:
+      every layer makes the compositor re-sample everything beneath it on
+      every frame, and a measurement found 77 elements running one. Most were
+      tiny — icon buttons, inline SVGs, the little "press for details" tags —
+      where the blur is invisible at that size but still costs a full
+      compositor pass. Blur is now spent only on surfaces that genuinely
+      float over other content: the nav, modals, the hero panel and the
+      raised card. Everything else keeps the glass look through gradient +
+      border + inset highlight, which costs nothing. */
+.gotag, .iconbtn, .chip, .eyebrow, .flag, .ico,
+.serp__hit.is-dim, .tick, .pophint, .qvkick,
+svg, .badge, .steplink{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+@media(max-width:900px){
+  #services .bento > .card,
+  #seo .grid > .card,
+  #brand .grid > .card,
+  #industries .grid > .card,
+  #work .grid > .card,
+  .slab, .adcard{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+}
+
+/* 3. Promote only what actually animates, and let the browser reclaim it. */
+.serp,.serp__hit{ will-change:auto }
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SERVICE / SEO / BRAND CARDS AS TILES
+   The phone breakpoint already reduced these to name-and-discipline tiles
+   and pushed the detail into the quick-view dialog. That treatment is now
+   the behaviour at every width: fourteen full write-ups stacked down the
+   page was the single biggest contributor to its length. The detail is not
+   gone — it is one press away, and the dialog shows more of it than the
+   card ever did.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* .feat/.solid used to span the full row because it carried a two-column
+   write-up. In tile mode it carries the same content as every other tile,
+   so the span left a large empty box — it now sits in the flow like the
+   rest, and keeps only its accent flag. */
+#services .bento > .card.feat,
+#services .bento > .card.solid{ grid-column:span 1 !important }
+#services .bento > .card.feat h3{ font-size:1.02rem !important }
+
+#services .bento > .card,
+#seo .grid > .card,
+#brand .grid > .card{
+  grid-column:span 1 !important; grid-row:auto !important;
+  min-height:184px; padding:20px 18px 16px !important; border-radius:19px;
+  display:flex !important; flex-direction:column; align-items:flex-start;
+  text-align:left; cursor:pointer;
+  transition:border-color .4s var(--ez,ease), box-shadow .4s var(--ez,ease);
+}
+#seo .grid, #brand .grid{ grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) }
+#services .bento{ grid-template-columns:repeat(auto-fit,minmax(220px,1fr)) !important }
+
+/* the face keeps only what identifies the service */
+#services .bento > .card .featin{ display:block !important }
+#services .bento > .card .featin > div + div{ display:none !important }
+#services .bento > .card .ico,
+#seo .grid > .card .ico,
+#brand .grid > .card .ico{
+  width:40px !important; height:40px !important; border-radius:13px;
+  margin:0 0 14px !important; flex:none;
+}
+#services .bento > .card .ico svg,
+#seo .grid > .card .ico svg,
+#brand .grid > .card .ico svg{ width:18px; height:18px }
+
+#services .bento > .card h3,
+#seo .grid > .card h3,
+#brand .grid > .card h3{
+  font-size:1.02rem !important; line-height:1.28; margin:0 !important;
+  letter-spacing:-.02em; max-width:18ch;
+}
+#services .bento > .card .mono,
+#seo .grid > .card .mono,
+#brand .grid > .card .mono{
+  font-size:9px !important; letter-spacing:.11em !important; line-height:1.5;
+  margin:9px 0 0 !important; max-width:26ch; color:var(--dim) !important;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* everything below the name now lives in the dialog */
+#services .bento > .card p.muted,
+#services .bento > .card ul.ticks,
+#services .bento > .card > span.row,
+#services .bento > .card .featin span.row,
+#services .bento > .card h4,
+#seo .grid > .card p.muted,
+#seo .grid > .card ul.ticks,
+#seo .grid > .card h4,
+#seo .grid > .card .row,
+#brand .grid > .card p.muted,
+#brand .grid > .card ul.ticks,
+#brand .grid > .card h4,
+#brand .grid > .card .row{ display:none !important }
+
+/* the affordance, pinned to the bottom of every tile */
+/* An earlier pass collapsed this into a 29px icon-only pill with
+   font-size:0!important. On a tile the label is the only thing announcing
+   that the card opens, so it is restored to real text — which means
+   matching that !important rather than losing to it. */
+#services .bento > .card > .gotag,
+#seo .grid > .card .gotag,
+#brand .grid > .card .gotag{
+  position:static !important; opacity:1 !important; transform:none !important;
+  width:auto !important; height:auto !important;
+  margin-top:auto !important; padding:14px 0 0 !important;
+  background:none !important; border:0 !important; border-radius:0 !important;
+  display:flex !important; align-items:center; justify-content:flex-start; gap:6px;
+  color:var(--ac,var(--cy)) !important; font-family:var(--mono);
+  font-size:8px !important; letter-spacing:.15em !important;
+  line-height:1.4 !important; text-transform:uppercase;
+  transition:gap .3s var(--ez,ease);
+}
+#services .bento > .card:hover .gotag,
+#seo .grid > .card:hover .gotag,
+#brand .grid > .card:hover .gotag{ gap:10px }
+#services .bento > .card .gotag svg,
+#seo .grid > .card .gotag svg,
+#brand .grid > .card .gotag svg{ width:10px !important; height:10px !important }
+
+/* The label was screen-reader-only in the old bento, where the card already
+   showed its whole description. On a tile it is the only thing telling you
+   the card opens, so it becomes visible text. */
+#services .bento > .card > .gotag .gotxt,
+#seo .grid > .card .gotag .gotxt,
+#brand .grid > .card .gotag .gotxt{
+  position:static !important; width:auto !important; height:auto !important;
+  margin:0 !important; padding:0 !important;
+  overflow:visible !important; clip-path:none !important; border:0 !important;
+  font-style:normal; font-size:8px !important; line-height:1.4 !important;
+  white-space:nowrap;
+}
+
+#services .bento > .card:hover,
+#seo .grid > .card:hover,
+#brand .grid > .card:hover{
+  border-color:rgba(var(--acs,95,225,255),.34);
+  box-shadow:0 20px 46px -30px rgba(0,0,0,.9), 0 0 40px -26px rgba(var(--acs,95,225,255),.6);
+}
+#services .qvbtn{ display:none }
+
+@media(max-width:760px){
+  #services .bento,#seo .grid,#brand .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:10px
+  }
+  #services .bento > .card,#seo .grid > .card,#brand .grid > .card{
+    min-height:150px; padding:15px 12px 12px !important; border-radius:16px;
+    align-items:center; text-align:center;
+  }
+  #services .bento > .card .ico,#seo .grid > .card .ico,#brand .grid > .card .ico{
+    width:34px !important; height:34px !important; margin:0 auto 11px !important
+  }
+  #services .bento > .card h3,#seo .grid > .card h3,#brand .grid > .card h3{
+    font-size:.9rem !important; max-width:16ch
+  }
+  #services .bento > .card .mono,#seo .grid > .card .mono,#brand .grid > .card .mono{
+    font-size:8px !important; max-width:22ch
+  }
+  #services .bento > .card .gotag,#seo .grid > .card .gotag,#brand .grid > .card .gotag{
+    justify-content:center; font-size:7.5px; padding-top:10px
+  }
+}
+@media(max-width:400px){
+  #services .bento > .card,#seo .grid > .card,#brand .grid > .card{ min-height:138px }
+}
+
+/* ══════════════ QUICK-VIEW STAGE ══════════════
+   Fills the dead space at the top of the service dialog. Built from CSS and
+   the card's existing glyph rather than a photograph: it costs no request,
+   it can never 404, and it recolours itself per card. */
+.popstage,
+.qvstage{
+  position:relative; height:168px; margin:-2px -2px 20px;
+  border-radius:19px 19px 16px 16px; overflow:hidden;
+  background:
+    radial-gradient(120% 100% at 22% 0%,rgba(var(--acs,95,225,255),.28),transparent 62%),
+    linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.012) 46%,transparent),
+    linear-gradient(180deg,rgba(12,18,29,.9),rgba(6,9,15,.96));
+  border-bottom:1px solid rgba(var(--acs,95,225,255),.22);
+  display:grid; place-items:center; isolation:isolate;
+}
+.popshot,
+.qvshot{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; opacity:.5; filter:saturate(.85) contrast(1.05);
+}
+/* blueprint grid, echoing the page background */
+.popgrid,
+.qvgrid{
+  position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background-image:
+    linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:34px 34px;
+  -webkit-mask-image:radial-gradient(80% 80% at 50% 40%,#000,transparent 78%);
+          mask-image:radial-gradient(80% 80% at 50% 40%,#000,transparent 78%);
+}
+.popglow,
+.qvglow{
+  position:absolute; left:50%; top:44%; width:230px; height:230px; translate:-50% -50%;
+  border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle,rgba(var(--acs,95,225,255),.34),transparent 66%);
+  filter:blur(14px);
+}
+/* the card's own glyph, enlarged */
+.pophero,
+.qvhero{
+  position:relative; z-index:1; display:grid; place-items:center;
+  width:70px; height:70px; border-radius:22px;
+  background:linear-gradient(150deg,rgba(255,255,255,.15),rgba(255,255,255,.04));
+  border:1px solid rgba(var(--acs,95,225,255),.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    0 18px 40px -20px rgba(0,0,0,.9),
+    0 0 44px -14px rgba(var(--acs,95,225,255),.75);
+  color:var(--ac,var(--cy));
+}
+.pophero svg,
+.qvhero svg{ width:31px; height:31px }
+.popstamp,
+.qvstamp{
+  position:absolute; left:0; right:0; bottom:0; z-index:1;
+  padding:9px 16px;
+  font-family:var(--mono); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ac,var(--cy));
+  background:linear-gradient(180deg,transparent,rgba(4,7,14,.86));
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+/* the dialog no longer repeats the icon below the stage */
+.qvscroll > .ico{ display:none }
+.qvscroll > .qvkick{ margin-top:0 }
+
+@media(max-width:520px){
+  .qvstage{ height:132px; margin-bottom:16px }
+  .qvhero{ width:58px; height:58px; border-radius:18px }
+  .qvhero svg{ width:26px; height:26px }
+}
+@media(prefers-reduced-motion:no-preference){
+  .qv.on .qvstage{ animation:qvStage .55s var(--ez,cubic-bezier(.2,.7,.2,1)) both }
+  @keyframes qvStage{ from{opacity:0;transform:scale(.97)} to{opacity:1;transform:none} }
+}
+
+/* the raised card's stage sits flush inside its rounded top corners */
+.popghost{ position:relative; overflow:hidden }
+.popghost .popstage{
+  height:180px; width:auto;
+  margin:-22px -22px 22px; border-radius:17px 17px 14px 14px;
+}
+.popghost .pophero{ width:76px; height:76px }
+.popghost .pophero svg{ width:34px; height:34px }
+/* the tile's own affordance is meaningless once the card is open */
+.popghost .gotag{ display:none !important }
+@media(max-width:620px){
+  .popghost .popstage{ height:140px; margin-bottom:16px }
+  .popghost .pophero{ width:60px; height:60px }
+  .popghost .pophero svg{ width:27px; height:27px }
 }
 </style>
 
@@ -11061,5 +11404,106 @@ body::before{
 })();
 </script>
 
+
+<script>
+/* ══════════════ HERO SEARCH — TWO-QUERY CYCLE ══════════════
+   Query 1 is the brand name: anyone can rank for their own domain.
+   Query 2 is the commercial keyword someone types when they do NOT yet
+   know you exist. Nexlyr holds 01 on both, which is the actual claim the
+   SEO section makes further down the page. */
+(function(){
+  var wrap = document.getElementById('serp');
+  if(!wrap) return;
+  var typed = document.getElementById('serpTyped'),
+      kind  = document.getElementById('serpKind'),
+      count = document.getElementById('serpCount'),
+      rank  = document.getElementById('serpRank');
+  if(!typed||!kind||!count||!rank) return;
+
+  var RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  var Q = [
+    { q:'nexlyr.solutions',
+      kind:'Brand search',
+      count:'About 41,300 results \u00b7 0.38 seconds',
+      rank:'01' },
+    { q:'best web development agency',
+      kind:'Competitive search',
+      count:'About 1,240,000,000 results \u00b7 0.61 seconds',
+      rank:'01' }
+  ];
+
+  var i = 0, timer;
+  function stop(){ clearTimeout(timer); }
+
+  function swapMeta(item){
+    wrap.classList.add('is-swapping');
+    setTimeout(function(){
+      kind.textContent  = item.kind;
+      count.innerHTML   = item.count;
+      rank.textContent  = item.rank;
+      wrap.classList.remove('is-swapping');
+    }, 240);
+  }
+
+  function scan(){
+    wrap.classList.remove('is-scanning');
+    void wrap.offsetWidth;              /* reflow so the animation re-fires */
+    wrap.classList.add('is-scanning');
+  }
+
+  function type(text, done){
+    var n = 0;
+    (function step(){
+      typed.textContent = text.slice(0, ++n);
+      if(n < text.length) timer = setTimeout(step, 46 + Math.random()*38);
+      else done && done();
+    })();
+  }
+
+  function erase(done){
+    var t = typed.textContent;
+    (function step(){
+      t = t.slice(0, -1);
+      typed.textContent = t;
+      if(t.length) timer = setTimeout(step, 22);
+      else done && done();
+    })();
+  }
+
+  function cycle(){
+    var item = Q[i];
+    type(item.q, function(){
+      swapMeta(item);
+      scan();
+      timer = setTimeout(function(){
+        i = (i + 1) % Q.length;
+        erase(function(){ timer = setTimeout(cycle, 380); });
+      }, 3400);
+    });
+  }
+
+  /* Reduced motion: no typing, no sweep — show the harder query outright,
+     since that is the one that carries the message. */
+  if(RM){
+    var last = Q[Q.length-1];
+    typed.textContent = last.q;
+    kind.textContent  = last.kind;
+    count.innerHTML   = last.count;
+    rank.textContent  = last.rank;
+    return;
+  }
+
+  /* Only run while the hero is actually on screen. */
+  typed.textContent = '';
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(e.isIntersecting){ stop(); cycle(); }
+      else stop();
+    });
+  }, {threshold:.25});
+  io.observe(wrap);
+})();
+</script>
 </body>
 </html>
