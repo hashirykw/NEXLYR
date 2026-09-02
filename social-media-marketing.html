@@ -4770,6 +4770,16 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
   border-radius:0 0 14px 0;background:var(--brand);color:#06070B;font-weight:600;
   font-size:14px;text-decoration:none}
 .nx-skip:focus{left:0}
+
+/* ── FINAL: .btn.p base colour ────────────────────────────────
+   Earlier rules set `background` as a shorthand (solid white), while the
+   later glass rules only set `background-image`. The white background-COLOR
+   survived underneath and bled through the translucent gradient, which is
+   why the button rendered washed-out white instead of dark glass.
+   Pin the base colour so --gl-face sits on something dark. */
+.btn.p{background-color:#171C27}
+.btn.p:hover,.btn.p:focus-visible{background-color:#1E2533}
+.btn.p:active{background-color:#12161F}
 </style>
 
 <!-- ════════════ HERO ════════════ -->
