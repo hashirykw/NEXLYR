@@ -1319,11 +1319,9 @@ select.inp option{background:#0F141C;color:var(--text)}
                   <path d="M32 32l136 136M168 32L32 168"/>
                   <rect x="41" y="41" width="118" height="118"/>
                 </g>
-                <g class="bsys-mark" id="bsysMark" stroke="url(#bsysG)" fill="none"
-                   stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></g>
               </svg>
               <img class="bsys-logo" id="bsysLogo" src="logo-icon-512.webp"
-                   alt="" width="108" height="108" decoding="async" loading="lazy"/>
+                   alt="" width="108" height="108" decoding="async"/>
               </div>
 
               <div class="bsys-id">
@@ -1350,14 +1348,14 @@ select.inp option{background:#0F141C;color:var(--text)}
             <!-- campaign result -->
             <div class="bsys-res">
               <div class="bsys-stat">
-                <span class="bsys-k">Cost / lead</span>
-                <strong id="bsysCpl">Rs 410</strong>
-                <i class="bsys-d down" id="bsysCplD">&darr; 62%</i>
+                <span class="bsys-k">Colour</span>
+                <strong id="bsysCpl">Deep ink · cyan</strong>
+                <i class="bsys-d down" id="bsysCplD">Palette</i>
               </div>
               <div class="bsys-stat">
-                <span class="bsys-k">Enquiries</span>
-                <strong id="bsysLeads">128</strong>
-                <i class="bsys-d up" id="bsysLeadsD">&uarr; 3.4&times;</i>
+                <span class="bsys-k">Approach</span>
+                <strong id="bsysLeads">In-house</strong>
+                <i class="bsys-d up" id="bsysLeadsD">Built</i>
               </div>
               <svg class="bsys-spark" viewBox="0 0 130 36" preserveAspectRatio="none" aria-hidden="true">
                 <path id="bsysSpark" d="M2 30 L24 27 L46 22 L68 15 L90 12 L112 6 L128 3"
@@ -6400,8 +6398,8 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
 .bsys-res{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:14px;
   padding:17px 20px 18px;border-top:1px solid rgba(255,255,255,.07);
   background:rgba(255,255,255,.024)}
-.bsys-stat strong{display:block;margin-top:6px;font-size:24px;font-weight:600;
-  letter-spacing:-.03em;color:var(--text);font-variant-numeric:tabular-nums}
+.bsys-stat strong{display:block;margin-top:6px;font-size:15px;font-weight:600;
+  letter-spacing:-.01em;color:var(--text);line-height:1.35}
 .bsys-d{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:10.5px;
   padding:2px 9px;border-radius:99px;font-style:normal}
 .bsys-d.down{color:#4FE3B0;background:rgba(79,227,176,.13)}
@@ -6446,7 +6444,7 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
 .bsys-logo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
   opacity:0;transform:scale(.86);pointer-events:none;
   transition:opacity .5s var(--ez,ease),transform .7s cubic-bezier(.16,1,.3,1)}
-.bsys.is-real .bsys-logo{animation:bsysReal 5.6s ease-in-out infinite}
+.bsys-logo{animation:bsysReal 5.6s ease-in-out infinite}
 @keyframes bsysReal{
   0%{opacity:0;transform:scale(.86) rotate(-6deg)}
   30%{opacity:1;transform:scale(1) rotate(0)}
@@ -6454,25 +6452,9 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
   97%{opacity:0;transform:scale(1.04)}
   100%{opacity:0}
 }
-/* per-path draw length, set from JS so every mark draws at its own pace */
-.bsys-mark path{
-  stroke-dasharray:var(--len,420);stroke-dashoffset:var(--len,420);
-  animation:bsysDrawVar 5.6s cubic-bezier(.16,1,.3,1) infinite;
-  animation-delay:var(--d,0s)}
-@keyframes bsysDrawVar{
-  0%{stroke-dashoffset:var(--len,420)}
-  44%{stroke-dashoffset:0}
-  88%{stroke-dashoffset:0;opacity:1}
-  96%{opacity:0}
-  100%{stroke-dashoffset:var(--len,420);opacity:0}
-}
-.bsys.is-real .bsys-mark{opacity:0}
 @media(max-width:560px){.bsys-markwrap{width:84px;height:84px}}
 @media(prefers-reduced-motion:reduce){
-  .bsys-mark path,.bsys.is-real .bsys-logo{animation:none!important}
-  .bsys-mark path{stroke-dashoffset:0}
-  .bsys-logo{opacity:0}
-  .bsys.is-real .bsys-logo{opacity:1;transform:none}
+  .bsys-logo{animation:none!important;opacity:1;transform:none}
 }
 
 /* ── FINAL: .btn.p base colour ────────────────────────────────
@@ -7309,38 +7291,26 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
   var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var BRANDS = [
-    { name:'NEXLYR',  tag:'The Next Layer of Digital', cat:'Technology · Karachi',
-      file:'nexlyr-mark.svg', real:true, paths:[],
+    { name:'NEXLYR', tag:'The Next Layer of Digital', cat:'Our own studio · Karachi',
+      file:'nexlyr-mark.svg', logo:'logo-icon-512.webp',
       c:['#7FEBFF','#18C8F0','#3B7DFF'],
       sw:['#06070B','#0D1018','#5FE1FF','#18C8F0','#F3F6FA'],
       type:["'Playfair Display',serif","'Poppins',sans-serif","'JetBrains Mono',monospace"],
-      cpl:'Rs 410', cplD:'↓ 62%', leads:'128', leadsD:'↑ 3.4×' },
+      k1:'Palette', v1:'Deep ink · cyan', k2:'Built', v2:'In-house' },
 
-    { name:'MERIDIAN', tag:'Built for the long game', cat:'Retail · Lahore',
-      file:'meridian-mark.svg', real:false,
-      /* an M drawn as a single peak, held inside an open ring */
-      paths:[
-        'M100 30a70 70 0 0170 70',
-        'M170 100a70 70 0 01-140 0',
-        'M64 140V70l36 40 36-40v70'
-      ],
-      c:['#FFD9A8','#F5A64B','#E0682B'],
-      sw:['#0B0906','#181109','#F5A64B','#E0682B','#FBF3E8'],
+    { name:'CAMBRIDGE ONLINE', tag:'Learn · Prepare · Succeed', cat:'Online academy',
+      file:'cambridge-identity.svg', logo:'client-cambridge.webp',
+      c:['#F3D9A4','#D4A548','#8C5A1E'],
+      sw:['#0B0805','#1A1109','#D4A548','#8C5A1E','#F6ECD9'],
       type:["'Playfair Display',serif","'Jost',sans-serif","'JetBrains Mono',monospace"],
-      cpl:'Rs 268', cplD:'↓ 71%', leads:'214', leadsD:'↑ 4.1×' },
+      k1:'Palette', v1:'Gold · oxblood', k2:'Mark', v2:'Crest & laurel' },
 
-    { name:'VERTA',   tag:'Clinics that run themselves', cat:'Healthcare · Islamabad',
-      file:'verta-mark.svg', real:false,
-      /* a leaf whose vein doubles as a pulse line */
-      paths:[
-        'M100 36c28 32 42 58 42 80a42 42 0 01-84 0c0-22 14-48 42-80z',
-        'M100 74v58',
-        'M76 116h12l8-16 10 30 8-14h10'
-      ],
-      c:['#B9F5D8','#4FE3B0','#1FA97E'],
-      sw:['#050A08','#0B140F','#4FE3B0','#1FA97E','#EFFBF6'],
+    { name:'INFINIMIND ACADEMY', tag:'No limits on learning', cat:'Academy',
+      file:'infinimind-identity.svg', logo:'client-infinimind.webp',
+      c:['#F2F5FA','#C3CBD8','#7E8798'],
+      sw:['#050506','#101114','#C3CBD8','#7E8798','#F2F5FA'],
       type:["'Jost',sans-serif","'Poppins',sans-serif","'JetBrains Mono',monospace"],
-      cpl:'Rs 512', cplD:'↓ 48%', leads:'96',  leadsD:'↑ 2.7×' }
+      k1:'Palette', v1:'Mono · silver', k2:'Mark', v2:'Infinity loop' }
   ];
 
   var el = {
@@ -7348,7 +7318,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     tag:  document.getElementById('bsysTag'),
     cat:  document.getElementById('bsysCat'),
     file: document.getElementById('bsysFile'),
-    mark: document.getElementById('bsysMark'),
+    logo: document.getElementById('bsysLogo'),
     wrap: document.querySelector('.bsys'),
     sw:   document.getElementById('bsysSw'),
     type: document.getElementById('bsysType'),
@@ -7380,25 +7350,11 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
     if (el.tag)   el.tag.textContent  = b.tag;
     if (el.cat)   el.cat.textContent  = b.cat;
     if (el.file)  el.file.textContent = b.file;
-    /* the Nexlyr identity uses the real logo file; the others are drawn */
-    if (el.wrap) el.wrap.classList.toggle('is-real', !!b.real);
-    if (el.mark) {
-      el.mark.innerHTML = '';
-      b.paths.forEach(function (d, i) {
-        var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        p.setAttribute('d', d);
-        el.mark.appendChild(p);
-        /* draw each stroke over its own length, staggered slightly */
-        var len = 420;
-        try { len = Math.ceil(p.getTotalLength()) || 420; } catch (e) {}
-        p.style.setProperty('--len', len);
-        p.style.setProperty('--d', (i * 0.12).toFixed(2) + 's');
-      });
-    }
-    if (el.cpl)   el.cpl.textContent  = b.cpl;
-    if (el.cplD)  el.cplD.textContent = b.cplD;
-    if (el.leads) el.leads.textContent  = b.leads;
-    if (el.leadsD)el.leadsD.textContent = b.leadsD;
+    if (el.logo) el.logo.src = b.logo;
+    if (el.cpl)   el.cpl.textContent   = b.v1;
+    if (el.cplD)  el.cplD.textContent  = b.k1;
+    if (el.leads) el.leads.textContent = b.v2;
+    if (el.leadsD)el.leadsD.textContent = b.k2;
 
     swatches.forEach(function (s, i) { s.style.background = b.sw[i] || b.sw[0]; });
     typeBits.forEach(function (t, i) { t.style.fontFamily = b.type[i] || b.type[0]; });
@@ -7409,7 +7365,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeProject();closePerson()
   if (RM) return;
 
   /* phase label tracks the CSS timeline */
-  var PHASES = [[0,'Constructing'],[2200,'Locking palette'],[3400,'Setting type'],[4400,'Measuring']];
+  var PHASES = [[0,'Loading mark'],[2200,'Locking palette'],[3400,'Setting type'],[4400,'Kit ready']];
   function runPhases() {
     PHASES.forEach(function (p) {
       setTimeout(function () { if (el.phase) el.phase.textContent = p[1]; }, p[0]);
