@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
 
-  "//": "cleanUrls serves /video-editing for video-editing.html. Do not remove it — Google has the clean URLs indexed and they 404 without this.",
   "cleanUrls": true,
   "trailingSlash": false,
 
