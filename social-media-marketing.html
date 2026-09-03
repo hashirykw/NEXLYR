@@ -5782,58 +5782,224 @@ addEventListener('load',()=>{
     setTimeout(function(){ t.remove(); cb(); }, RM ? 60 : 520 + Math.random() * 380);
   }
 
-  var KB = [
-   {k:['price','pricing','cost','rate','charge','budget','kitna','paisa','fee','quote','quotation'],
-    a:'We don\'t publish fixed rates — every build is scoped differently. A five-page brochure site and a Supabase-backed portal are not the same job.<br><br>Tell us what you need and you\'ll get a straight number within a day. ' + WAL + ' or fill the form on the home page.'},
-   {k:['admin panel','admin','panel','software','stock','inventory','pos','point of sale','billing','invoice','erp','dashboard','back office','backoffice'],
-    a:'Custom <b>admin panels and dedicated business software</b> — stock and inventory, billing and POS, appointment booking, staff roles, expenses and reports, plus a customer portal where you need one. Built for your trade rather than a generic package, with no monthly per-seat fee.<br><br>Full breakdown on the <a href="business-software.html">Admin Panels &amp; Software</a> page.'},
-   {k:['barber','salon','saloon','haircut','spa','parlour','parlor','booking','appointment','slot','calendar'],
-    a:'Booking systems are one of our most-requested builds — barbers, salons, clinics and studios. A chair-by-chair calendar, online booking from your own site, WhatsApp reminders and repeat-customer history.<br><br>See <a href="business-software.html#systems">Built for the trade</a>.'},
-   {k:['shop','store','kirana','retail','restaurant','cafe','gym','clinic','pharmacy','school','workshop','tailor','laundry','distributor','wholesale'],
-    a:'We build panels for exactly these trades — retail and wholesale, restaurants, gyms, clinics and pharmacies, schools, workshops, property and more. Each one starts from the same foundation and is then written for how that business actually runs.<br><br>Find yours on the <a href="business-software.html#systems">Business Software</a> page.'},
-   {k:['web','website','site','develop','landing','html','frontend','front-end','next'],
-    a:'Web development is our core. Custom-built front-ends, business sites, booking portals, admin panels with Supabase, and full 3D/WebGL experiences — all hand-coded, no page-builder templates.<br><br>See the full breakdown on the <a href="web-development.html">Web Development</a> page.'},
-   {k:['video','edit','reel','reels','short','shorts','podcast','youtube','tiktok','montage','vfx'],
-    a:'Video editing covers Reels and Shorts, podcast multicam, long-form YouTube, ads and product cuts — with proper sound design, colour and motion graphics.<br><br>Details on the <a href="video-editing.html">Video Editing</a> page.'},
-   {k:['logo','brand','branding','design','graphic','poster','identity','thumbnail','banner','creative'],
-    a:'Logo and identity design, social creatives, thumbnails, packaging and full brand kits.<br><br>See <a href="web-development.html#brand">Logo &amp; Branding</a>.'},
-   {k:['ad','ads','marketing','meta','facebook','instagram','google ad','campaign','leads','ppc','social'],
-    a:'We run Meta and Google campaigns end to end — creative, targeting, testing and reporting — and manage social accounts alongside them.<br><br>More on the <a href="social-media-marketing.html">Social Media Marketing</a> page.'},
-   {k:['chatbot','bot','ai','automation','agent','gpt','assistant'],
-    a:'Two AI products: <b>AI chatbots</b> trained on your business that answer and qualify on your site 24/7, and <b>AI calling agents</b> — a natural-sounding voice that dials leads, books appointments and follows up.<br><br>Both are covered on the <a href="web-development.html#chatbots">Web Development</a> page.'},
-   {k:['call','calling','voice','phone agent','cold call'],
-    a:'AI calling agents handle inbound and outbound calls in a natural voice — qualifying leads, booking slots, chasing no-shows and logging everything. Ask about it on ' + WAL + '.'},
-   {k:['seo','rank','google rank','search','findable','keyword'],
-    a:'Basic on-page and technical SEO ships free with every build — schema, sitemap, Core Web Vitals, Search Console. Advanced, local and ongoing SEO is separate monthly work.<br><br>See <a href="web-development.html#seo">SEO</a>.'},
-   {k:['work','portfolio','project','example','sample','built','made','case'],
-    a:'55+ projects delivered so far — education platforms, restaurants, gyms and brand sites. Open the <a href="index.html#work">Work</a> section to see a selection of them live.'},
-   {k:['team','who','about','founder','hashir','raza','raahym','member'],
-    a:'Three of us: <b>M. Hashir</b> (founder — web development, brand and logo design, ads, podcast-level editing), <b>Raahym Nouman</b> (co-founder, leads operator) and <b>Syed M. Raza</b> (video editor and graphic designer).<br><br>Full profiles in the <a href="index.html#about">About</a> section.'},
-   {k:['contact','whatsapp','number','email','reach','talk','connect','hire'],
-    a:'Fastest route is ' + WAL + ' — 0305 3687680.<br>Email: <a href="mailto:nexlyr.solutions@gmail.com">nexlyr.solutions@gmail.com</a><br>Instagram &amp; LinkedIn: nexlyr.solutions'},
-   {k:['time','long','deadline','fast','urgent','delivery','when','duration'],
-    a:'A landing page usually lands in 3–6 days, a full multi-page site in 1–3 weeks, and a portal or admin panel with a backend in 3–5 weeks. Reels turn around in 24–72 hours. Urgent work can be prioritised — just say so.'},
-   {k:['location','karachi','where','office','pakistan','city'],
-    a:'Based in Karachi, Pakistan — working with clients across Pakistan and internationally. Everything runs remotely, meetings on call or WhatsApp.'},
-   {k:['revision','change','support','maintain','after','warranty','training'],
-    a:'Revisions are built into every project until it\'s right, and we stay on for post-launch fixes, content updates and hosting help. Software builds also come with recorded training for you and your staff.'},
-   {k:['host','domain','vercel','deploy','server','supabase','data','backup','secure','security'],
-    a:'We deploy on Vercel with your own domain, and use Supabase when a project needs auth, a database or an admin panel — with row-level security, rate-limited logins and daily backups. Handover includes full ownership of everything.'},
-   {k:['hi','hello','hey','salam','assalam','yo','good morning','good evening'],
-    a:'Hello — welcome to Nexlyr. I can walk you through web development, admin panels and business software, video editing, design, ads or AI agents. What are you building?'},
-   {k:['thanks','thank','shukriya','ok','okay','great','nice','cool'],
-    a:'Anytime. When you\'re ready, ' + WAL + ' or use the form on the home page and Hashir will come back to you personally.'}
+      var KB = [
+
+   /* ── conversation ── */
+   {t:'', s:1, w:1.2, k:['hi','hii','hello','helo','hey','heyy','yo','salam','salaam','assalam','assalamualaikum','aoa','asalam','good morning','good afternoon','good evening','kaise ho','kya haal'],
+    a:`Hello, and welcome to Nexlyr Solutions. I can walk you through <b>web development</b>, <b>business software and admin panels</b>, <b>video editing</b>, <b>logo and brand design</b>, <b>Meta and Google ads</b>, <b>social media</b>, <b>SEO</b> or our <b>AI chatbots and calling agents</b> — pricing, timelines and how we work included.<br><br>What are you building? If it is easier to just talk it through, ${WAL} and you will be speaking to Hashir directly.`},
+
+   {t:'', s:1, w:1.2, k:['thanks','thank you','thankyou','thank','shukriya','shukria','jazakallah','ok','okay','okey','acha','theek','got it','great','nice','cool','perfect','awesome','good'],
+    a:`Happy to help — that is what I am here for. Ask me anything else you are unsure about, no question is too small.<br><br>When you are ready to talk numbers, ${WAL} or fill the project brief on the <a href="index.html#contact">contact section</a> and Hashir replies to you personally, usually the same day.`},
+
+   {t:'', s:1, k:['bye','goodbye','good bye','see you','khuda hafiz','allah hafiz','later','tata'],
+    a:`Take care. The chat stays here whenever you want to pick it back up, and ${WAL} is open any time you would rather speak to a person.`},
+
+   {t:'the team', w:1.3, k:['are you a bot','are you real','are you human','are you ai','who are you','what are you','are you a person','am i talking to a human','is this a bot','real person','robot','you are bot'],
+    a:`Straight answer: I am the Nexlyr assistant built into this site — automated, and trained only on what is actually on these pages, so I will not invent things to sound clever. If I do not know something, I will say so and pass you to a person.<br><br>Behind me there are three real people, and ${WAL} reaches Hashir himself — not a queue, not a call centre.`},
+
+   {t:'the team', k:['help','confused','not sure','dont know','do not know','i need help','can you help','samajh','madad','stuck','lost'],
+    a:`Of course — and you do not need to know the technical words for any of this. Tell me in plain language what your business does and what is going wrong or what you want to launch, and I will point you at the right service.<br><br>If it is easier to say it out loud, ${WAL} — you can send a voice note and Hashir will listen to it himself.`},
+
+   /* ── money, scope, time ── */
+   {t:'pricing', w:1.35, k:['price','prices','pricing','cost','costs','costing','rate','rates','charge','charges','fee','fees','budget','quote','quotation','estimate','how much','kitna','kitne','kitni','paisa','paise','rupees','cheap','cheapest','expensive','affordable','package','packages','price list','pricelist'],
+    a:`We do not publish a price list, and that is deliberate — a five-page brochure site and a portal with logins, a database and an admin panel are not the same job, so one table cannot be honest about both.<br><br>Four things move the number: <b>how many screens</b>, <b>whether there is a backend</b>, <b>who writes the copy and sources the photos</b>, and <b>what happens after launch</b>.<br><br>Send the scope — a paragraph, a reference site, a screenshot or a voice note — and you get back a written scope, a timeline and one straight number, usually the same day. ${WAL} or use the <a href="index.html#contact">project brief</a>.`},
+
+   {t:'pricing', w:1.3, k:['payment','payments','pay','paid','advance','deposit','instalment','instalments','installment','installments','bank transfer','easypaisa','jazzcash','invoice me','milestone','terms'],
+    a:`Payment terms are written into the quote before any work starts, so nothing is a surprise halfway through — you see the scope, the timeline and the number together, in writing.<br><br>Exact split and method for your project is something Hashir confirms with you directly: ${WAL}.`},
+
+   {t:'how to start', w:1.3, k:['start','get started','begin','how do i start','how to start','next step','next steps','process','how it works','how does it work','how do you work','onboarding','first step','shuru','kaise start'],
+    a:`Two routes, both landing in the same place:<br><br>1. ${WAL} and talk it through — voice notes are welcome.<br>2. Fill the <a href="index.html#contact">project brief</a>. It validates everything and opens WhatsApp with your details already written out, so it reaches Hashir directly instead of sitting in an inbox.<br><br>From there you get a written scope, a timeline and a number — usually the same day. Then you see a <b>live preview link from the first week</b>, not a big reveal at the end, so you are never guessing what you paid for.`},
+
+   {t:'what you need to send', k:['what do you need','what do you need from me','requirements','what should i send','what info','content ready','no content','dont have content','do not have content','photos','copy','text ready'],
+    a:`Less than most people expect. What the business does, who it is for, one or two reference sites you like or hate, and any content you already have.<br><br>No copy or photos yet? That is normal — we write and source them, and it is quoted as part of the scope rather than sprung on you later.`},
+
+   {t:'timelines', w:1.25, k:['time','timeline','timelines','how long','how many days','how many weeks','deadline','delivery','duration','when will','turnaround','turn around','kitna time','kab tak','kitne din','fast','quick','speed of delivery'],
+    a:`Honest ranges, brief to live:<br><br>• Focused landing page — <b>3 to 6 days</b><br>• Full multi-page business site — <b>1 to 3 weeks</b><br>• Portal, store or admin panel with a backend — <b>3 to 5 weeks</b><br>• Multi-branch or heavy-reporting systems — <b>6 to 10 weeks</b><br>• Reels and Shorts — <b>24 to 72 hours</b><br>• Long-form YouTube — <b>3 to 6 days</b>; multicam podcast — <b>4 to 7 days</b><br><br>You see a working preview link from the first week either way. If something is urgent, say so up front and it gets prioritised rather than quietly queued.`},
+
+   {t:'timelines', w:1.2, k:['urgent','urgently','asap','emergency','rush','today','tomorrow','kal','jaldi','right now','this week','need it fast'],
+    a:`Say it up front and it gets prioritised properly rather than quietly queued — that is the difference between a rush job and a rushed job.<br><br>Message ${WAL} with your deadline in the first line and you will get a yes or a no honestly, not a maybe that slips.`},
+
+   /* ── web development ── */
+   {t:'web development', w:1.2, k:['web','website','websites','web development','web dev','site','sites','webpage','web page','landing page','landing','front end','frontend','html','css','javascript','react','next js','nextjs','three js','threejs','3d website','webgl','animation','hand coded','custom website','business website','make a website','build a website','website banwana','website banana'],
+    a:`Web development is the core of the studio. Every line of HTML, CSS and JavaScript is written for your site — no WordPress theme, no Wix, no page builder — so nothing loads that your pages do not use.<br><br>That covers business sites and landing pages, portals and dashboards, e-commerce, admin panels on Supabase, and full 3D or WebGL centrepieces where the brand earns one. React or Next.js when a project genuinely needs it, not as a default.<br><br>Full breakdown on the <a href="web-development.html">Web Development</a> page, and 10 live builds in the <a href="index.html#work">Work</a> section.`},
+
+   {t:'web development', w:1.25, k:['wordpress','word press','wix','squarespace','shopify','page builder','elementor','template','theme','builder','why custom','why hand coded'],
+    a:`No — we do not use WordPress, Wix or any page builder, and it is not snobbery. Builders add weight that shows up as slow loading on a real phone, they cap what you can build the moment you outgrow the template, and they age badly.<br><br>Hand-written code costs about the same at our level, stays fast because nothing spare loads, and can be extended years later without a rebuild. Tested on mid-range Android over mobile data, not just on a fast laptop on office wifi.`},
+
+   {t:'ownership', w:1.25, k:['own','ownership','who owns','do i own','my code','source code','code','files','lock in','lockin','locked in','transfer','move it','leave you','stop working with you','licence','license','monthly fee'],
+    a:`You own all of it, completely. Your domain, your hosting account, your repository, every file. No proprietary platform, no licence to renew, no monthly ransom to keep the site online.<br><br>If you ever want to walk away, you take everything and go — and because it is written plainly rather than generated by a builder, any other developer can pick it up cleanly.`},
+
+   {t:'redesign', k:['redesign','re design','rebuild','revamp','existing site','current site','old site','my site is','fix my website','improve my website','migrate','slow website','website is slow'],
+    a:`Often, yes. We audit first, keep the URLs and content already earning you traffic, rebuild the rest, and map the redirects — so your rankings carry over instead of resetting on launch day.<br><br>Send the link on ${WAL} and you will get an honest read on whether it needs a rebuild or just fixing.`},
+
+   {t:'e-commerce', w:1.2, k:['ecommerce','e commerce','shop','online store','store','cart','checkout','sell online','payment gateway','products','catalogue','catalog','order online','stripe'],
+    a:`Stores that read cleanly one-handed on a phone: product catalogue with variants and stock, cart, checkout and order confirmation — or, where a gateway is overkill, a catalogue that routes the order straight to WhatsApp with the item pre-filled.<br><br>Product schema is included so listings can appear properly in search. See <a href="web-development.html#ecommerce">E-commerce &amp; Ordering</a>.`},
+
+   {t:'portals and apps', w:1.2, k:['web app','webapp','portal','dashboard','dashboards','login','logins','sign in','signup','sign up','user accounts','members area','member portal','internal tool','saas','roles','role based','authentication','auth'],
+    a:`When a website is not enough: portals, dashboards, booking systems and internal tools. Logins, roles, a real database and screens built around the job rather than a contact form pretending to be software.<br><br>Supabase or Node behind it with row-level security, email/password and social sign-in with rate limiting, role-based access for owner, staff and customer, plus search, filtering, pagination and exports. See <a href="web-development.html#apps">Web Apps &amp; Portals</a>.`},
+
+   {t:'mobile apps', k:['mobile app','android app','ios app','app store','play store','native app','flutter','react native'],
+    a:`Our focus is web apps rather than App Store builds — a portal or store that runs in any phone browser, installs to the home screen, and needs no download or store approval to update.<br><br>If a native app is genuinely the right answer for your case, say so on ${WAL} and Hashir will tell you honestly rather than sell you the thing he builds.`},
+
+   {t:'admin panels', w:1.25, k:['admin','admin panel','admin panels','cms','back office','backoffice','backend','back end','control panel','manage content','edit myself','update myself','dashboard panel','audit log'],
+    a:`Every system we build ships with a panel so you stop paying a developer for one-line edits: add a product, publish a post, change a price, export a list.<br><br>Inside it — role-based logins, a dashboard of the numbers that actually matter, add/edit/delete across your content, image uploads, CSV export and an audit log recording who changed what and when. Written for your data, not a generic CMS.<br><br>See the <a href="business-software.html#panel">anatomy of an admin panel</a>.`},
+
+   {t:'business software', w:1.25, k:['software','system','systems','custom software','dedicated software','erp','crm','management system','business software','pos','point of sale','billing','invoice','invoicing','barcode','stock','inventory','warehouse','godown','supplier','ledger','purchase entry','sale record','expenses','reports'],
+    a:`We build software for one business rather than selling a generic package. Stock and inventory with live counts, low-stock alerts, purchase and sale entry, barcode support, supplier ledgers and one-tap reports; billing and POS; expenses; staff roles; and a customer-facing side where it helps.<br><br>A website tells people about your business — software runs it. Most clients end up with both, connected. Start on the <a href="business-software.html">Business Software</a> page.`},
+
+   {t:'booking systems', w:1.2, k:['barber','barbershop','salon','saloon','haircut','spa','parlour','parlor','beauty','booking','bookings','booking system','appointment','appointments','slot','slots','calendar','reservation','no show','no shows'],
+    a:`Booking systems are one of our most-requested builds — barbers, salons, clinics and studios.<br><br>Your customers get a booking page: pick the person, pick a slot, confirm on WhatsApp. You get a panel with the day laid out chair by chair, customer history and preferred barber, takings per chair, and a record of who never turned up. It runs on the counter tablet and on your phone.<br><br>See <a href="business-software.html#systems">Built for the trade</a>.`},
+
+   {t:'business software', k:['gym','clinic','hospital','doctor','pharmacy','school','academy','tuition','restaurant','cafe','hotel','real estate','property','shop','kirana','retail','wholesale','distributor','tailor','laundry','workshop','garage','my industry','my business type'],
+    a:`Those are exactly the trades we write panels for — retail and wholesale, restaurants and cafés, gyms, clinics and pharmacies, schools and academies, workshops, property and more.<br><br>Each one starts from the same foundation and is then written for how that business actually runs day to day, rather than bending your process to fit a package. Find yours on the <a href="business-software.html#systems">Business Software</a> page, or see the <a href="index.html#industries">industries</a> we work across.`},
+
+   {t:'data security', w:1.2, k:['safe','safety','secure','security','data','my data','privacy','backup','backups','hacked','staff access','permissions','row level','rls','gdpr'],
+    a:`Your data sits in <b>your own Supabase project</b> under row-level security, which means permissions are enforced by the database itself and not just by the interface — a staff login physically cannot read the owner's revenue figures.<br><br>The usual setup is three tiers: owner sees everything including money, manager sees operations and stock, staff see only their shift. Every change is written to an audit log with a name and timestamp, backups run automatically, and you hold the keys to the account.`},
+
+   {t:'offline mode', k:['offline','internet drops','no internet','connection drops','power cut','counter','load shedding'],
+    a:`For counter systems we build an offline mode: sales entered while the connection is down are held on the device and pushed up the moment it returns, so the shop never stops because the internet did.<br><br>Worth mentioning up front though — it changes how the system gets built, so tell us at brief stage rather than after.`},
+
+   {t:'training and support', w:1.15, k:['training','train','teach','not technical','non technical','how do i use it','walkthrough','handover','staff training','support','maintenance','maintain','after launch','warranty','revision','revisions','changes later','updates'],
+    a:`You do not need to be technical — the panel is built for the person running the shop, so everything is a form and a button.<br><br>At handover we sit with you and your staff for a walkthrough and <b>record it</b>, so the next person you hire can be trained from the recording. Revisions are part of the build until it is right, and after launch we stay on for fixes, content and layout changes, dependency updates, backups, uptime checks and keeping Analytics and Search Console clean.`},
+
+   /* ── video ── */
+   {t:'video editing', w:1.2, k:['video','videos','video editing','edit','editing','editor','reel','reels','short','shorts','tiktok','youtube','podcast','montage','vfx','colour grade','color grade','sound design','captions','subtitles','thumbnail','cut','footage'],
+    a:`Video is a full floor here, not an add-on. Reels and Shorts, multicam podcasts, long-form YouTube, ads and product cuts — cut for retention first, then finished with colour, sound design, clean captions and motion graphics.<br><br>The on-screen hook, the burned-in captions and the caption for the post itself are written too, if you want them — usually better that way, since the person cutting already knows where the strongest line is.<br><br>Details on the <a href="video-editing.html">Video Editing</a> page.`},
+
+   {t:'video revisions', k:['rough cut','roughcut','how many revisions','video revision','change the edit','re edit','recut'],
+    a:`One full revision round is included on every edit, and because you approve the <b>rough cut</b> before finishing starts, that round is almost always small.<br><br>Structural changes after approval count as a new edit — which is exactly why the rough cut stage exists, so nothing expensive gets discovered late.`},
+
+   {t:'video editing', k:['phone footage','mobile footage','shot on phone','iphone footage','camera quality','what camera','bad footage','raw footage'],
+    a:`Phone footage works, and most of what we cut starts that way. Shoot in the highest setting your phone offers, keep it steady, and record somewhere quiet — bad audio is the one thing an edit cannot fully rescue. Everything else we can work with.`},
+
+   /* ── design, ads, social ── */
+   {t:'logo and identity', w:1.2, k:['logo','logos','design','designer','graphic design','logo design','brand','branding','identity','brand kit','rebrand','wordmark','monogram','favicon','colour palette','color palette','typography','fonts','vector','ai file','svg'],
+    a:`Over a hundred logos have come out of the studio, and what you get is the system rather than one picture: three genuinely different directions first — not three colourways of one idea — then unlimited refinement on the route you choose.<br><br>Delivered as a full set: primary lockup, stacked, icon-only and a single-colour cut for stamps and embroidery, with SVG, AI and PDF source files, PNG and WebP exports at every size, and a favicon set. See <a href="design-and-ads.html">Design &amp; Ads</a>.`},
+
+   {t:'graphic design', k:['graphic','graphics','poster','posters','banner','flyer','brochure','packaging','print','menu design','social creative','creatives','carousel'],
+    a:`Social creatives, thumbnails, posters and banners, menus, packaging and print — produced alongside the video and the site, which is why a client's feed, their ads and their website end up sharing one visual language instead of three.<br><br>See <a href="design-and-ads.html">Design &amp; Ads</a>.`},
+
+   {t:'ads', w:1.2, k:['ad','ads','advert','advertising','advertisement','meta ads','facebook ads','instagram ads','google ads','ppc','campaign','campaigns','leads','lead generation','targeting','retargeting','pixel','roas','ad spend','ad budget','boost'],
+    a:`We build, run and optimise Meta and Google campaigns end to end — creative, targeting, testing and reporting.<br><br>Important part: <b>the budget stays in your own ad account, paid on your own card</b>, so you keep the pixel, the data and the history. We are paid for the work, not a slice of your spend, so there is no incentive to tell you to spend more than you should. Already running campaigns? We audit structure, audiences and creative first, and will say plainly if the campaign is fine and the landing page is the problem.<br><br>More on <a href="design-and-ads.html#ads">Ads</a> and <a href="social-media-marketing.html#paid">Paid Social</a>.`},
+
+   {t:'social media', w:1.15, k:['social media','social','instagram','facebook','linkedin','content','posting','posts','calendar','manage my page','page management','followers','reach','engagement','organic','on camera','who films','shoot'],
+    a:`Full social management — strategy, content calendar, creative, posting and reporting.<br><br>You do not need to be on camera: plenty of accounts we run never show a face, using carousels, screen recordings, product and process footage and text-led reels. Either you send raw phone footage and we handle everything after, or we shoot on site in Karachi. The calendar lands in week one, posting starts in week two, and reach usually moves inside a month — anyone promising a number by a date has not seen your account yet.<br><br>See <a href="social-media-marketing.html">Social Media Marketing</a>.`},
+
+   {t:'SEO', w:1.25, k:['seo','rank','ranking','rankings','google rank','search engine','keywords','keyword','sitemap','schema','meta tags','search console','backlinks','first page','google par','findable'],
+    a:`SEO comes in layers here, and the first one is free.<br><br><b>Basic, included with every build:</b> unique titles and meta, one H1 with a real heading hierarchy, semantic HTML, alt text, clean URLs, Organisation/LocalBusiness/Service schema, sitemap and robots, Open Graph and Twitter cards, canonicals, and Search Console and Analytics connected and verified.<br><br><b>Advanced, retained monthly:</b> keyword and page architecture, content that answers the search, internal linking, authority building and monthly reporting.<br><br>Timing honestly: technical fixes can register in days, competitive commercial terms take three to six months. Anyone promising page one in a month is describing something other than SEO. See <a href="web-development.html#seo">SEO</a>.`},
+
+   /* ── AI ── */
+   {t:'AI chatbots', w:1.2, k:['chatbot','chat bot','bot for my website','ai chat','ai assistant','automation','automate','gpt','ai agent','artificial intelligence','ai'],
+    a:`An assistant trained on <b>your</b> services, hours, policies and pricing — exactly like the one you are using now. It answers instantly, qualifies the visitor, and hands the warm ones to WhatsApp instead of losing them at midnight.<br><br>It lives inside your own site with no third-party badge, and you get a transcript of every conversation. See <a href="web-development.html#chatbots">AI Chatbots</a>.`},
+
+   {t:'AI calling agents', w:1.3, k:['calling agent','calling agents','ai calling','voice agent','voice ai','phone agent','cold call','cold calling','answer calls','missed calls','call agent','receptionist','ivr'],
+    a:`A voice that answers every ring. It picks up when nobody can, explains what you do, answers the predictable questions, takes details and books the call back — in a real voice, not a phone tree.<br><br>It rings new leads within minutes of them enquiring, qualifies with real conversation, books into your calendar, sends reminders and chases the ones who went quiet. It handles overflow and after-hours, escalates to a human on request, and every call is transcribed and summarised to WhatsApp or email.<br><br>See <a href="web-development.html#calling">AI Calling Agents</a>.`},
+
+   /* ── hosting ── */
+   {t:'hosting and domain', w:1.15, k:['host','hosting','domain','domains','deploy','deployment','server','vercel','supabase','database','ssl','dns','uptime','downtime','who hosts'],
+    a:`We deploy to <b>your own</b> hosting and domain with DNS and SSL set up properly, and use Supabase when a project needs auth, a database or an admin panel — Postgres with row-level security behind it.<br><br>After launch: backups, dependency updates, uptime and error monitoring, and content or layout changes on request. Handover includes full ownership of every part of it.`},
+
+   {t:'performance', k:['speed','fast site','slow','performance','mobile friendly','responsive','core web vitals','lighthouse','loads slowly','optimised','optimized'],
+    a:`Speed is measured on a mid-range Android over mobile data, not on a fast laptop on office wifi — that is the device your customers actually hold.<br><br>Image formats and sizing, font loading strategy, deferred work and Core Web Vitals are handled from the first commit rather than bolted on at the end, and motion is used once and confidently rather than stacked until the page stutters.`},
+
+   /* ── the studio ── */
+   {t:'what we do', w:1.2, k:['services','service','what do you do','what do you offer','what you do','offer','nexlyr','company','studio','agency','all services'],
+    a:`Nexlyr Solutions is a Karachi studio doing six things, all in-house:<br><br>• <b>Web development</b> — hand-coded sites, stores, portals and 3D builds<br>• <b>Business software</b> — stock, POS, booking and admin panels on Supabase<br>• <b>Video editing</b> — Reels, Shorts, podcasts and long-form<br>• <b>Design</b> — logos, identity systems, creatives and print<br>• <b>Ads &amp; social</b> — Meta and Google campaigns, plus account management<br>• <b>AI</b> — chatbots and calling agents<br><br>That mix is the point: when the same team writes the site, designs the logo, cuts the video and runs the campaigns, the brand looks like one brand. Which one do you want to dig into?`},
+
+   {t:'the team', w:1.3, k:['hashir','muhammad hashir','m hashir','who is hashir','founder','owner of nexlyr'],
+    a:`<b>M. Hashir</b> founded Nexlyr and still writes the code on every build that leaves the studio — front-end engineering, cinematic 3D and interfaces that feel expensive without getting slow.<br><br>He also handles the brand side himself: logo and identity systems, the Meta and Google ad accounts, and the social strategy underneath them. Every quote you receive is written by him, and he is the person who replies when you message the number on this page — ${WAL}.`},
+
+   {t:'the team', w:1.3, k:['raza','syed raza','syed m raza','who is raza','video editor'],
+    a:`<b>Syed M. Raza</b> is our web developer, video editor and graphic designer — the reason a client's site, their feed and their ads end up speaking the same language.<br><br>On the build side he writes front-end pages and sections alongside Hashir. On the video side he cuts for retention first — the opening three seconds, the pacing of the middle, the moment the viewer would have scrolled — then finishes with colour, sound design, clean captions and motion graphics, plus the thumbnails and social creatives that go out with them.`},
+
+   {t:'the team', w:1.3, k:['raahym','rahym','raahym nouman','nouman','who is raahym','leads operator'],
+    a:`<b>Raahym Nouman</b> co-founded Nexlyr with Hashir and runs the front of the pipeline. Every enquiry — form, WhatsApp, Instagram or referral — reaches him first.<br><br>He works out what the business actually needs and gathers the detail that makes a quote accurate, then stays on as the coordination point once a project starts. That is why enquiries get a same-day reply instead of a backlog.`},
+
+   {t:'the team', w:1.2, k:['team','who are the team','staff','members','employees','how many people','agency size','who is behind','about you','about nexlyr'],
+    a:`Three of us, and you will deal with all three by name:<br><br>• <b>M. Hashir</b> — founder and lead web developer. Writes the code on every build, designs the logos and identity systems, and runs the Meta and Google ad accounts.<br>• <b>Syed M. Raza</b> — web developer, video editor and graphic designer. Builds pages and front-end work alongside running the video floor, thumbnails and social creatives.<br>• <b>Raahym Nouman</b> — co-founder and leads operator. Every enquiry reaches him first, which is why messages get a same-day reply instead of a backlog.<br><br>Full profiles in the <a href="index.html#about">About</a> section.`},
+
+   {t:'the team', k:['who will work on my project','who builds it','freelancer','outsource','subcontract','junior','agency or freelancer'],
+    a:`The same three people, start to finish — nothing is outsourced to a stranger and handed back. Hashir writes the code and the quote you receive, Raza builds and cuts alongside him, and Raahym keeps the thread moving.<br><br>That is the reason clients come to us instead of assembling three freelancers: when the same team writes the site, designs the logo, cuts the video and runs the campaigns, the brand looks like one brand and nothing gets lost in handovers between people who have never spoken.`},
+
+   {t:'our work', w:1.15, k:['work','your work','see your work','portfolio','projects','project','examples','example','samples','sample','case study','case studies','previous clients','built before','experience','references'],
+    a:`<b>55+ projects</b> delivered so far — education platforms, restaurants, gyms, fitness brands, business sites and brand-led builds, plus 100+ logos.<br><br>Open the <a href="index.html#work">Work</a> section to browse them; each one opens live in a device frame with a breakdown of what was actually built, not just a screenshot.`},
+
+   {t:'trust', k:['trust','legit','scam','fake','reviews','review','testimonial','testimonials','rating','reliable','guarantee','refund','risk'],
+    a:`Fair question to ask anyone online. Three things we would point at rather than ask you to take our word: the <a href="index.html#work">work</a> is live and clickable, client <a href="index.html#reviews">reviews</a> are on the home page, and you see a <b>preview link from the first week</b> so you are never paying into silence.<br><br>Add to that full ownership at handover — your domain, hosting and files — meaning you are never locked in even if you change your mind about us.`},
+
+   {t:'location', w:1.15, k:['location','where','where are you','office','address','karachi','pakistan','city','remote','outside karachi','international','abroad','dubai','uk','usa','time zone','timezone','meet','meeting','visit'],
+    a:`The studio is in <b>Karachi, Pakistan</b>, and we work with clients across Pakistan and internationally.<br><br>The process is remote by default and always has been — briefs and revisions over WhatsApp, a call or Google Meet, and live preview links from day one so you can see the build as it happens. Time zone has never been the hard part.`},
+
+   {t:'contact', k:['language','urdu','english','roman urdu','speak urdu','hindi'],
+    a:`English or Urdu, whichever is easier for you — voice notes included. Quotes and written scopes are sent in English by default, but say the word and Hashir will talk it through in Urdu.`},
+
+   {t:'careers', k:['job','jobs','hiring','hire me','internship','intern','cv','resume','career','vacancy','work with you','join'],
+    a:`For anything about working with us rather than hiring us, send it straight to ${WAL} with your portfolio or showreel — Hashir reads those himself.`},
+
+   {t:'contact', w:1.25, k:['contact','contact you','whatsapp','number','phone number','mobile number','email','mail','reach','reach you','talk','speak','call you','connect','hire','get in touch','instagram handle','linkedin'],
+    a:`Fastest route is ${WAL} — <b>0305 3687680</b>. Messages reach Hashir directly, and voice notes are welcome.<br><br>Email: <a href="mailto:nexlyr.solutions@gmail.com">nexlyr.solutions@gmail.com</a><br>Instagram &amp; LinkedIn: <b>nexlyr.solutions</b><br><br>Or fill the <a href="index.html#contact">project brief</a> — it opens WhatsApp with your details already written out, so nothing sits unread in an inbox.`}
+
   ];
 
-  function reply(q){
-    var s = q.toLowerCase(), best = null, score = 0;
-    KB.forEach(function(e){
-      var n = e.k.reduce(function(a, k){ return a + (s.indexOf(k) > -1 ? k.length : 0); }, 0);
-      if(n > score){ score = n; best = e; }
-    });
-    return best ? best.a :
-      'I didn\'t quite catch that. I can help with <b>web development</b>, <b>admin panels and business software</b>, <b>video editing</b>, <b>design &amp; branding</b>, <b>ads</b> or <b>AI agents</b> — or you can go straight to ' + WAL + '.';
+  /* ── matcher: word-boundary scoring, so "ok" no longer matches "booking"
+        and "ad" no longer matches "already". Longer phrases outrank single words. ── */
+  function NEXnorm(s){
+    return ' ' + String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
   }
+  function NEXhit(text, kw){
+    if(text.indexOf(' ' + kw + ' ') > -1) return true;
+    if(text.indexOf(' ' + kw + 's ') > -1) return true;
+    if(kw.indexOf(' ') === -1){
+      if(text.indexOf(' ' + kw + 'es ') > -1) return true;
+      if(text.indexOf(' ' + kw + 'ing ') > -1) return true;
+    }
+    return false;
+  }
+  function NEXscore(entry, text, wordCount){
+    if(entry.s && wordCount > 5) return 0;
+    var sc = 0;
+    for(var i = 0; i < entry.k.length; i++){
+      var kw = entry.k[i];
+      if(NEXhit(text, kw)) sc += (kw.split(' ').length * 14) + kw.length;
+    }
+    return sc * (entry.w || 1);
+  }
+
+  var NEXmiss = 0;
+
+  function reply(userText){
+    var text = NEXnorm(userText);
+    var trimmed = text.trim();
+    var wordCount = trimmed ? trimmed.split(' ').length : 0;
+
+    var best = null, bestScore = 0, second = null, secondScore = 0;
+    for(var i = 0; i < KB.length; i++){
+      var sc = NEXscore(KB[i], text, wordCount);
+      if(sc > bestScore){ second = best; secondScore = bestScore; best = KB[i]; bestScore = sc; }
+      else if(sc > secondScore){ second = KB[i]; secondScore = sc; }
+    }
+
+    var money = / (price|prices|pricing|cost|costs|rate|rates|charge|charges|fee|fees|quote|quotation|budget|kitna|kitne|how much|afford) /.test(text);
+    if(money && best && best.t !== 'pricing'){
+      for(var m2 = 0; m2 < KB.length; m2++){ if(KB[m2].t === 'pricing'){ second = best; secondScore = bestScore; best = KB[m2]; bestScore = 999; break; } }
+    }
+
+    if(best && bestScore > 0){
+      NEXmiss = 0;
+      var out = best.a;
+      if(second && second.t && second.t !== best.t && (bestScore === 999 || secondScore >= bestScore * 0.6)){
+        out += '<br><br><span style="opacity:.72">Were you asking about <b>' + second.t + '</b> instead? Say the word and I will cover that too.</span>';
+      }
+      return out;
+    }
+
+    NEXmiss++;
+    if(NEXmiss >= 2){
+      return `That one is outside what I have been trained on, and I would rather hand you to a person than guess at it.<br><br>${WAL} — send the same question there and Hashir answers it himself, usually within the hour during the day. You can send a voice note if that is easier.`;
+    }
+    return `I did not quite catch that one — my fault, not yours. Try it in a few plain words, or pick a track:<br><br>• <b>Web development</b> — sites, stores, portals, 3D<br>• <b>Business software</b> — stock, POS, booking, admin panels<br>• <b>Video editing</b> — Reels, podcasts, YouTube<br>• <b>Design &amp; ads</b> — logos, creatives, Meta and Google<br>• <b>AI</b> — chatbots and calling agents<br>• <b>Pricing</b>, <b>timelines</b> or <b>how to start</b><br><br>Or skip me entirely: ${WAL}.`;
+  }
+
   function send(v){
     v = (v || '').trim(); if(!v) return;
     say(v.replace(/[<>]/g, ''), 'u');
