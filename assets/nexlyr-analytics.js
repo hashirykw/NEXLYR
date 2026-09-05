@@ -272,7 +272,7 @@
       '.nxc button{flex:1;min-width:120px;padding:10px 16px;border-radius:99px;border:1px solid rgba(255,255,255,.13);' +
       'background:transparent;color:#F3F6FA;cursor:pointer;font-size:13px;font-weight:500;transition:.25s}' +
       '.nxc button:hover{border-color:rgba(255,255,255,.24);background:rgba(255,255,255,.045)}' +
-      '.nxc button.y{background:linear-gradient(104deg,#7FEBFF,#18C8F0 46%,#3B7DFF);border-color:transparent;color:#06070B;font-weight:600}' +
+      '.nxc button.y{background:linear-gradient(104deg,#7FEBFF,#18C8F0 46%,#0C7FC4);border-color:transparent;color:#06070B;font-weight:600}' +
       '@media (prefers-reduced-motion:reduce){.nxc{transition:none}}';
     document.head.appendChild(css);
 
