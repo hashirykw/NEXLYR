@@ -11488,5 +11488,178 @@ html.lenis,html.lenis body{height:auto}
 })();
 </script>
 
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     WORK DECK — the rake, ported from the Anna Malik routes
+     Appended last so it wins over the layered #workgrid overrides above
+     without needing to unpick any of them.
+     ══════════════════════════════════════════════════════════════════════ -->
+<style id="nx-rake">
+@media(min-width:901px){
+  /* The rail stays — ten projects cannot live in one raked row — but the
+     cards now sit in it the way the reference deck does: one uniform angle,
+     each set further back and overlapping the one before it. --col is the
+     card's position within its group of three and is set in JS, because the
+     filter hides cards with display:none and nth-child counts those too. */
+  #workgrid{perspective:1600px!important;perspective-origin:44% 46%!important;
+    align-items:center!important;padding-block:26px 40px!important}
+  #workgrid>.card.card:nth-child(n){
+    --col:0;
+    transform-style:flat;backface-visibility:hidden;
+    transform:translateZ(calc(var(--col) * -72px)) rotateY(-24deg)!important;
+    transition:transform .8s cubic-bezier(.22,.9,.28,1),
+               border-color .45s var(--ez,ease),
+               box-shadow .55s var(--out,ease),
+               opacity .45s var(--ez,ease),
+               filter .45s var(--ez,ease)!important}
+  /* the overlap. Applied to every card after the first in a group of three,
+     so each group re-opens at full width instead of marching off-screen. */
+  #workgrid>.card.card[style*="--col:1"],
+  #workgrid>.card.card[style*="--col:2"]{margin-left:-10.5%!important}
+  /* hover pulls it forward and squares it up */
+  #workgrid>.card.card:nth-child(n):hover,
+  #workgrid>.card.card:nth-child(n):focus-visible,
+  #workgrid>.card.card:nth-child(n).is-hot{
+    transform:translateZ(calc(var(--col) * -72px + 64px)) rotateY(-8deg)!important;
+    z-index:6}
+  /* the rest fall back, so the one being read is the only thing competing */
+  #workgrid:has(>.card:hover)>.card:not(:hover){opacity:.44;filter:saturate(.7)}
+  /* a card mid-flight in the pop-out must never be re-angled */
+  #workgrid>.card.card.popping,.card.popping{transform:none!important;margin-left:0!important}
+}
+@media(min-width:901px) and (prefers-reduced-motion:reduce){
+  #workgrid{perspective:none!important}
+  #workgrid>.card.card:nth-child(n){transform:none!important;transition:none!important;margin-left:0!important}
+}
+/* ── the phone: the rake is dropped and the cards swipe one at a time.
+      A receding stack leaves the back card a few pixels wide, and a
+      showpiece that cannot be read is not a showpiece. ── */
+@media(max-width:900px){
+  #workgrid>.card.card:nth-child(n){--col:0!important;margin-left:0!important}
+  #wdots{display:flex}
+}
+/* the dots under the rail */
+#wdots{display:none;justify-content:center;align-items:center;gap:2px;margin-top:6px}
+#wdots button{width:30px;height:30px;display:grid;place-items:center;
+  background:none;border:0;padding:0;cursor:pointer}
+#wdots button::after{content:"";display:block;width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.22);transition:width .3s ease,background .3s ease}
+#wdots button.on::after{width:18px;border-radius:99px;background:var(--cy,#18C8F0)}
+</style>
+
+<script>
+/* ══ WORK DECK: group the rake in threes, and drive the dots ══════════ */
+(function(){
+  var grid=document.getElementById('workgrid');
+  if(!grid)return;
+  var all=function(){return [].slice.call(grid.querySelectorAll(':scope > .card'))};
+  var vis=function(){return all().filter(function(c){
+    return c.style.display!=='none' && c.offsetParent!==null});};
+
+  var dots=document.getElementById('wdots');
+  if(!dots){
+    dots=document.createElement('div'); dots.id='wdots';
+    dots.setAttribute('aria-label','Project pages');
+    grid.parentNode.insertBefore(dots,grid.nextSibling);
+  }
+
+  /* Depth cycles every three. Left to run, --col would keep climbing across
+     ten cards and the last one would sit a thousand pixels behind the glass. */
+  function rake(){
+    var v=vis();
+    all().forEach(function(c){c.style.removeProperty('--col')});
+    v.forEach(function(c,n){c.style.setProperty('--col', n%3)});
+    buildDots(v.length);
+    mark();
+  }
+  function buildDots(n){
+    var want=Math.max(1,Math.ceil(n/(window.innerWidth<901?1:3)));
+    if(dots.children.length===want)return;
+    dots.innerHTML='';
+    for(var i=0;i<want;i++){
+      (function(k){
+        var b=document.createElement('button');
+        b.type='button'; b.setAttribute('aria-label','Go to page '+(k+1));
+        b.addEventListener('click',function(){
+          var v=vis(), per=window.innerWidth<901?1:3, t=v[k*per];
+          if(t)t.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+        });
+        dots.appendChild(b);
+      })(i);
+    }
+  }
+  function mark(){
+    var v=vis(); if(!v.length)return;
+    var per=window.innerWidth<901?1:3;
+    var mid=grid.scrollLeft+grid.clientWidth/2, best=0, gap=1e9;
+    v.forEach(function(c,n){
+      var d=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);
+      if(d<gap){gap=d;best=n}
+    });
+    var page=Math.floor(best/per);
+    [].forEach.call(dots.children,function(b,n){b.classList.toggle('on',n===page)});
+  }
+
+  var t;
+  grid.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(mark,70)},{passive:true});
+  addEventListener('resize',function(){clearTimeout(t);t=setTimeout(rake,150)},{passive:true});
+  /* the category filter rewrites what is visible, so re-rake after it runs */
+  document.querySelectorAll('.seg[data-filter] button').forEach(function(b){
+    b.addEventListener('click',function(){setTimeout(rake,60)});
+  });
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',rake);
+  else rake();
+  addEventListener('load',rake);
+})();
+</script>
+
+
+<!-- ══ SERVICES RAIL — every name on show ══════════════════════════════
+     The rail used to sit collapsed at one icon wide and grow to reveal a
+     name only while a chip was hovered, so nine of the ten services were
+     invisible until you went looking. It is open now: icon, name and its
+     own accent, all ten readable at a glance. Hover became a highlight
+     rather than a width change, which also stops the rail resizing under
+     the pointer as you move down it.
+     Below 1180px it is still replaced by the horizontal phone strip. -->
+<style id="nx-srail">
+@media(min-width:1181px) and (hover:hover){
+  .srail{right:16px;padding:12px 11px;border-radius:22px;gap:5px}
+  .srail-lbl{font-size:8px;padding-bottom:8px}
+
+  /* open, and no longer animating its own width */
+  .schip{width:198px!important;height:40px;border-radius:13px;
+    justify-content:flex-start;overflow:hidden;
+    transition:background .3s var(--ez),color .3s var(--ez),
+               border-color .3s var(--ez),transform .35s var(--out)!important}
+  .schip .si{width:38px}
+  .schip .si svg{width:17px;height:17px}
+  /* each service keeps its own colour, so the list scans as a list */
+  .schip .si{color:rgb(var(--acs,95,225,255));opacity:.82;transition:opacity .3s var(--ez)}
+  .schip .sn{opacity:1!important;padding-right:12px;font-size:.755rem;
+    overflow:hidden;text-overflow:ellipsis;min-width:0}
+
+  .schip:hover,.schip:focus-visible,.schip.pulse{
+    background:var(--g3);color:var(--text);
+    border-color:rgba(95,225,255,.3);transform:translateX(-3px)}
+  .schip:hover .si,.schip:focus-visible .si,.schip.pulse .si{opacity:1}
+  /* the accent bar is always there, and simply brightens */
+  .schip::before{opacity:.4}
+  .schip:hover::before,.schip:focus-visible::before,.schip.pulse::before{opacity:1}
+
+  .srail-more{padding-top:9px;font-size:8px}
+}
+@media(min-width:1181px) and (hover:hover) and (prefers-reduced-motion:reduce){
+  .schip,.schip:hover{transform:none!important;transition:none!important}
+}
+/* a short laptop cannot fit ten open rows plus a header and a footer */
+@media(min-width:1181px) and (hover:hover) and (max-height:720px){
+  .schip{height:35px}
+  .schip .si{width:34px}
+  .schip .sn{font-size:.71rem}
+  .srail{gap:4px;padding:10px 9px}
+}
+</style>
+
 </body>
 </html>
