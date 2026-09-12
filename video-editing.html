@@ -151,7 +151,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav) + 28px);co
 }
 body{
   font-family:var(--bdy);font-size:15.5px;line-height:1.62;letter-spacing:-.008em;
-  color:var(--text);background:var(--void);overflow-x:hidden;
+  color:var(--text);background:var(--void);overflow-x:clip;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img,video{display:block;max-width:100%}
@@ -901,10 +901,6 @@ select.inp option{background:#0F141C;color:var(--text)}
 .shell.desktop{width:840px;border-radius:11px;border:1px solid rgba(255,255,255,.2)}
 .shell.desktop .chrome{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;
   background:linear-gradient(180deg,#1C222D,#141922);border-bottom:1px solid rgba(255,255,255,.09)}
-.shell.desktop .chrome i{width:9px;height:9px;border-radius:50%;flex:none}
-.shell.desktop .chrome i:nth-child(1){background:#FF5F57}
-.shell.desktop .chrome i:nth-child(2){background:#FEBC2E}
-.shell.desktop .chrome i:nth-child(3){background:#28C840}
 .shell.desktop .chrome .url{flex:1;height:17px;border-radius:6px;margin-left:8px;
   background:rgba(0,0,0,.32);display:flex;align-items:center;padding:0 9px;
   font-family:var(--mono);font-size:9.5px;color:var(--dim);overflow:hidden;white-space:nowrap}
@@ -1525,7 +1521,7 @@ a.card:hover .gotag,a.card:focus-visible .gotag{opacity:1;transform:translateY(0
 .curtain.on{clip-path:inset(0 0 0 0)}
 .curtain img{width:92px;opacity:0;transform:scale(.86);
   filter:drop-shadow(0 0 30px rgba(24,200,240,.7));
-  transition:opacity .4s .16s ease,transform .6s .16s var(--out)}
+  transition:opacity .4s .16s var(--ez),transform .6s .16s var(--out)}
 .curtain.on img{opacity:1;transform:scale(1)}
 
 /* ── Sound toggle ───────────────────────────────────────────── */
@@ -4628,7 +4624,6 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
            aria-label="An animated editing timeline: a playhead crosses a strip of clips while the audience retention curve draws underneath, with cut decisions marked along the way.">
         <article class="ved glass">
           <div class="vebar">
-            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
             <span class="lbl">Timeline &middot; Retention</span>
           </div>
 
