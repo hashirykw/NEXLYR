@@ -150,7 +150,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav) + 28px);co
 }
 body{
   font-family:var(--bdy);font-size:15.5px;line-height:1.62;letter-spacing:-.008em;
-  color:var(--text);background:var(--void);overflow-x:hidden;
+  color:var(--text);background:var(--void);overflow-x:clip;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img,video{display:block;max-width:100%}
@@ -900,10 +900,6 @@ select.inp option{background:#0F141C;color:var(--text)}
 .shell.desktop{width:840px;border-radius:11px;border:1px solid rgba(255,255,255,.2)}
 .shell.desktop .chrome{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;
   background:linear-gradient(180deg,#1C222D,#141922);border-bottom:1px solid rgba(255,255,255,.09)}
-.shell.desktop .chrome i{width:9px;height:9px;border-radius:50%;flex:none}
-.shell.desktop .chrome i:nth-child(1){background:#FF5F57}
-.shell.desktop .chrome i:nth-child(2){background:#FEBC2E}
-.shell.desktop .chrome i:nth-child(3){background:#28C840}
 .shell.desktop .chrome .url{flex:1;height:17px;border-radius:6px;margin-left:8px;
   background:rgba(0,0,0,.32);display:flex;align-items:center;padding:0 9px;
   font-family:var(--mono);font-size:9.5px;color:var(--dim);overflow:hidden;white-space:nowrap}
@@ -1524,7 +1520,7 @@ a.card:hover .gotag,a.card:focus-visible .gotag{opacity:1;transform:translateY(0
 .curtain.on{clip-path:inset(0 0 0 0)}
 .curtain img{width:92px;opacity:0;transform:scale(.86);
   filter:drop-shadow(0 0 30px rgba(24,200,240,.7));
-  transition:opacity .4s .16s ease,transform .6s .16s var(--out)}
+  transition:opacity .4s .16s var(--ez),transform .6s .16s var(--out)}
 .curtain.on img{opacity:1;transform:scale(1)}
 
 /* ── Sound toggle ───────────────────────────────────────────── */
@@ -4534,17 +4530,12 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
       </div>
 
       <div class="serp" id="serp" data-rv style="--i:2" aria-hidden="true">
-          <div class="serp__chrome">
-            <span class="serp__dots"><i></i><i></i><i></i></span>
-            <span class="serp__omni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>search</span>
-          </div>
-
           <div class="serp__bar">
             <svg class="serp__mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
             <span class="serp__q"><b class="serp__typed" id="serpTyped">nexlyr.solutions</b><i class="serp__caret"></i></span>
           </div>
 
-          <div class="serp__meta"><span class="serp__kind" id="serpKind">Brand search</span><span id="serpCount">About 41,300 results &middot; 0.38 seconds</span></div>
+          <div class="serp__meta"><span class="serp__kind" id="serpKind">Brand search</span><span id="serpCount">Illustration &middot; not a live results page</span></div>
 
           <article class="serp__hit">
             <span class="serp__rank" id="serpRank">01</span>
@@ -7283,7 +7274,7 @@ function buildShell(dev, proj){
   wrap.className='shell '+d.shell;
   let inner='';
   if(dev==='desktop'){
-    inner+='<div class="chrome"><i></i><i></i><i></i>'
+    inner+='<div class="chrome">'
          + '<span class="url">'+proj.url+'</span></div>';
   }
   if(dev==='phone') inner+='<div class="isl"></div>';
@@ -9415,9 +9406,9 @@ window.OFFERS = [
   transform:rotateY(-9deg) translateZ(0)!important;
   transform-origin:50% 50%!important;
   transition:transform .6s cubic-bezier(.22,.9,.28,1),
-             box-shadow .45s ease,
-             border-color .4s ease,
-             opacity .35s ease!important;
+             box-shadow .45s var(--ez),
+             border-color .4s var(--ez),
+             opacity .35s var(--ez)!important;
   will-change:transform;
 }
 #workgrid>.card:nth-child(even){transform:rotateY(9deg)!important}
@@ -9447,7 +9438,7 @@ window.OFFERS = [
   text-transform:uppercase;color:var(--brand2);text-align:left;
   background:linear-gradient(0deg,rgba(6,8,13,.94),rgba(6,8,13,0));
   opacity:0;transform:translateY(6px);
-  transition:opacity .34s ease,transform .34s ease;
+  transition:opacity .34s var(--ez),transform .34s var(--ez);
   pointer-events:none;
 }
 #workgrid>.card:hover::after,
@@ -9472,7 +9463,7 @@ window.OFFERS = [
              rgba(11,14,21,.97)!important;
   transform:translateY(14px) scale(.985)!important;
   opacity:0;
-  transition:transform .42s cubic-bezier(.22,.9,.28,1),opacity .3s ease!important;
+  transition:transform .42s cubic-bezier(.22,.9,.28,1),opacity .3s var(--ez)!important;
   will-change:transform,opacity;
   contain:paint;
   display:flex;flex-direction:column;
@@ -9546,7 +9537,7 @@ window.OFFERS = [
 }
 
 /* ── 5. THE BLOCKED-PREVIEW STATE ─────────────────────────────── */
-.shell .skel{transition:opacity .4s ease}
+.shell .skel{transition:opacity .4s var(--ez)}
 .shell .skel.blocked{background:linear-gradient(180deg,#0C1119,#080B11);opacity:1!important}
 .shell .skel.blocked span{display:none}
 .skelcta{
@@ -10346,7 +10337,7 @@ body.wz-locked{overflow:hidden}
    refuses to publish prices look like it was running a sale. One rail,
    and only once the visitor is past the hero. */
 .adrail.l{display:none!important}
-.adrail.r{opacity:0;transition:opacity .5s ease;pointer-events:none}
+.adrail.r{opacity:0;transition:opacity .5s var(--ez);pointer-events:none}
 body.past-hero .adrail.r{opacity:1;pointer-events:auto}
 
 /* ═══════════ READING PROGRESS ═════════════════════════════════════
@@ -11330,7 +11321,7 @@ html.lenis,html.lenis body{height:auto}
   font-family:var(--mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase;
   color:var(--ac,var(--cy)); opacity:.62;
   display:flex; align-items:center; gap:6px;
-  transition:opacity .3s ease, gap .3s ease;
+  transition:opacity .3s var(--ez), gap .3s var(--ez);
 }
 #workgrid > .card:hover::after{ opacity:1; gap:10px; }
 @media(hover:none){ #workgrid > .card::after{ opacity:.85 } }
@@ -11472,16 +11463,6 @@ body::before{
 }
 
 /* browser chrome */
-.serp__chrome{ display:flex; align-items:center; gap:11px; margin-bottom:14px }
-.serp__dots{ display:flex; gap:5px }
-.serp__dots i{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.17) }
-.serp__omni{
-  flex:1; display:flex; align-items:center; gap:6px;
-  font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; color:var(--dim);
-  background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07);
-  border-radius:999px; padding:5px 12px;
-}
-.serp__omni svg{ width:10px; height:10px; opacity:.6; flex:none }
 
 /* the query */
 .serp__bar{
@@ -11516,9 +11497,9 @@ body::before{
 .serp__kind{
   color:var(--gold); border:1px solid rgba(255,201,120,.32); border-radius:999px;
   padding:.24rem .55rem; letter-spacing:.13em;
-  transition:opacity .28s ease;
+  transition:opacity .28s var(--ez);
 }
-.serp__rank{ transition:opacity .28s ease }
+.serp__rank{ transition:opacity .28s var(--ez) }
 .serp.is-swapping .serp__kind, .serp.is-swapping .serp__rank{ opacity:.2 }
 
 /* the winning result */
@@ -12039,10 +12020,10 @@ svg, .badge, .steplink{
 
 <script>
 /* ══════════════ HERO SEARCH — TWO-QUERY CYCLE ══════════════
-   Query 1 is the brand name: anyone can rank for their own domain.
-   Query 2 is the commercial keyword someone types when they do NOT yet
-   know you exist. Nexlyr holds 01 on both, which is the actual claim the
-   SEO section makes further down the page. */
+   Query 1 is the brand name: anyone can rank for their own domain, so the
+   01 there is honest. Query 2 is the commercial keyword we optimise for —
+   it shows the anatomy of a tuned result, not a position we hold. No
+   result counts, no borrowed ranking. */
 (function(){
   var wrap = document.getElementById('serp');
   if(!wrap) return;
@@ -12057,12 +12038,12 @@ svg, .badge, .steplink{
   var Q = [
     { q:'nexlyr.solutions',
       kind:'Brand search',
-      count:'About 41,300 results \u00b7 0.38 seconds',
+      count:'Illustration \u00b7 not a live results page',
       rank:'01' },
-    { q:'best web development agency',
-      kind:'Competitive search',
-      count:'About 1,240,000,000 results \u00b7 0.61 seconds',
-      rank:'01' }
+    { q:'web development agency karachi',
+      kind:'The query we build for',
+      count:'Illustration \u00b7 not a live results page',
+      rank:'\u2014' }
   ];
 
   var i = 0, timer;
