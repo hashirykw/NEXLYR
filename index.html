@@ -144,7 +144,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav) + 28px);co
 }
 body{
   font-family:var(--bdy);font-size:15.5px;line-height:1.62;letter-spacing:-.008em;
-  color:var(--text);background:var(--void);overflow-x:hidden;
+  color:var(--text);background:var(--void);overflow-x:clip;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img,video{display:block;max-width:100%}
@@ -894,10 +894,6 @@ select.inp option{background:#0F141C;color:var(--text)}
 .shell.desktop{width:840px;border-radius:11px;border:1px solid rgba(255,255,255,.2)}
 .shell.desktop .chrome{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;
   background:linear-gradient(180deg,#1C222D,#141922);border-bottom:1px solid rgba(255,255,255,.09)}
-.shell.desktop .chrome i{width:9px;height:9px;border-radius:50%;flex:none}
-.shell.desktop .chrome i:nth-child(1){background:#FF5F57}
-.shell.desktop .chrome i:nth-child(2){background:#FEBC2E}
-.shell.desktop .chrome i:nth-child(3){background:#28C840}
 .shell.desktop .chrome .url{flex:1;height:17px;border-radius:6px;margin-left:8px;
   background:rgba(0,0,0,.32);display:flex;align-items:center;padding:0 9px;
   font-family:var(--mono);font-size:9.5px;color:var(--dim);overflow:hidden;white-space:nowrap}
@@ -1518,7 +1514,7 @@ a.card:hover .gotag,a.card:focus-visible .gotag{opacity:1;transform:translateY(0
 .curtain.on{clip-path:inset(0 0 0 0)}
 .curtain img{width:92px;opacity:0;transform:scale(.86);
   filter:drop-shadow(0 0 30px rgba(24,200,240,.7));
-  transition:opacity .4s .16s ease,transform .6s .16s var(--out)}
+  transition:opacity .4s .16s var(--ez),transform .6s .16s var(--out)}
 .curtain.on img{opacity:1;transform:scale(1)}
 
 /* ── Sound toggle ───────────────────────────────────────────── */
@@ -7260,7 +7256,7 @@ function buildShell(dev, proj){
   wrap.className='shell '+d.shell;
   let inner='';
   if(dev==='desktop'){
-    inner+='<div class="chrome"><i></i><i></i><i></i>'
+    inner+='<div class="chrome">'
          + '<span class="url">'+proj.url+'</span></div>';
   }
   if(dev==='phone') inner+='<div class="isl"></div>';
@@ -9198,9 +9194,9 @@ window.OFFERS = [
   transform:rotateY(-9deg) translateZ(0)!important;
   transform-origin:50% 50%!important;
   transition:transform .6s cubic-bezier(.22,.9,.28,1),
-             box-shadow .45s ease,
-             border-color .4s ease,
-             opacity .35s ease!important;
+             box-shadow .45s var(--ez),
+             border-color .4s var(--ez),
+             opacity .35s var(--ez)!important;
   will-change:transform;
 }
 #workgrid>.card:nth-child(even){transform:rotateY(9deg)!important}
@@ -9230,7 +9226,7 @@ window.OFFERS = [
   text-transform:uppercase;color:var(--brand2);text-align:left;
   background:linear-gradient(0deg,rgba(6,8,13,.94),rgba(6,8,13,0));
   opacity:0;transform:translateY(6px);
-  transition:opacity .34s ease,transform .34s ease;
+  transition:opacity .34s var(--ez),transform .34s var(--ez);
   pointer-events:none;
 }
 #workgrid>.card:hover::after,
@@ -9255,7 +9251,7 @@ window.OFFERS = [
              rgba(11,14,21,.97)!important;
   transform:translateY(14px) scale(.985)!important;
   opacity:0;
-  transition:transform .42s cubic-bezier(.22,.9,.28,1),opacity .3s ease!important;
+  transition:transform .42s cubic-bezier(.22,.9,.28,1),opacity .3s var(--ez)!important;
   will-change:transform,opacity;
   contain:paint;
   display:flex;flex-direction:column;
@@ -9329,7 +9325,7 @@ window.OFFERS = [
 }
 
 /* ── 5. THE BLOCKED-PREVIEW STATE ─────────────────────────────── */
-.shell .skel{transition:opacity .4s ease}
+.shell .skel{transition:opacity .4s var(--ez)}
 .shell .skel.blocked{background:linear-gradient(180deg,#0C1119,#080B11);opacity:1!important}
 .shell .skel.blocked span{display:none}
 .skelcta{
@@ -10129,7 +10125,7 @@ body.wz-locked{overflow:hidden}
    refuses to publish prices look like it was running a sale. One rail,
    and only once the visitor is past the hero. */
 .adrail.l{display:none!important}
-.adrail.r{opacity:0;transition:opacity .5s ease;pointer-events:none}
+.adrail.r{opacity:0;transition:opacity .5s var(--ez);pointer-events:none}
 body.past-hero .adrail.r{opacity:1;pointer-events:auto}
 
 /* ═══════════ READING PROGRESS ═════════════════════════════════════
@@ -11627,7 +11623,7 @@ html.lenis,html.lenis body{height:auto}
 #wdots button{width:30px;height:30px;display:grid;place-items:center;
   background:none;border:0;padding:0;cursor:pointer}
 #wdots button::after{content:"";display:block;width:6px;height:6px;border-radius:50%;
-  background:rgba(255,255,255,.22);transition:width .3s ease,background .3s ease}
+  background:rgba(255,255,255,.22);transition:width .3s var(--ez),background .3s var(--ez)}
 #wdots button.on::after{width:18px;border-radius:99px;background:var(--cy,#18C8F0)}
 </style>
 
