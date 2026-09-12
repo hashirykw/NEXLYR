@@ -151,7 +151,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav) + 28px);co
 }
 body{
   font-family:var(--bdy);font-size:15.5px;line-height:1.62;letter-spacing:-.008em;
-  color:var(--text);background:var(--void);overflow-x:hidden;
+  color:var(--text);background:var(--void);overflow-x:clip;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img,video{display:block;max-width:100%}
@@ -901,10 +901,6 @@ select.inp option{background:#0F141C;color:var(--text)}
 .shell.desktop{width:840px;border-radius:11px;border:1px solid rgba(255,255,255,.2)}
 .shell.desktop .chrome{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;
   background:linear-gradient(180deg,#1C222D,#141922);border-bottom:1px solid rgba(255,255,255,.09)}
-.shell.desktop .chrome i{width:9px;height:9px;border-radius:50%;flex:none}
-.shell.desktop .chrome i:nth-child(1){background:#FF5F57}
-.shell.desktop .chrome i:nth-child(2){background:#FEBC2E}
-.shell.desktop .chrome i:nth-child(3){background:#28C840}
 .shell.desktop .chrome .url{flex:1;height:17px;border-radius:6px;margin-left:8px;
   background:rgba(0,0,0,.32);display:flex;align-items:center;padding:0 9px;
   font-family:var(--mono);font-size:9.5px;color:var(--dim);overflow:hidden;white-space:nowrap}
@@ -1525,7 +1521,7 @@ a.card:hover .gotag,a.card:focus-visible .gotag{opacity:1;transform:translateY(0
 .curtain.on{clip-path:inset(0 0 0 0)}
 .curtain img{width:92px;opacity:0;transform:scale(.86);
   filter:drop-shadow(0 0 30px rgba(24,200,240,.7));
-  transition:opacity .4s .16s ease,transform .6s .16s var(--out)}
+  transition:opacity .4s .16s var(--ez),transform .6s .16s var(--out)}
 .curtain.on img{opacity:1;transform:scale(1)}
 
 /* ── Sound toggle ───────────────────────────────────────────── */
@@ -4810,27 +4806,27 @@ img[loading="lazy"]{contain-intrinsic-size:auto 300px}
         </div>
       </div>
 
-      <!-- the signature element: our own profile, growing in real time -->
+      <!-- the signature element: an example account, showing how one post travels.
+           Figures are illustrative and labelled as such in the card. -->
       <div class="igwrap" id="igwrap" data-rv style="--i:2" role="img"
-           aria-label="An animated mock-up of the @nexlyr.solution Instagram profile: a post collecting likes and shares while the follower and reach counters climb.">
+           aria-label="An illustration of how one post travels: it is liked, it is shared, the shares bring followers, and reach climbs. Example figures, not live account metrics.">
         <div class="igfx" aria-hidden="true">
-          <span class="igpill a" data-pill="like"><svg viewBox="0 0 24 24" fill="#FF6B72" stroke="#FF6B72" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0112 8.4a3.9 3.9 0 017 2.3c0 4.9-7 9.3-7 9.3z"/></svg>+1,940 likes</span>
-          <span class="igpill b" data-pill="share"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L10.5 13.5"/><path d="M21 3l-6.8 18-3.7-7.5L3 9.8 21 3z"/></svg>Shared to 312 stories</span>
-          <span class="igpill c" data-pill="follow"><i class="av" aria-hidden="true"></i><b style="font-weight:600">hamza.rz</b>&nbsp;started following</span>
-          <span class="igpill d" data-pill="reach"><svg viewBox="0 0 24 24" fill="none" stroke="var(--em)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V10"/><path d="M10 18V5"/><path d="M16 18v-6"/><path d="M22 18V8"/></svg>Reach up 214%</span>
+          <span class="igpill a" data-pill="like"><svg viewBox="0 0 24 24" fill="#FF6B72" stroke="#FF6B72" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0112 8.4a3.9 3.9 0 017 2.3c0 4.9-7 9.3-7 9.3z"/></svg>New likes</span>
+          <span class="igpill b" data-pill="share"><svg viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L10.5 13.5"/><path d="M21 3l-6.8 18-3.7-7.5L3 9.8 21 3z"/></svg>Shared to stories</span>
+          <span class="igpill c" data-pill="follow"><i class="av" aria-hidden="true"></i><b style="font-weight:600">Someone new</b>&nbsp;started following</span>
+          <span class="igpill d" data-pill="reach"><svg viewBox="0 0 24 24" fill="none" stroke="var(--em)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V10"/><path d="M10 18V5"/><path d="M16 18v-6"/><path d="M22 18V8"/></svg>Reach climbing</span>
         </div>
 
         <article class="ig glass">
           <div class="igbar">
-            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="lbl">Instagram &middot; Insights</span>
+            <span class="lbl">Insights &middot; Illustration</span>
           </div>
 
           <header class="ighead">
             <span class="igav"><span><img src="logo-icon-128.webp" alt="" width="34" height="34" decoding="async" fetchpriority="high"/></span></span>
             <span class="igid">
-              <b>nexlyr.solutions <i aria-hidden="true">&#10003;</i></b>
-              <em>Digital agency &middot; Karachi, Pakistan</em>
+              <b>your.brand</b>
+              <em>Example account &middot; figures are illustrative</em>
             </span>
             <button class="igfollow" type="button" tabindex="-1" aria-hidden="true">Follow</button>
           </header>
