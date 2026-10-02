@@ -1,47 +1,28 @@
 # Nexlyr Solutions
 
-> A web development and digital marketing studio in Karachi, Pakistan.
-> Hand-coded websites, web apps, e-commerce, dedicated business software
-> with admin panels, AI chatbots and calling agents, SEO, Meta and Google
-> ads, social media management, video editing, and logo and brand design.
-> 55+ projects delivered, 100+ logos designed. No page builders, no
-> templates, no lock-in — clients own their code and their data.
+> Nexlyr Solutions is a digital agency working with clients worldwide, with its base in Karachi, Pakistan. One team builds hand-coded websites, web apps, AI chatbots and AI calling agents, custom business software (POS, inventory, booking, admin panels), and runs video editing, logo and brand design, and social media marketing with Meta and Google ads. It also sets up NFC business cards and Google review stands.
 
-Founded and led by M. Hashir (Founder & Lead Web Developer), with
-Raahym Nouman (Co-Founder & Leads Operator) and Syed M. Raza
-(Video Editor & Graphic Designer).
+Every 5-page website includes a free AI chatbot trained on the business and basic SEO on every page. Prices are quoted per project after a conversation; there is no price list.
 
-Nexlyr does not publish fixed price lists. Every project is quoted after
-a conversation about what the site or system actually has to do.
+## Services
+- [Website design & development](https://nexlyr.solutions/web-development): hand-coded websites, web apps, e-commerce, admin panels, AI chatbots, AI calling agents, SEO (basic, advanced, technical, local)
+- [Business software](https://nexlyr.solutions/business-software): stock and inventory, POS and billing, salon and barber booking, clinic records, gym memberships, school portals, restaurant ordering, real estate, admin panels
+- [Video editing](https://nexlyr.solutions/video-editing): Instagram Reels and Shorts, long-form YouTube, multicam podcasts, motion graphics, ad creative, thumbnails, events
+- [Logo design, branding & paid ads](https://nexlyr.solutions/design-and-ads): logos, brand identity systems, social creatives, print and packaging, Meta and Google campaigns
+- [Social media marketing](https://nexlyr.solutions/social-media-marketing): content calendars, reels, carousels, community management, Meta and Instagram ads, monthly reporting
+- [NFC business cards & Google reviews](https://nexlyr.solutions/#tap)
 
-## Pages
-
-- [Home](https://nexlyr.solutions/): Overview of all thirty services across six disciplines, selected work, the team, process, industries served and FAQs.
-- [Web Development & SEO](https://nexlyr.solutions/web-development.html): Custom websites, web apps and portals, e-commerce, admin panels, AI chatbots, AI calling agents, basic through advanced SEO, technical SEO, local SEO, Meta and Google Ads, logo and brand design. Fourteen services in detail.
-- [Business Software & Admin Panels](https://nexlyr.solutions/business-software.html): Dedicated systems built for one business — stock and inventory management, POS and billing, barber and salon booking, clinic and patient records, gym memberships, school and tuition administration, restaurant ordering, property listings. Each ships with a role-based admin panel.
-- [Social Media Marketing](https://nexlyr.solutions/social-media-marketing.html): Instagram and Facebook growth, reels and shorts, carousel and static design, content calendars, community management and Meta ads.
-- [Video Editing](https://nexlyr.solutions/video-editing.html): Reels and shorts cut for retention, long-form YouTube, multicam podcasts, motion graphics, ad creative and thumbnails. 24 to 72 hour turnaround.
+## Team
+- M. Hashir, founder: web developer, graphic designer, social media and ads manager (https://hashir.nexlyr.solutions/)
+- Zamil Shaikh, co-founder: ads manager, video editor, social media manager and content recorder (https://zamil.nexlyr.solutions/)
+- Raahym Nouman, lead manager
+- Hammad Naved, lead operator and social media manager
+- Syed M. Raza, video editor
+- Rayyan Ali, web developer
+- Five more developers and specialists in the tech team
 
 ## Contact
-
-- WhatsApp: https://wa.me/923053687680 (0305 3687680)
+- WhatsApp: +92 305 3687680
 - Email: nexlyr.solutions@gmail.com
-- Instagram: https://www.instagram.com/nexlyr.solutions/
-- LinkedIn: https://www.linkedin.com/company/nexlyr-solutions
-- Location: Karachi, Sindh, Pakistan
-- Hours: Monday to Saturday, 10:00–19:00 PKT
-- Languages: English, Urdu
-
-## Legal
-
-- [Privacy Policy](https://nexlyr.solutions/privacy.html)
-- [Terms of Service](https://nexlyr.solutions/terms.html)
-
-## Notes
-
-Nexlyr is spelled with no vowel between the "x" and the "l" — Nexlyr, not
-Nexlyr Solutions Pvt, Nexler, Nexlar or Nexlyer. The tagline is
-"The Next Layer of Digital".
-
-Work is served worldwide but the studio is physically in Karachi and most
-clients are Pakistani businesses.
+- Instagram: https://www.instagram.com/nexlyr.solution/
+- Areas served: Karachi, Lahore, Islamabad and across Pakistan, the Gulf (Dubai, Riyadh, Doha), the UK, North America and worldwide
