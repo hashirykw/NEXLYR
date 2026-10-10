@@ -39,5 +39,11 @@ window.NEXLYR_CONFIG = {
   THANK_YOU_URL: 'thank-you.html',
 
   // Set false while testing locally so you don't pollute real analytics.
-  TRACKING_ENABLED: true
+  TRACKING_ENABLED: true,
+
+  // Admin-panel content + first-party event log. Off: the database has
+  // no get_public_content function or events table, so the site uses the
+  // content built into the pages and GA4 for visitor stats.
+  // Leads always save to Supabase regardless of this switch.
+  CMS_ENABLED: false
 };

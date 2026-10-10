@@ -1227,11 +1227,21 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .ledger li:active::before{transform:scaleX(1)}
 .ledger li:active .ledger__n{color:var(--color-cyan);-webkit-text-stroke-color:transparent}
 @media (prefers-reduced-motion:reduce){.ledger li::before,.ledger__n,.ledger h3{transition:none}}
+
+/* ---------- smoothness: no live blur behind cards, no blurred orbs (same look, far cheaper to paint) ---------- */
+.lc{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:linear-gradient(160deg,rgb(19 31 45 / .92),rgb(8 13 20 / .94))}
+.chips li,.word__side .chips li,.pc__go,.btn--ghost,.hero__chip,.stand__panel,.icon-btn:not(.nav .icon-btn){backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.btn--ghost{background:rgb(12 20 29 / .86)}
+.word__side .chips li{background:rgb(6 10 16 / .72)!important}
+.orb{filter:none!important}
+.orb--c{background:radial-gradient(circle,rgb(24 200 240 / .9) 0%,rgb(24 200 240 / .35) 30%,transparent 68%)}
+.orb--a{background:radial-gradient(circle,rgb(12 127 196 / .9) 0%,rgb(12 127 196 / .35) 30%,transparent 68%)}
+.orb--d{background:radial-gradient(circle,rgb(10 92 143 / .9) 0%,rgb(10 92 143 / .35) 30%,transparent 68%)}
 </style>
 <script>(function(){try{var r=document.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||sessionStorage.getItem('nx_seen'))r.classList.add('no-loader');if(!rm&&sessionStorage.getItem('nx_nav')){r.classList.add('is-covered');sessionStorage.removeItem('nx_nav');setTimeout(function(){r.classList.remove('is-covered')},3000)}}catch(e){}})();</script>
 <noscript><style>.loader,.curtain{display:none}</style></noscript>
-<script src="nexlyr-config.js?v=eb1f7c6a"></script>
-<script src="nexlyr-cms.js?v=b0ac18c1"></script>
+<script src="nexlyr-config.js?v=454f63c5"></script>
+<script src="nexlyr-cms.js?v=679d7eaf"></script>
 <script src="nexlyr-analytics.js?v=bc7c4023" defer></script>
 <script src="nexlyr-leads.js?v=223923d1" defer></script>
 </head>
@@ -1536,6 +1546,9 @@ NX.render = api => {
   const retL = $('#tlRetL'), retA = $('#tlRetA'), dot = $('#tlRetDot'), retN = $('#tlRetN');
   const LEN = retL.getTotalLength ? retL.getTotalLength() : 0;
   if (LEN) { retL.style.strokeDasharray = LEN; }
+  /* sample the curve once; every frame just reads from this table */
+  const PTS = []; if (LEN) for (let i = 0; i <= 100; i++) { const q = retL.getPointAtLength(LEN * i / 100); PTS.push([+q.x.toFixed(1), +q.y.toFixed(1)]); }
+  const ptAt = p => PTS[Math.max(0, Math.min(100, Math.round(p * 100)))];
   const clips = $$('#tlTracks .clip:not(.clip--a)').map(c => ({ el: c, a: parseFloat(c.style.left) / 100, b: (parseFloat(c.style.left) + parseFloat(c.style.width)) / 100 }));
   const wave = $('#wave');
   const NOTES = [[0, 'Hook holds'], [.3, 'Pace stays up'], [.55, 'B-roll keeps eyes'], [.8, 'Finish strong']];
@@ -1543,11 +1556,10 @@ NX.render = api => {
   setP = p => {
     base(p);
     if (LEN) {
-      const pt = retL.getPointAtLength(p * LEN);
+      const k = Math.round(p * 100), pt = ptAt(p);
       retL.style.strokeDashoffset = LEN * (1 - p);
-      dot.style.left = (pt.x / 200 * 100) + '%'; dot.style.top = (pt.y / 90 * 100) + '%';
-      const steps = 24, pts = []; for (let i = 0; i <= steps; i++) { const q = retL.getPointAtLength(p * LEN * i / steps); pts.push(q.x.toFixed(1) + ' ' + q.y.toFixed(1)); }
-      retA.setAttribute('d', 'M' + pts.join(' L') + ` L${pt.x.toFixed(1)} 90 L0 90 Z`);
+      dot.style.left = (pt[0] / 200 * 100) + '%'; dot.style.top = (pt[1] / 90 * 100) + '%';
+      if (k !== setP.k) { setP.k = k; retA.setAttribute('d', 'M' + PTS.slice(0, k + 1).map(q => q[0] + ' ' + q[1]).join(' L') + ` L${pt[0]} 90 L0 90 Z`); }
     }
     clips.forEach(c => c.el.classList.toggle('is-live', p >= c.a && p <= c.b));
     if (wave) wave.style.setProperty('--p', (p * 100) + '%');
@@ -1563,8 +1575,14 @@ NX.render = api => {
   }
   NX.tlSet = setP;
   if (RM) { setP(1); return; }
-  let t0 = performance.now();
-  (function loop(now) { const p = ((now - t0) / 9000) % 1; setP(p); requestAnimationFrame(loop); })(t0);
+  /* run only while the timeline is on screen and the tab is visible */
+  let t0 = performance.now(), off = 0, raf = 0, vis = true;
+  const loop = now => { setP(((now - t0) / 9000) % 1); raf = requestAnimationFrame(loop); };
+  const go = () => { if (!raf && vis && !document.hidden) { t0 = performance.now() - off; raf = requestAnimationFrame(loop); } };
+  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; off = (performance.now() - t0) % 9000; } };
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { vis = es[0].isIntersecting; vis ? go() : stop(); }).observe($('#tl'));
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : go());
+  go();
 };
 NX.still = () => NX.tlSet && NX.tlSet(1);
 NX.intro = (tl, api) => {
@@ -1852,10 +1870,7 @@ const NXBoot = () => {
   const REELS = NX.reels || [
     { t:'Market update reel', src:'reel-video-1.mp4', poster:'reel-video-1.webp' },
     { t:'Motion-graphics promo', src:'reel-video-2.mp4', poster:'reel-video-2.webp' },
-    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' },
-    { t:'New reel', src:'reel-video-4.mp4', poster:'reel-video-4.webp' },
-    { t:'New reel', src:'reel-video-5.mp4', poster:'reel-video-5.webp' },
-    { t:'New reel', src:'reel-video-6.mp4', poster:'reel-video-6.webp' }
+    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' }
   ];
   api.reels = el => {
     if (!el) return;
@@ -2165,8 +2180,8 @@ const NXBoot = () => {
   }
 
   const lcs = $$('.more__card, .tap__card, .quote, .fact, .card, .numlist > li, .lc-in, .qa, .pb');
-  gsap.set(lcs, { opacity: 0, y: 46 });
-  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.fromTo(b, { clipPath: 'inset(22% 0% 0% 0% round 24px)' }, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1, ease: 'expo.out', stagger: .07, clearProps: 'clipPath,transform' }) });
+  gsap.set(lcs, { opacity: 0, y: 32 });
+  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.to(b, { opacity: 1, y: 0, duration: .85, ease: 'expo.out', stagger: .07, clearProps: 'transform' }) });
 
   /* footer sign-off: bars build the mark again */
   gsap.from('.foot__in > *', { y: 24, opacity: 0, duration: .9, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: '.foot', start: 'top 95%', once: true } });

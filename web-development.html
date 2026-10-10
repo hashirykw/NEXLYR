@@ -1254,11 +1254,21 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .ledger li:active::before{transform:scaleX(1)}
 .ledger li:active .ledger__n{color:var(--color-cyan);-webkit-text-stroke-color:transparent}
 @media (prefers-reduced-motion:reduce){.ledger li::before,.ledger__n,.ledger h3{transition:none}}
+
+/* ---------- smoothness: no live blur behind cards, no blurred orbs (same look, far cheaper to paint) ---------- */
+.lc{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:linear-gradient(160deg,rgb(19 31 45 / .92),rgb(8 13 20 / .94))}
+.chips li,.word__side .chips li,.pc__go,.btn--ghost,.hero__chip,.stand__panel,.icon-btn:not(.nav .icon-btn){backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.btn--ghost{background:rgb(12 20 29 / .86)}
+.word__side .chips li{background:rgb(6 10 16 / .72)!important}
+.orb{filter:none!important}
+.orb--c{background:radial-gradient(circle,rgb(24 200 240 / .9) 0%,rgb(24 200 240 / .35) 30%,transparent 68%)}
+.orb--a{background:radial-gradient(circle,rgb(12 127 196 / .9) 0%,rgb(12 127 196 / .35) 30%,transparent 68%)}
+.orb--d{background:radial-gradient(circle,rgb(10 92 143 / .9) 0%,rgb(10 92 143 / .35) 30%,transparent 68%)}
 </style>
 <script>(function(){try{var r=document.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||sessionStorage.getItem('nx_seen'))r.classList.add('no-loader');if(!rm&&sessionStorage.getItem('nx_nav')){r.classList.add('is-covered');sessionStorage.removeItem('nx_nav');setTimeout(function(){r.classList.remove('is-covered')},3000)}}catch(e){}})();</script>
 <noscript><style>.loader,.curtain{display:none}</style></noscript>
-<script src="nexlyr-config.js?v=eb1f7c6a"></script>
-<script src="nexlyr-cms.js?v=b0ac18c1"></script>
+<script src="nexlyr-config.js?v=454f63c5"></script>
+<script src="nexlyr-cms.js?v=679d7eaf"></script>
 <script src="nexlyr-analytics.js?v=bc7c4023" defer></script>
 <script src="nexlyr-leads.js?v=223923d1" defer></script>
 </head>
@@ -2379,8 +2389,8 @@ const NXBoot = () => {
   }
 
   const lcs = $$('.more__card, .tap__card, .quote, .fact, .card, .numlist > li, .lc-in, .qa, .pb');
-  gsap.set(lcs, { opacity: 0, y: 46 });
-  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.fromTo(b, { clipPath: 'inset(22% 0% 0% 0% round 24px)' }, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1, ease: 'expo.out', stagger: .07, clearProps: 'clipPath,transform' }) });
+  gsap.set(lcs, { opacity: 0, y: 32 });
+  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.to(b, { opacity: 1, y: 0, duration: .85, ease: 'expo.out', stagger: .07, clearProps: 'transform' }) });
 
   /* footer sign-off: bars build the mark again */
   gsap.from('.foot__in > *', { y: 24, opacity: 0, duration: .9, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: '.foot', start: 'top 95%', once: true } });

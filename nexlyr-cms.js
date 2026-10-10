@@ -12,7 +12,9 @@
   var CFG = window.NEXLYR_CONFIG || {};
   var URL_ = (CFG.SUPABASE_URL || '').replace(/\/$/, '');
   var KEY = CFG.SUPABASE_ANON_KEY || '';
-  var LIVE = !!(URL_ && KEY && URL_.indexOf('xxxx') === -1);
+  /* CMS_ENABLED: false = no admin-panel content and no first-party event log.
+     Leads are separate (nexlyr-leads.js) and always on. */
+  var LIVE = !!(URL_ && KEY && URL_.indexOf('xxxx') === -1) && CFG.CMS_ENABLED !== false;
   var NEW_KEY = /^sb_(publishable|secret)_/.test(KEY);
   var CACHE = 'nx_cms_v1', WAIT_MS = 450, MISS_TTL = 6 * 3600 * 1000;
 
@@ -36,7 +38,7 @@
   }
 
   window.NX = window.NX || {};
-  var cached = readCache(), ready;
+  var cached = LIVE ? readCache() : null, ready;
   if (cached && cached.miss && Date.now() - cached.t > MISS_TTL) cached = null;
   if (cached && cached.c) {
     // stale-while-revalidate: render instantly from cache, refresh for next time
@@ -142,9 +144,11 @@
     var body = JSON.stringify(Q.splice(0, Q.length));
     fetch(URL_ + '/rest/v1/events', { method: 'POST', keepalive: !!beacon, headers: headers({ Prefer: 'return=minimal' }), body: body }).catch(function () {});
   }
-  setInterval(flush, 5000);
-  addEventListener('pagehide', function () { flush(true); });
-  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(true); });
+  if (TRACK) {
+    setInterval(flush, 5000);
+    addEventListener('pagehide', function () { flush(true); });
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(true); });
+  }
   push('page_view', { title: document.title.slice(0, 120) });
 
   // mirror everything sent through nx.track (GA4/Meta) into Supabase too

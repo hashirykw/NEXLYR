@@ -1358,11 +1358,21 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
   .word .ph{opacity:.55}
   .word__shade{background:linear-gradient(180deg,rgb(6 10 16 / .35) 0%,rgb(6 10 16 / .1) 30%,rgb(6 10 16 / .7) 62%,rgb(6 10 16 / .95) 100%),radial-gradient(80% 50% at 80% 18%,rgb(24 200 240 / .22),transparent 70%)!important}
 }
+
+/* ---------- smoothness: no live blur behind cards, no blurred orbs (same look, far cheaper to paint) ---------- */
+.lc{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:linear-gradient(160deg,rgb(19 31 45 / .92),rgb(8 13 20 / .94))}
+.chips li,.word__side .chips li,.pc__go,.btn--ghost,.hero__chip,.stand__panel,.icon-btn:not(.nav .icon-btn){backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.btn--ghost{background:rgb(12 20 29 / .86)}
+.word__side .chips li{background:rgb(6 10 16 / .72)!important}
+.orb{filter:none!important}
+.orb--c{background:radial-gradient(circle,rgb(24 200 240 / .9) 0%,rgb(24 200 240 / .35) 30%,transparent 68%)}
+.orb--a{background:radial-gradient(circle,rgb(12 127 196 / .9) 0%,rgb(12 127 196 / .35) 30%,transparent 68%)}
+.orb--d{background:radial-gradient(circle,rgb(10 92 143 / .9) 0%,rgb(10 92 143 / .35) 30%,transparent 68%)}
 </style>
 <script>(function(){try{var r=document.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||sessionStorage.getItem('nx_seen'))r.classList.add('no-loader');if(!rm&&sessionStorage.getItem('nx_nav')){r.classList.add('is-covered');sessionStorage.removeItem('nx_nav');setTimeout(function(){r.classList.remove('is-covered')},3000)}}catch(e){}})();</script>
 <noscript><style>.loader,.curtain{display:none}</style></noscript>
-<script src="nexlyr-config.js?v=eb1f7c6a"></script>
-<script src="nexlyr-cms.js?v=b0ac18c1"></script>
+<script src="nexlyr-config.js?v=454f63c5"></script>
+<script src="nexlyr-cms.js?v=679d7eaf"></script>
 <script src="nexlyr-analytics.js?v=bc7c4023" defer></script>
 <script src="nexlyr-leads.js?v=223923d1" defer></script>
 </head>
@@ -2296,12 +2306,10 @@ let TEAM = [
     tags:['Development','Social media','QA & testing'] }
 ];
 
-/* Replace with real client words (ideally copied from your Google reviews). */
-let QUOTES = [
-  { h:'Parents trust the website now', q:'It opens in a second on a cheap phone, the syllabus and past papers are exactly where a parent expects them, and I post notices myself without messaging anyone.', who:'Ayesha R. · Education client' },
-  { h:'He talked me out of things I asked for', q:'I wanted three features that would have slowed the site down and cost me money. He explained why in plain language, then built the two that actually mattered.', who:'Bilal A. · Fitness client' },
-  { h:'The menu works in one hand', q:'Customers used to give up halfway down the old PDF. Now they scroll, tap, and the order arrives in our WhatsApp already written out.', who:'Sana J. · Restaurant client' }
-];
+/* Real client reviews only (copy them from your Google reviews), e.g.
+   { h:'Short headline', q:'What the client said, word for word.', who:'Name · Business' }
+   While this list is empty the reviews section stays hidden. */
+let QUOTES = [];
 
 NX.faq = [
   ['Why is there no pricing on this website?','A five-page brochure site and a platform with logins and an admin panel are not the same job, so one price list would overcharge someone. Send the scope and you get one straight number for exactly what you need, usually the same day.'],
@@ -2426,17 +2434,18 @@ NX.render = api => {
   ['mouseenter', 'focusin'].forEach(ev => crewSec.addEventListener(ev, () => crewPaused = true));
   ['mouseleave', 'focusout'].forEach(ev => crewSec.addEventListener(ev, () => { crewPaused = false; }));
   if (!RM && 'IntersectionObserver' in window) {
-    let inView = false, last = performance.now();
-    new IntersectionObserver(es => { inView = es[0].isIntersecting; }, { threshold: .3 }).observe(crewSec);
-    (function tickCrew(now) {
+    let inView = false, last = performance.now(), crewRaf = 0;
+    function tickCrew(now) {
       const dt = Math.min(now - last, 100); last = now;
-      if (inView && !crewPaused) {
+      if (!crewPaused) {
         crewEl += dt;
         const bar = $('.tm.is-on .tm__bar i', crewThumbs); if (bar) bar.style.transform = `scaleX(${Math.min(crewEl / CREW_MS, 1)})`;
         if (crewEl >= CREW_MS) showCrew((crewCur + 1) % TEAM.length);
       }
-      requestAnimationFrame(tickCrew);
-    })(last);
+      crewRaf = inView ? requestAnimationFrame(tickCrew) : 0;
+    }
+    /* the autoplay clock only runs while the team section is on screen */
+    new IntersectionObserver(es => { inView = es[0].isIntersecting; if (inView && !crewRaf) { last = performance.now(); crewRaf = requestAnimationFrame(tickCrew); } }, { threshold: .3 }).observe(crewSec);
   }
 
   /* ---------- standard: build the layer rings ---------- */
@@ -2451,6 +2460,7 @@ NX.render = api => {
   })();
 
 
+  { const rv = $('#reviews'); if (rv) rv.hidden = !QUOTES.length; }
   $('#quotes').innerHTML = QUOTES.map(q => `<blockquote class="quote lc" style="margin:0"><h3>${esc(q.h)}</h3><p>${esc(q.q)}</p><footer>${esc(q.who)}</footer></blockquote>`).join('');
 
   /* ---------- NFC card: tilt + flip ---------- */
@@ -2809,10 +2819,7 @@ const NXBoot = () => {
   const REELS = NX.reels || [
     { t:'Market update reel', src:'reel-video-1.mp4', poster:'reel-video-1.webp' },
     { t:'Motion-graphics promo', src:'reel-video-2.mp4', poster:'reel-video-2.webp' },
-    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' },
-    { t:'New reel', src:'reel-video-4.mp4', poster:'reel-video-4.webp' },
-    { t:'New reel', src:'reel-video-5.mp4', poster:'reel-video-5.webp' },
-    { t:'New reel', src:'reel-video-6.mp4', poster:'reel-video-6.webp' }
+    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' }
   ];
   api.reels = el => {
     if (!el) return;
@@ -3122,8 +3129,8 @@ const NXBoot = () => {
   }
 
   const lcs = $$('.more__card, .tap__card, .quote, .fact, .card, .numlist > li, .lc-in, .qa, .pb');
-  gsap.set(lcs, { opacity: 0, y: 46 });
-  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.fromTo(b, { clipPath: 'inset(22% 0% 0% 0% round 24px)' }, { opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1, ease: 'expo.out', stagger: .07, clearProps: 'clipPath,transform' }) });
+  gsap.set(lcs, { opacity: 0, y: 32 });
+  ScrollTrigger.batch(lcs, { start: 'top 90%', once: true, onEnter: b => gsap.to(b, { opacity: 1, y: 0, duration: .85, ease: 'expo.out', stagger: .07, clearProps: 'transform' }) });
 
   /* footer sign-off: bars build the mark again */
   gsap.from('.foot__in > *', { y: 24, opacity: 0, duration: .9, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: '.foot', start: 'top 95%', once: true } });
