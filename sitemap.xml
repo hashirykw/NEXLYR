@@ -2,55 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://nexlyr.solutions/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-home.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/web-development</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-web-development.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/business-software</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-software.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/video-editing</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-video-editing.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/design-and-ads</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-design-and-ads.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/social-media-marketing</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://nexlyr.solutions/og-social-media.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://nexlyr.solutions/privacy</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://nexlyr.solutions/terms</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

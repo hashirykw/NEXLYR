@@ -2,7 +2,6 @@
 
 Everything in this folder sits side by side, with no subfolders, so it survives GitHub's web uploader (which flattens folders). Upload all files to the repo root.
 
-Delete these old files from the repo if they are still there: `log.json`, `checks.yml`, `download`, `download (1)`, `security.txt`, `hero.mp4`, `hero-poster.webp`.
 
 # Nexlyr — images to generate
 
