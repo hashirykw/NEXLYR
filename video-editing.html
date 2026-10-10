@@ -1237,6 +1237,30 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .orb--c{background:radial-gradient(circle,rgb(24 200 240 / .9) 0%,rgb(24 200 240 / .35) 30%,transparent 68%)}
 .orb--a{background:radial-gradient(circle,rgb(12 127 196 / .9) 0%,rgb(12 127 196 / .35) 30%,transparent 68%)}
 .orb--d{background:radial-gradient(circle,rgb(10 92 143 / .9) 0%,rgb(10 92 143 / .35) 30%,transparent 68%)}
+
+/* ---------- themed dropdown (replaces the browser's white option list) ---------- */
+.dd{position:relative}
+.dd__native{position:absolute!important;inset:0;width:100%;height:100%;opacity:0;pointer-events:none;clip-path:inset(50%)}
+.field .dd__btn{width:100%;min-height:52px;padding:14px 46px 14px 16px;border-radius:12px;border:1px solid var(--color-line-2);background:var(--color-ink);color:var(--color-white);text-align:left;display:flex;align-items:center;cursor:pointer;position:relative;transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.dd__btn .dd__val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd__btn.is-empty .dd__val{color:var(--color-mute)}
+.dd__btn:hover{border-color:rgb(127 235 255 / .4)}
+.dd__btn:focus-visible,.dd.is-open .dd__btn{outline:none;border-color:var(--color-cyan);box-shadow:0 0 0 3px rgb(24 200 240 / .25)}
+.field.has-err .dd__btn{border-color:var(--color-err)}
+.dd__chev{position:absolute;right:16px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--color-cyan);transition:transform var(--dur-base) var(--ease-out)}
+.dd.is-open .dd__chev{transform:rotate(180deg)}
+.dd__list{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:40;margin:0;padding:6px;list-style:none;max-height:min(320px,52vh);overflow-y:auto;overscroll-behavior:contain;border-radius:14px;border:1px solid var(--color-line-2);background:linear-gradient(160deg,#122030,#080D14);box-shadow:0 24px 60px -18px rgb(0 0 0 / .85),inset 0 1px 0 rgb(255 255 255 / .05);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.985);transform-origin:top center;transition:opacity 180ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s linear 220ms;scrollbar-width:thin;scrollbar-color:rgb(127 235 255 / .3) transparent}
+.dd.is-up .dd__list{top:auto;bottom:calc(100% + 8px);transform-origin:bottom center;transform:translateY(6px) scale(.985)}
+.dd.is-open .dd__list{opacity:1;visibility:visible;transform:none;transition:opacity 180ms var(--ease-out),transform 220ms var(--ease-out),visibility 0s}
+.dd__opt{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:10px 12px;border-radius:10px;color:var(--color-soft);cursor:pointer;transition:background-color var(--dur-fast),color var(--dur-fast)}
+.dd__opt.is-active{background:rgb(24 200 240 / .12);color:var(--color-white)}
+.dd__opt[aria-selected="true"]{color:var(--color-cyan-lt,#7FEBFF);font-weight:600}
+.dd__opt svg{width:16px;height:16px;flex:none;opacity:0;color:var(--color-cyan)}
+.dd__opt[aria-selected="true"] svg{opacity:1}
+@media (prefers-reduced-motion: reduce){.dd__list,.dd__chev{transition:none}}
+.contact2__side{border-radius:30px 0 0 30px}
+@media (max-width:900px){.contact2__side{border-radius:30px 30px 0 0}}
+.contact2:has(.dd.is-open){overflow:visible;z-index:5}
 </style>
 <script>(function(){try{var r=document.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||sessionStorage.getItem('nx_seen'))r.classList.add('no-loader');if(!rm&&sessionStorage.getItem('nx_nav')){r.classList.add('is-covered');sessionStorage.removeItem('nx_nav');setTimeout(function(){r.classList.remove('is-covered')},3000)}}catch(e){}})();</script>
 <noscript><style>.loader,.curtain{display:none}</style></noscript>
@@ -1927,6 +1951,78 @@ const NXBoot = () => {
   if ($('#f-svc')) {
     $('#f-svc').insertAdjacentHTML('beforeend', SERVICES.map(s => `<option${NX.svc === s.t ? ' selected' : ''}>${esc(s.t)}</option>`).join('') + '<option>Not sure yet</option>');
   }
+
+  /* themed dropdown: the real <select> stays for the form, this draws the list in the site's colours */
+  const NXSelect = sel => {
+    if (!sel || sel.dataset.dd) return; sel.dataset.dd = '1';
+    const wrap = d.createElement('div'), lab = d.querySelector(`label[for="${sel.id}"]`), uid = sel.id + '-dd';
+    if (lab && !lab.id) lab.id = sel.id + '-lab';
+    wrap.className = 'dd'; sel.before(wrap); wrap.appendChild(sel);
+    sel.classList.add('dd__native'); sel.tabIndex = -1; sel.setAttribute('aria-hidden', 'true');
+    const opts = [...sel.options].filter(o => o.value !== '');
+    const tick = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+    wrap.insertAdjacentHTML('beforeend', `<button type="button" class="dd__btn" id="${uid}-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="${uid}-list"${lab ? ` aria-labelledby="${lab.id} ${uid}-btn"` : ''}><span class="dd__val"></span><svg class="dd__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><ul class="dd__list" id="${uid}-list" role="listbox" tabindex="-1" data-lenis-prevent${lab ? ` aria-labelledby="${lab.id}"` : ''}>${opts.map((o, i) => `<li class="dd__opt" role="option" id="${uid}-o${i}" aria-selected="false"><span>${esc(o.text)}</span>${tick}</li>`).join('')}</ul>`);
+    const btn = wrap.querySelector('.dd__btn'), val = btn.querySelector('.dd__val'), list = wrap.querySelector('.dd__list'), items = [...list.children];
+    const ph = (sel.options[0] && sel.options[0].value === '' ? sel.options[0].text : 'Choose one');
+    let act = -1, open = false, typed = '', typedT = 0;
+    const sync = () => {
+      const i = opts.findIndex(o => o.selected && sel.value !== '');
+      items.forEach((li, j) => li.setAttribute('aria-selected', String(j === i)));
+      val.textContent = i > -1 ? opts[i].text : ph; btn.classList.toggle('is-empty', i < 0);
+    };
+    const setAct = (i, scroll) => {
+      act = Math.max(0, Math.min(items.length - 1, i));
+      items.forEach((li, j) => li.classList.toggle('is-active', j === act));
+      list.setAttribute('aria-activedescendant', items[act].id);
+      if (scroll) { const li = items[act], t = li.offsetTop, b = t + li.offsetHeight; if (t < list.scrollTop) list.scrollTop = t - 6; else if (b > list.scrollTop + list.clientHeight) list.scrollTop = b - list.clientHeight + 6; }
+    };
+    const show = () => {
+      if (open) return; open = true;
+      const r = btn.getBoundingClientRect(), need = Math.min(320, innerHeight * .52) + 16;
+      wrap.classList.toggle('is-up', innerHeight - r.bottom < need && r.top > innerHeight - r.bottom);
+      wrap.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
+      const i = opts.findIndex(o => o.selected && sel.value !== '');
+      setAct(i > -1 ? i : 0, true); list.focus({ preventScroll: true });
+    };
+    const hide = refocus => {
+      if (!open) return; open = false;
+      wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false');
+      if (refocus) btn.focus({ preventScroll: true });
+    };
+    const pick = i => {
+      sel.value = opts[i].value; sync();
+      sel.dispatchEvent(new Event('input', { bubbles: true })); sel.dispatchEvent(new Event('change', { bubbles: true }));
+      const f = sel.closest('.field'); if (f && f.classList.contains('has-err')) { f.classList.remove('has-err'); const e = f.querySelector('.err'); if (e) e.textContent = ''; }
+      hide(true);
+    };
+    btn.addEventListener('click', () => open ? hide(true) : show());
+    btn.addEventListener('keydown', e => { if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) { e.preventDefault(); show(); } });
+    list.addEventListener('keydown', e => {
+      const k = e.key;
+      if (k === 'ArrowDown') { e.preventDefault(); setAct(act + 1, true); }
+      else if (k === 'ArrowUp') { e.preventDefault(); setAct(act - 1, true); }
+      else if (k === 'Home') { e.preventDefault(); setAct(0, true); }
+      else if (k === 'End') { e.preventDefault(); setAct(items.length - 1, true); }
+      else if (k === 'Enter' || k === ' ') { e.preventDefault(); pick(act); }
+      else if (k === 'Escape') { e.preventDefault(); e.stopPropagation(); hide(true); }
+      else if (k === 'Tab') hide(false);
+      else if (k.length === 1) {
+        clearTimeout(typedT); typed += k.toLowerCase(); typedT = setTimeout(() => typed = '', 600);
+        const j = opts.findIndex(o => o.text.toLowerCase().startsWith(typed)); if (j > -1) setAct(j, true);
+      }
+    });
+    items.forEach((li, i) => {
+      li.addEventListener('pointermove', () => { if (act !== i) setAct(i); });
+      li.addEventListener('click', () => pick(i));
+    });
+    list.addEventListener('focusout', e => { if (!wrap.contains(e.relatedTarget)) hide(false); });
+    d.addEventListener('pointerdown', e => { if (open && !wrap.contains(e.target)) hide(false); });
+    sel.addEventListener('focus', () => btn.focus());
+    sel.addEventListener('change', sync);
+    if (lab) lab.addEventListener('click', e => { e.preventDefault(); btn.focus(); });
+    sync();
+  };
+  NXSelect($('#f-svc'));
 
   /* ---------- menu ---------- */
   const menuBtn = $('#menuBtn');
