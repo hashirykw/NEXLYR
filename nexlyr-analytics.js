@@ -15,8 +15,9 @@
   var PIXEL = CFG.META_PIXEL_ID || '';
   var STORE_KEY = 'nx_consent_v1';
 
-  var hasGA4 = GA4 && GA4.indexOf('X') === -1;
-  var hasPixel = PIXEL && PIXEL.indexOf('0000') === -1;
+  /* real IDs only: the placeholders are G-XXXXXXXXXX and 0000000000000000 */
+  var hasGA4 = /^G-[A-Z0-9]{6,}$/.test(GA4) && !/^G-X+$/.test(GA4);
+  var hasPixel = /^[0-9]{10,20}$/.test(PIXEL) && !/^0+$/.test(PIXEL);
 
   /* ─────────────────────────────────────────────────────────────
      1. CONSENT

@@ -7,7 +7,7 @@ window.NEXLYR_CONFIG = {
   /* ── 1. Google Analytics 4 ────────────────────────────────────
      analytics.google.com → Admin → Data Streams → Web
      Looks like: G-XXXXXXXXXX                                     */
-  GA4_ID: 'G-XXXXXXXXXX',
+  GA4_ID: 'G-JX9ZKBTBTH',
 
   /* ── 2. Meta (Facebook) Pixel ─────────────────────────────────
      business.facebook.com → Events Manager → Data Sources
