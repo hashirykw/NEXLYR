@@ -49,7 +49,8 @@ jobs:
                   if '${' in href or "'+" in href or '"+' in href:
                       continue
                   path = href.split('#')[0].split('?')[0].lstrip('/')
-                  if path and not os.path.exists(path):
+                  # Vercel cleanUrls: /web-development is served from web-development.html
+                  if path and not os.path.exists(path) and not os.path.exists(path + '.html'):
                       missing.append(f'{f} -> {href}')
           for m in missing:
               print('MISSING', m)

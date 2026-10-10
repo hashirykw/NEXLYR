@@ -14,7 +14,7 @@
   var KEY = CFG.SUPABASE_ANON_KEY || '';
   var LIVE = !!(URL_ && KEY && URL_.indexOf('xxxx') === -1);
   var NEW_KEY = /^sb_(publishable|secret)_/.test(KEY);
-  var CACHE = 'nx_cms_v1', WAIT_MS = 1400;
+  var CACHE = 'nx_cms_v1', WAIT_MS = 450, MISS_TTL = 6 * 3600 * 1000;
 
   function headers(extra) {
     var h = { apikey: KEY, 'Content-Type': 'application/json' };
@@ -27,12 +27,17 @@
   function fetchContent() {
     if (!LIVE) return Promise.resolve(null);
     return fetch(URL_ + '/rest/v1/rpc/get_public_content', { method: 'POST', headers: headers(), body: '{}' })
-      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) {
+        /* no admin content yet: remember that for a few hours so pages never wait on it */
+        if (!r.ok) { try { localStorage.setItem(CACHE, JSON.stringify({ t: Date.now(), c: {}, miss: 1 })); } catch (e) {} return null; }
+        return r.json();
+      })
       .catch(function () { return null; });
   }
 
   window.NX = window.NX || {};
   var cached = readCache(), ready;
+  if (cached && cached.miss && Date.now() - cached.t > MISS_TTL) cached = null;
   if (cached && cached.c) {
     // stale-while-revalidate: render instantly from cache, refresh for next time
     NX.cms = cached.c;

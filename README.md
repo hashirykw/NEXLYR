@@ -1,9 +1,12 @@
 # Nexlyr — website (frontend)
 
-Every file sits side by side with no subfolders, so it uploads correctly through GitHub's website (which flattens folders). Upload everything to the repo root, and Vercel deploys it.
+Pages, scripts and images sit side by side in the repo root, and Vercel deploys it. A few files live in folders because they have to:
 
-## Remove these old files from the repo if they are still there
-`log.json`, `checks.yml`, `download`, `download (1)`, `security.txt`, `hero.mp4`, `hero-poster.webp`, `IMAGE-PROMPTS.md`
+- `.well-known/security.txt` — security contact, served at `/.well-known/security.txt`
+- `.github/workflows/checks.yml` — checks every push (sitemap, JSON-LD, broken links, one h1 per page)
+- `.hallmark/log.json` — design history used by the Hallmark design skill
+
+Push with git rather than GitHub's web uploader, which flattens folders.
 
 ## The files you might edit
 - `nexlyr-config.js`: Supabase URL and publishable key, GA4 and Meta Pixel IDs, tracking on/off. This is the only file to touch when IDs change.
@@ -16,9 +19,12 @@ Every file sits side by side with no subfolders, so it uploads correctly through
 - Admin changes reach visitors on their next page load.
 
 ## Images
-Placeholders show the Nexlyr mark until a real image exists. The exact file names and prompts are in the `4-image-prompts` folder. Either:
+Placeholders show the Nexlyr mark until a real image exists. The exact file names and prompts are in `IMAGE-PROMPTS.md`. Either:
 - drop the image next to `index.html` with that exact name, or
 - upload it in the admin panel and paste its link into the right item.
 
 ## Previewing on your computer
 Links between pages use clean addresses (`/web-development`), which work on Vercel. Opening the `.html` files straight from your computer shows each page, but clicking between pages needs the live site.
+
+## Hero earth
+The homepage earth loads three.js from cdnjs after the page is up and uses `earth-day.webp`, `earth-night.webp`, `earth-water.webp` and `earth-relief.webp`. Earth imagery: NASA Blue Marble and Black Marble (public domain). If WebGL or any of these files are unavailable, the dotted canvas globe shows instead.

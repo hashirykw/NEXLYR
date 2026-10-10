@@ -7,19 +7,22 @@ Every 5-page website includes a free AI chatbot trained on the business and basi
 ## Services
 - [Website design & development](https://nexlyr.solutions/web-development): hand-coded websites, web apps, e-commerce, admin panels, AI chatbots, AI calling agents, SEO (basic, advanced, technical, local)
 - [Business software](https://nexlyr.solutions/business-software): stock and inventory, POS and billing, salon and barber booking, clinic records, gym memberships, school portals, restaurant ordering, real estate, admin panels
-- [Video editing](https://nexlyr.solutions/video-editing): Instagram Reels and Shorts, long-form YouTube, multicam podcasts, motion graphics, ad creative, thumbnails, events
+- [Video editing](https://nexlyr.solutions/video-editing): Instagram Reels and Shorts, long-form YouTube, multicam podcasts, motion graphics, ad creative, AI UGC ads, thumbnails, events
 - [Logo design, branding & paid ads](https://nexlyr.solutions/design-and-ads): logos, brand identity systems, social creatives, print and packaging, Meta and Google campaigns
 - [Social media marketing](https://nexlyr.solutions/social-media-marketing): content calendars, reels, carousels, community management, Meta and Instagram ads, monthly reporting
 - [NFC business cards & Google reviews](https://nexlyr.solutions/#tap)
 
+## Client portal
+- Every client gets a private portal at https://portal.nexlyr.solutions/ with live project steps, daily updates, invoices and verifiable receipts, step comments, final files and add-on requests. Clients sign in with a Client ID and password.
+
 ## Team
-- M. Hashir, founder: web developer, graphic designer, social media and ads manager (https://hashir.nexlyr.solutions/)
-- Zamil Shaikh, co-founder: ads manager, video editor, social media manager and content recorder (https://zamil.nexlyr.solutions/)
-- Raahym Nouman, lead manager
-- Hammad Naved, lead operator and social media manager
+- M. Hashir, founder: full-stack web developer and motion graphics expert, leads every project (https://hashir.nexlyr.solutions/)
+- Zamil Shaikh, co-founder: video editor and AI UGC creator (https://zamil.nexlyr.solutions/)
+- Raahym Nouman, co-founder: lead manager and website backend manager
+- Hammad Naved, head of the leads department and social media expert
 - Syed M. Raza, video editor
 - Rayyan Ali, web developer
-- Five more developers and specialists in the tech team
+- Ten more developers, social media experts and specialists
 
 ## Contact
 - WhatsApp: +92 305 3687680
