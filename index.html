@@ -268,7 +268,18 @@ p{margin:0}
 .quote{padding:clamp(22px,2.6vw,34px);display:grid;gap:var(--space-md);align-content:start}
 .quote h3{font-size:1.35rem;font-stretch:100%;line-height:1.15}
 .quote p{color:var(--color-soft);font-size:var(--text-md)}
-.quote footer{color:var(--color-mute);font-size:var(--text-sm)}
+.quote footer{color:var(--color-mute);font-size:var(--text-sm);display:flex;align-items:center;gap:14px}
+.quote footer img{width:48px;height:auto;flex:none;object-fit:contain}
+.quote footer b{display:block;color:var(--color-white);font-weight:600;font-size:var(--text-md)}
+.quote footer small{display:block;color:var(--color-mute);font-size:var(--text-sm)}
+/* a single review gets the whole row, set large */
+.quotes:has(>.quote:only-child){grid-template-columns:1fr}
+.quotes:has(>.quote:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:860px){.quotes:has(>.quote:nth-child(2):last-child){grid-template-columns:1fr}}
+.quote:only-child{position:relative;max-width:980px;padding:clamp(28px,4.4vw,60px);gap:clamp(18px,2vw,26px);overflow:hidden}
+.quote:only-child::before{content:"\201C";position:absolute;top:-.18em;right:.08em;font-family:var(--font-display);font-size:clamp(9rem,6rem + 10vw,16rem);line-height:1;color:rgb(24 200 240 / .1);pointer-events:none}
+.quote:only-child h3{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.2rem);color:var(--color-cyan-lt,#7FEBFF)}
+.quote:only-child p{font-size:clamp(1.08rem,.98rem + .5vw,1.4rem);line-height:1.6;color:var(--color-white);max-width:62ch}
 @media (max-width:860px){.quotes{grid-template-columns:1fr;gap:40px}}
 
 /* ---------- faq ---------- */
@@ -2368,7 +2379,9 @@ let TEAM = [
 /* Real client reviews only (copy them from your Google reviews), e.g.
    { h:'Short headline', q:'What the client said, word for word.', who:'Name · Business' }
    While this list is empty the reviews section stays hidden. */
-let QUOTES = [];
+let QUOTES = [
+  { h:'Taken seriously online.', q:'We came to Nexlyr with an old SWK logo and a website that didn’t match the academy we’ve become. They rebranded us as Cambridge Online and built a site that parents and students actually find and use, with all our streams and faculty and a proper enquiry form. The part I value most is the admin panel: my team updates teachers, admissions and notices themselves, without calling a developer for every change. Hashir understood what an academy needs and kept improving things after launch. I’d recommend Nexlyr to any institute that wants to be taken seriously online.', who:'Sir Waqas Khan', org:'Cambridge Online (formerly SWK Solutions)', logo:'logo-cambridge-online.webp', url:'https://cambridgeonline.tech' }
+];
 
 NX.faq = [
   ['Why is there no pricing on this website?','A five-page brochure site and a platform with logins and an admin panel are not the same job, so one price list would overcharge someone. Send the scope and you get one straight number for exactly what you need.'],
@@ -2520,7 +2533,7 @@ NX.render = api => {
 
 
   { const rv = $('#reviews'); if (rv) rv.hidden = !QUOTES.length; }
-  $('#quotes').innerHTML = QUOTES.map(q => `<blockquote class="quote lc" style="margin:0"><h3>${esc(q.h)}</h3><p>${esc(q.q)}</p><footer>${esc(q.who)}</footer></blockquote>`).join('');
+  $('#quotes').innerHTML = QUOTES.map(q => `<blockquote class="quote lc" style="margin:0"${q.url ? ` cite="${esc(q.url)}"` : ''}><h3>${esc(q.h)}</h3><p>${esc(q.q)}</p><footer>${q.logo ? `<img src="${esc(q.logo)}" alt="" width="48" height="52" loading="lazy" decoding="async">` : ''}<span><b>${esc(q.who)}</b>${q.org ? `<small>${esc(q.org)}</small>` : ''}</span></footer></blockquote>`).join('');
 
   /* ---------- NFC card: tilt + flip ---------- */
   const nfc = $('#nfc'), nfcStage = $('#nfcStage');
