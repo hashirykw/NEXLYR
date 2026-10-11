@@ -1381,7 +1381,7 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
     <div class="phero__vis">
       <div class="tl lc" id="tl" aria-label="Illustration of an editing timeline">
         <div class="tl__top">
-          <div class="tl__prev"><img src="reel-video-3.webp" alt="" onerror="this.remove()"><video class="tl__vid" muted loop playsinline preload="none" poster="reel-video-3.webp" data-src="reel-video-3.mp4" aria-hidden="true"></video><span class="tl__rec" aria-hidden="true"><i></i>Editing</span><span class="tl__cap" id="tlCap">Nobody watches past three seconds.</span><span class="tl__tc mono" id="tlTc">00:00:00:00</span></div>
+          <div class="tl__prev"><img src="reel-video-3.webp?v=2" alt="" onerror="this.remove()"><video class="tl__vid" muted loop playsinline preload="none" poster="reel-video-3.webp?v=2" data-src="reel-video-3.mp4" aria-hidden="true"></video><span class="tl__rec" aria-hidden="true"><i></i>Editing</span><span class="tl__cap" id="tlCap">Nobody watches past three seconds.</span><span class="tl__tc mono" id="tlTc">00:00:00:00</span></div>
           <div class="tl__ret"><span class="mono">Audience retention</span><b id="tlRet">100%</b><div class="tl__retG"><svg viewBox="0 0 200 90" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="retFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#18C8F0" stop-opacity=".28"/><stop offset="1" stop-color="#18C8F0" stop-opacity="0"/></linearGradient></defs><path class="tl__retGhost" d="M0 6 C 30 8, 40 20, 60 22 S 110 26, 140 30 S 180 34, 200 38" fill="none" stroke="rgb(127 235 255 / .18)" stroke-width="1.5" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"/><path id="tlRetA" fill="url(#retFill)" d=""/><path class="tl__retL" id="tlRetL" d="M0 6 C 30 8, 40 20, 60 22 S 110 26, 140 30 S 180 34, 200 38" fill="none" stroke="#7FEBFF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg><span class="tl__retDot" id="tlRetDot" aria-hidden="true"></span></div><small class="tl__retN" id="tlRetN">Hook holds</small></div>
         </div>
         <div class="tl__tracks" id="tlTracks">
@@ -1918,12 +1918,13 @@ const NXBoot = () => {
 
   /* reels: add a file to /media and add a line here, it shows up; missing files hide themselves */
   const REELS = NX.reels || [
-    { t:'Market update reel', src:'reel-video-1.mp4', poster:'reel-video-1.webp' },
-    { t:'Animated explainer', src:'reel-video-5.mp4?v=1', poster:'reel-video-5.webp?v=1' },
-    { t:'Motion-graphics promo', src:'reel-video-2.mp4', poster:'reel-video-2.webp' },
-    { t:'Kinetic type · Digital growth', src:'reel-video-4.mp4?v=1', poster:'reel-video-4.webp?v=1' },
-    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' },
-    { t:'Animated brand promo', src:'reel-video-6.mp4?v=1', poster:'reel-video-6.webp?v=1' }
+    { t:'Market update reel', src:'reel-video-1.mp4', poster:'reel-video-1.webp?v=2' },
+    { t:'Animated explainer', src:'reel-video-5.mp4?v=1', poster:'reel-video-5.webp?v=2' },
+    { t:'Sketch explainer · Landing pages', src:'reel-video-7.mp4?v=1', poster:'reel-video-7.webp?v=1' },
+    { t:'Motion-graphics promo', src:'reel-video-2.mp4', poster:'reel-video-2.webp?v=2' },
+    { t:'Kinetic type · Digital growth', src:'reel-video-4.mp4?v=1', poster:'reel-video-4.webp?v=2' },
+    { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp?v=2' },
+    { t:'Animated brand promo', src:'reel-video-6.mp4?v=1', poster:'reel-video-6.webp?v=2' }
   ];
   api.reels = el => {
     if (!el) return;
