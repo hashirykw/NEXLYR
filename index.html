@@ -263,24 +263,85 @@ p{margin:0}
 .step p{font-size:var(--text-sm);color:var(--color-mute);line-height:1.55}
 @media (max-width:900px){.steps{grid-template-columns:1fr;gap:28px;padding-left:44px}.steps::before,.steps__fill{top:0;bottom:0;left:13px;right:auto;width:1px;height:auto}.steps__fill{transform:scaleY(0);transform-origin:top}.step{position:relative}.step .dot{position:absolute;left:-44px;top:0}.step h3{margin-top:2px}}
 
-/* ---------- reviews ---------- */
-.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
-.quote{padding:clamp(22px,2.6vw,34px);display:grid;gap:var(--space-md);align-content:start}
-.quote h3{font-size:1.35rem;font-stretch:100%;line-height:1.15}
-.quote p{color:var(--color-soft);font-size:var(--text-md)}
-.quote footer{color:var(--color-mute);font-size:var(--text-sm);display:flex;align-items:center;gap:14px}
-.quote footer img{width:48px;height:auto;flex:none;object-fit:contain}
-.quote footer b{display:block;color:var(--color-white);font-weight:600;font-size:var(--text-md)}
-.quote footer small{display:block;color:var(--color-mute);font-size:var(--text-sm)}
-/* a single review gets the whole row, set large */
-.quotes:has(>.quote:only-child){grid-template-columns:1fr}
-.quotes:has(>.quote:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:860px){.quotes:has(>.quote:nth-child(2):last-child){grid-template-columns:1fr}}
-.quote:only-child{position:relative;max-width:980px;padding:clamp(28px,4.4vw,60px);gap:clamp(18px,2vw,26px);overflow:hidden}
-.quote:only-child::before{content:"\201C";position:absolute;top:-.18em;right:.08em;font-family:var(--font-display);font-size:clamp(9rem,6rem + 10vw,16rem);line-height:1;color:rgb(24 200 240 / .1);pointer-events:none}
-.quote:only-child h3{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.2rem);color:var(--color-cyan-lt,#7FEBFF)}
-.quote:only-child p{font-size:clamp(1.08rem,.98rem + .5vw,1.4rem);line-height:1.6;color:var(--color-white);max-width:62ch}
-@media (max-width:860px){.quotes{grid-template-columns:1fr;gap:40px}}
+/* ---------- reviews: a 3D deck, the next review comes forward from the back ---------- */
+.rv__grid{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:clamp(32px,5vw,80px);align-items:center}
+.rv__side{display:grid;gap:22px;align-content:center}
+.rv__side h2{margin:0}
+.rv__names{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px;counter-reset:rv}
+.rv__names button{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border-radius:14px;text-align:left;color:var(--color-mute);border:1px solid transparent;transition:color var(--dur-fast),background-color var(--dur-fast),border-color var(--dur-fast)}
+.rv__names button::before{counter-increment:rv;content:counter(rv,decimal-leading-zero);font-family:var(--font-mono);font-size:11px;color:var(--color-mute);opacity:.7}
+.rv__names img{width:30px;height:30px;object-fit:contain;flex:none;opacity:.6;transition:opacity var(--dur-fast)}
+.rv__names b{display:block;font-weight:600;font-size:var(--text-md);color:inherit}
+.rv__names small{display:block;font-size:12px;color:var(--color-mute)}
+.rv__names button:hover{color:var(--color-soft)}
+.rv__names button[aria-current="true"]{color:var(--color-white);background:rgb(24 200 240 / .07);border-color:rgb(127 235 255 / .18)}
+.rv__names button[aria-current="true"] img{opacity:1}
+.rv__ctrl{display:flex;align-items:center;gap:14px;margin-top:6px}
+.rv__btn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:var(--color-white);border:1px solid var(--color-line-2);background:rgb(255 255 255 / .03);transition:border-color var(--dur-fast),background-color var(--dur-fast),transform var(--dur-fast)}
+.rv__btn svg{width:20px;height:20px}
+.rv__btn:hover{border-color:var(--color-cyan);background:rgb(24 200 240 / .1)}
+.rv__btn:active{transform:scale(.94)}
+.rv__count{font-size:12px;color:var(--color-mute);min-width:58px;text-align:center}
+.rv__dots{display:none;gap:8px}
+.rv__dots i{width:7px;height:7px;border-radius:99px;background:rgb(255 255 255 / .2);transition:width var(--dur-base) var(--ease-out),background-color var(--dur-base)}
+.rv__dots i.is-on{width:22px;background:var(--color-cyan)}
+.rv.is-single .rv__ctrl,.rv.is-single .rv__names{display:none}
+
+.rv__stage{position:relative;perspective:1500px;perspective-origin:30% 40%;padding:56px 70px 40px 0}
+.rv__orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px)}
+.rv__orb--a{width:150px;height:150px;right:2%;top:-2%;background:radial-gradient(circle at 32% 30%,rgb(127 235 255 / .5),rgb(24 200 240 / .12) 55%,transparent 72%)}
+.rv__orb--b{width:90px;height:90px;left:-4%;bottom:6%;background:radial-gradient(circle at 35% 30%,rgb(59 125 255 / .45),rgb(59 125 255 / .08) 60%,transparent 74%)}
+.rv__deck{position:relative;display:grid;transform-style:preserve-3d}
+.rv__card{--p:0;grid-area:1/1;position:relative;display:grid;gap:clamp(16px,1.8vw,22px);align-content:start;margin:0;padding:clamp(26px,3.4vw,46px);border-radius:26px;overflow:hidden;
+  background:linear-gradient(150deg,#1A2938,#0B121A 62%);border:1px solid rgb(127 235 255 / .16);
+  box-shadow:0 40px 80px -36px rgb(0 0 0 / .9),inset 0 1px 0 rgb(255 255 255 / .08);
+  transform-origin:50% 100%;
+  transform:translate3d(calc(var(--p) * 62px),calc(var(--p) * -46px),calc(var(--p) * -150px)) rotateY(-6deg) rotateX(2deg);
+  opacity:calc(1 - var(--p) * .3);filter:blur(calc(var(--p) * 1.2px)) brightness(calc(1 - var(--p) * .28));
+  z-index:calc(10 - var(--p));
+  transition:transform .9s cubic-bezier(.2,.8,.2,1) .06s,opacity .7s ease,filter .7s ease}
+.rv__card[data-p="0"]{filter:none}
+.rv__card[data-p="3"],.rv__card[data-p="4"],.rv__card[data-p="5"]{opacity:0}
+.rv__card::before{content:"\201C";position:absolute;top:-.2em;right:.06em;font-family:var(--font-display);font-size:clamp(8rem,5rem + 8vw,14rem);line-height:1;color:rgb(24 200 240 / .1);pointer-events:none}
+.rv__card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,rgb(255 255 255 / .07),transparent 32%)}
+.rv__card h3{font-size:clamp(1.35rem,1.05rem + 1.1vw,2rem);line-height:1.1;color:var(--color-cyan-lt,#7FEBFF);margin:0;max-width:85%}
+.rv__card p{margin:0;font-size:clamp(1rem,.94rem + .32vw,1.2rem);line-height:1.62;color:var(--color-white)}
+.rv__card footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:6px}
+.rv__card footer img{width:46px;height:46px;object-fit:contain;flex:none}
+.rv__card footer>span{flex:1 1 0;min-width:0}
+.rv__card footer b{display:block;font-weight:600;font-size:var(--text-md);color:var(--color-white)}
+.rv__card footer small{display:block;font-size:var(--text-sm);color:var(--color-mute)}
+.rv__card footer a{margin-left:auto;font-size:12px;color:var(--color-cyan-lt,#7FEBFF);text-decoration:none;border-bottom:1px solid rgb(127 235 255 / .3)}
+.rv__card footer a:hover{border-color:currentColor}
+/* the front card leaves towards the viewer, then rejoins at the back */
+.rv__card.is-out{transform:translate3d(-30px,140px,220px) rotateY(-3deg) rotateX(-6deg);opacity:0;filter:none;transition:transform .7s cubic-bezier(.5,0,.75,0),opacity .3s ease}
+.rv__card.is-in{transform:translate3d(-40px,60px,260px) rotateY(-4deg);opacity:0}
+.rv__card.no-tr{transition:none!important}
+.rv.is-single .rv__card{transform:none;filter:none}
+
+/* phone: a flat stack you swipe, cards peeking out underneath */
+@media (max-width:860px){
+  .rv__grid{grid-template-columns:1fr;gap:28px}
+  .rv__names{display:none}
+  .rv__stage{perspective:none;padding:0 0 22px;order:2}
+  .rv__side{display:contents}
+  .rv__side .kick{order:0}.rv__side h2{order:1}
+  .rv__ctrl{order:3;justify-content:center;margin-top:0}
+  .rv__count{display:none}
+  .rv__dots{display:flex}
+  .rv__orb--a{width:110px;height:110px;right:-6%;top:-40px}
+  .rv__orb--b{display:none}
+  .rv__card{transform-origin:50% 100%;touch-action:pan-y;user-select:none;
+    transform:translate3d(0,calc(var(--p) * 18px),0) scale(calc(1 - var(--p) * .06));
+    opacity:calc(1 - var(--p) * .3);filter:brightness(calc(1 - var(--p) * .25));
+    transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .45s ease,filter .45s ease}
+  .rv__card.is-out{transform:translate3d(calc(var(--fly,-1) * 115%),20px,0) rotate(calc(var(--fly,-1) * 14deg));opacity:0;transition:transform .45s cubic-bezier(.5,0,.75,0),opacity .35s ease}
+  .rv__card.is-in{transform:translate3d(calc(var(--fly,1) * 115%),20px,0) rotate(calc(var(--fly,1) * 14deg));opacity:0}
+  .rv__card.is-drag{transition:none}
+  .rv__card h3{max-width:100%}
+  .rv__card footer a{margin-left:0;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){.rv__card{transition:opacity .3s ease!important}}
 
 /* ---------- faq ---------- */
 .faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,96px)}
@@ -1851,12 +1912,24 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 </section>
 
 <!-- ============ REVIEWS ============ -->
-<section class="sec" id="reviews" style="padding-top:0">
-  <div class="wrap">
-    <div class="sec__head">
+<section class="sec rv" id="reviews" style="padding-top:0" aria-roledescription="carousel" aria-label="Client reviews">
+  <div class="wrap rv__grid">
+    <div class="rv__side">
+      <span class="kick">Client reviews</span>
       <h2 class="split">In their words.</h2>
+      <ol class="rv__names" id="rvNames"></ol>
+      <div class="rv__ctrl" id="rvCtrl">
+        <button class="rv__btn" type="button" id="rvPrev" aria-label="Previous review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <span class="rv__count mono" id="rvCount" aria-hidden="true"></span>
+        <button class="rv__btn" type="button" id="rvNext" aria-label="Next review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <span class="rv__dots" id="rvDots" aria-hidden="true"></span>
+      </div>
     </div>
-    <div class="quotes" id="quotes"></div>
+    <div class="rv__stage" id="rvStage">
+      <i class="rv__orb rv__orb--a" aria-hidden="true"></i><i class="rv__orb rv__orb--b" aria-hidden="true"></i>
+      <div class="rv__deck" id="quotes"></div>
+      <p class="sr-only" id="rvLive" aria-live="polite"></p>
+    </div>
   </div>
 </section>
 
@@ -2380,7 +2453,8 @@ let TEAM = [
    { h:'Short headline', q:'What the client said, word for word.', who:'Name · Business' }
    While this list is empty the reviews section stays hidden. */
 let QUOTES = [
-  { h:'Taken seriously online.', q:'We came to Nexlyr with an old SWK logo and a website that didn’t match the academy we’ve become. They rebranded us as Cambridge Online and built a site that parents and students actually find and use, with all our streams and faculty and a proper enquiry form. The part I value most is the admin panel: my team updates teachers, admissions and notices themselves, without calling a developer for every change. Hashir understood what an academy needs and kept improving things after launch. I’d recommend Nexlyr to any institute that wants to be taken seriously online.', who:'Sir Waqas Khan', org:'Cambridge Online (formerly SWK Solutions)', logo:'logo-cambridge-online.webp', url:'https://cambridgeonline.tech' }
+  { h:'Taken seriously online.', q:'We came to Nexlyr with an old SWK logo and a website that didn’t match the academy we’ve become. They rebranded us as Cambridge Online and built a site that parents and students actually find and use, with all our streams and faculty and a proper enquiry form. The part I value most is the admin panel: my team updates teachers, admissions and notices themselves, without calling a developer for every change. Hashir understood what an academy needs and kept improving things after launch. I’d recommend Nexlyr to any institute that wants to be taken seriously online.', who:'Sir Waqas Khan', org:'Cambridge Online (formerly SWK Solutions)', logo:'logo-cambridge-online.webp', url:'https://cambridgeonline.tech' },
+  { h:'A proper identity online.', q:'Before Nexlyr, physicswithsmk had no website at all. Students found me through word of mouth and WhatsApp. Nexlyr built physicswithsmk.com from scratch, along with a portal for my students, and it has given my teaching a proper identity online. Students and parents now have one place to find me, see what I teach and get in touch, and the site looks as professional as the results we work for. Hashir handled everything, from the design to getting it found on Google, and made it simple for me. Highly recommended for any teacher who wants to be taken seriously beyond the classroom.', who:'Sir Mehboob Khan', org:'Physics with SMK', logo:'logo-physicswithsmk.webp', url:'https://physicswithsmk.com' }
 ];
 
 NX.faq = [
@@ -2532,8 +2606,77 @@ NX.render = api => {
   })();
 
 
-  { const rv = $('#reviews'); if (rv) rv.hidden = !QUOTES.length; }
-  $('#quotes').innerHTML = QUOTES.map(q => `<blockquote class="quote lc" style="margin:0"${q.url ? ` cite="${esc(q.url)}"` : ''}><h3>${esc(q.h)}</h3><p>${esc(q.q)}</p><footer>${q.logo ? `<img src="${esc(q.logo)}" alt="" width="48" height="52" loading="lazy" decoding="async">` : ''}<span><b>${esc(q.who)}</b>${q.org ? `<small>${esc(q.org)}</small>` : ''}</span></footer></blockquote>`).join('');
+  /* ---------- reviews deck ---------- */
+  (() => {
+    const rv = $('#reviews'); if (!rv) return;
+    rv.hidden = !QUOTES.length; if (!QUOTES.length) return;
+    const n = QUOTES.length, host = q => { try { return new URL(q.url).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
+    rv.classList.toggle('is-single', n < 2);
+    $('#quotes').innerHTML = QUOTES.map((q, i) => `<blockquote class="rv__card" data-i="${i}" role="group" aria-roledescription="slide" aria-label="Review ${i + 1} of ${n}"${q.url ? ` cite="${esc(q.url)}"` : ''}><h3>${esc(q.h)}</h3><p>${esc(q.q)}</p><footer>${q.logo ? `<img src="${esc(q.logo)}" alt="" width="46" height="46" loading="lazy" decoding="async">` : ''}<span><b>${esc(q.who)}</b>${q.org ? `<small>${esc(q.org)}</small>` : ''}</span>${q.url ? `<a href="${esc(q.url)}" target="_blank" rel="noopener">${esc(host(q))} ↗</a>` : ''}</footer></blockquote>`).join('');
+    $('#rvNames').innerHTML = QUOTES.map((q, i) => `<li><button type="button" data-i="${i}">${q.logo ? `<img src="${esc(q.logo)}" alt="" width="30" height="30" loading="lazy">` : ''}<span><b>${esc(q.who)}</b>${q.org ? `<small>${esc(q.org)}</small>` : ''}</span></button></li>`).join('');
+    $('#rvDots').innerHTML = QUOTES.map(() => '<i></i>').join('');
+    const cards = $$('#quotes .rv__card'), names = $$('#rvNames button'), dots = $$('#rvDots i');
+    let order = cards.map((_, i) => i), busy = false;
+    const pad2 = k => String(k).padStart(2, '0');
+    const paint = () => {
+      order.forEach((ci, p) => { const c = cards[ci]; c.style.setProperty('--p', p); c.dataset.p = p; c.inert = p > 0; c.setAttribute('aria-hidden', p > 0 ? 'true' : 'false'); });
+      const cur = order[0];
+      names.forEach((b, i) => b.setAttribute('aria-current', i === cur ? 'true' : 'false'));
+      dots.forEach((d, i) => d.classList.toggle('is-on', i === cur));
+      $('#rvCount').textContent = pad2(cur + 1) + ' / ' + pad2(n);
+      $('#rvLive').textContent = `Review ${cur + 1} of ${n}: ${QUOTES[cur].who}`;
+    };
+    const settle = el => new Promise(res => { let done = false; const end = () => { if (!done) { done = true; res(); } }; el.addEventListener('transitionend', end, { once: true }); setTimeout(end, 650); });
+    const next = async (fly = -1) => {
+      if (busy || n < 2) return; busy = true;
+      const out = cards[order[0]]; out.style.setProperty('--fly', fly);
+      out.classList.add('is-out'); order.push(order.shift()); paint();
+      out.style.setProperty('--p', 0);              // keep it in front while it leaves
+      await settle(out);
+      out.classList.add('no-tr'); out.classList.remove('is-out'); out.style.setProperty('--p', n - 1);
+      void out.offsetWidth; out.classList.remove('no-tr');
+      busy = false;
+    };
+    const prev = async (fly = 1) => {
+      if (busy || n < 2) return; busy = true;
+      const ci = order.pop(), inc = cards[ci]; inc.style.setProperty('--fly', fly);
+      inc.classList.add('no-tr', 'is-in'); order.unshift(ci);
+      void inc.offsetWidth; inc.classList.remove('no-tr'); inc.classList.remove('is-in'); paint();
+      await settle(inc); busy = false;
+    };
+    const goTo = async i => { let k = order.indexOf(i); while (k-- > 0) { await next(); await new Promise(r => setTimeout(r, 120)); } };
+    paint();
+    if (n < 2) return;
+    $('#rvNext').addEventListener('click', () => { next(); kick(); });
+    $('#rvPrev').addEventListener('click', () => { prev(); kick(); });
+    names.forEach(b => b.addEventListener('click', () => { goTo(+b.dataset.i); kick(); }));
+    rv.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { next(); kick(); } else if (e.key === 'ArrowLeft') { prev(); kick(); } });
+    /* phone: swipe the front card */
+    let sx = 0, sy = 0, dx = 0, drag = null;
+    $('#quotes').addEventListener('pointerdown', e => {
+      if (innerWidth > 860 || busy || e.pointerType === 'mouse' && e.button) return;
+      const c = e.target.closest('.rv__card'); if (!c || c !== cards[order[0]] || e.target.closest('a')) return;
+      drag = c; sx = e.clientX; sy = e.clientY; dx = 0;
+    });
+    addEventListener('pointermove', e => {
+      if (!drag) return; dx = e.clientX - sx;
+      if (Math.abs(dx) < 8 || Math.abs(e.clientY - sy) > Math.abs(dx) && !drag.classList.contains('is-drag')) return;
+      drag.classList.add('is-drag'); drag.style.transform = `translate3d(${dx}px,0,0) rotate(${dx / 24}deg)`;
+    }, { passive: true });
+    const release = () => {
+      if (!drag) return; const c = drag; drag = null;
+      const was = c.classList.contains('is-drag'); c.classList.remove('is-drag'); c.style.transform = '';
+      if (was && Math.abs(dx) > 70) { (dx < 0 ? next(-1) : next(1)); kick(); }
+    };
+    addEventListener('pointerup', release); addEventListener('pointercancel', release);
+    /* auto-advance while on screen, paused on hover, focus or reduced motion */
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = 0, seen = false, hold = false;
+    const kick = () => { clearTimeout(timer); if (!still && seen && !hold) timer = setTimeout(() => { next(); kick(); }, 7000); };
+    new IntersectionObserver(es => { seen = es[0].isIntersecting; kick(); }, { threshold: .35 }).observe($('#rvStage'));
+    rv.addEventListener('pointerenter', () => { hold = true; kick(); }); rv.addEventListener('pointerleave', () => { hold = false; kick(); });
+    rv.addEventListener('focusin', () => { hold = true; kick(); }); rv.addEventListener('focusout', () => { hold = false; kick(); });
+  })();
 
   /* ---------- NFC card: tilt + flip ---------- */
   const nfc = $('#nfc'), nfcStage = $('#nfcStage');
