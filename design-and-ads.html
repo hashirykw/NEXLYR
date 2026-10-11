@@ -1259,6 +1259,7 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .dd__opt svg{width:16px;height:16px;flex:none;opacity:0;color:var(--color-cyan)}
 .dd__opt[aria-selected="true"] svg{opacity:1}
 @media (prefers-reduced-motion: reduce){.dd__list,.dd__chev{transition:none}}
+.ba .ph img{transform:none!important;object-fit:contain;object-position:50% 50%!important;transition:none!important}
 .contact2__side{border-radius:30px 0 0 30px}
 @media (max-width:900px){.contact2__side{border-radius:30px 30px 0 0}}
 .contact2:has(.dd.is-open){overflow:visible;z-index:5}
@@ -1403,16 +1404,16 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 <section class="sec" id="compare">
   <div class="wrap split2" style="align-items:center">
     <div style="display:grid;gap:22px">
-      <span class="kick">Tested where it lives</span>
-      <h2 class="split">A slide, and the street.</h2>
-      <p class="lede">Drag the handle. On the left, a mark as it looks in a presentation. On the right, the same mark on a shopfront, a story frame and a till receipt. We design for the right-hand side.</p>
+      <span class="kick">Rebrand · Cambridge Online</span>
+      <h2 class="split">Same academy. A brand that looks the part.</h2>
+      <p class="lede">Drag the handle. On the left, the mark SWK Online Academy started with. On the right, the identity we built when it became Cambridge Online: a gold eagle crest, a classic serif wordmark and one line that says what it does. Learn, prepare, succeed.</p>
     </div>
     <div class="ba" id="ba">
-      <figure class="ph ba__img" data-file="design-before.webp"><img data-img="design-before.webp" alt="A logo on a plain presentation slide" loading="lazy" decoding="async"></figure>
-      <div class="ba__after" id="baAfter"><figure class="ph ba__img" data-file="design-after.webp"><img data-img="design-after.webp" alt="The same logo on a shopfront sign, a phone story and a receipt" loading="lazy" decoding="async"></figure></div>
+      <figure class="ph ba__img" data-file="design-before.webp"><img data-img="design-before.webp" alt="Before: the old SWK Online Academy logo, a yellow shield with an eagle" loading="lazy" decoding="async"></figure>
+      <div class="ba__after" id="baAfter"><figure class="ph ba__img" data-file="design-after.webp"><img data-img="design-after.webp" alt="After: the Cambridge Online crest, a gold eagle over an open book with a serif wordmark" loading="lazy" decoding="async"></figure></div>
       <div class="ba__handle" id="baHandle" aria-hidden="true"><i></i></div>
-      <span class="ba__l mono">Slide</span><span class="ba__r mono">Street</span>
-      <input class="ba__range" id="baRange" type="range" min="0" max="100" value="50" aria-label="Compare the slide version and the real-world version">
+      <span class="ba__l mono">Before</span><span class="ba__r mono">After</span>
+      <input class="ba__range" id="baRange" type="range" min="0" max="100" value="50" aria-label="Compare the old SWK logo with the new Cambridge Online brand">
     </div>
   </div>
 </section>
