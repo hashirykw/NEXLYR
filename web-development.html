@@ -1137,7 +1137,6 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 @media (prefers-reduced-motion:reduce){.tab-panel.is-entering{animation:none}.tabs button .tabs__bar{display:none}}
 
 /* ---------- SEO layers: one at a time ---------- */
-#layers .layer{position:relative;top:auto!important;margin:0!important}
 
 /* ---------- tighter blocks: how-to steps, contact details, portal benefits ---------- */
 @media (max-width:760px){
@@ -1287,6 +1286,16 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .dd__opt svg{width:16px;height:16px;flex:none;opacity:0;color:var(--color-cyan)}
 .dd__opt[aria-selected="true"] svg{opacity:1}
 @media (prefers-reduced-motion: reduce){.dd__list,.dd__chev{transition:none}}
+.cimg{display:block;aspect-ratio:16/10;overflow:hidden;pointer-events:none}
+.cimg img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-out);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);mask-composite:intersect}
+.card:has(.cimg),.frame:has(.cimg),.fan__c:has(.cimg){overflow:hidden}
+.card>.cimg{margin:-26px -24px -4px}
+.frame>.cimg{margin:-22px -20px -4px}
+.fan__c>.cimg{margin:-24px -22px -4px}
+.card:hover .cimg img,.frame:hover .cimg img,.fan__c:hover .cimg img{transform:scale(1.06)}
+.layer{overflow:hidden;isolation:isolate;box-shadow:0 -24px 60px -24px rgb(0 0 0 / .75),inset 0 1px 0 rgb(127 235 255 / .12)}
+.layer__dim{position:absolute;inset:0;z-index:5;background:var(--color-ink);opacity:0;pointer-events:none}
+@media (max-width:860px){#layers .layer{position:relative;top:auto;margin:0 0 16px}}
 .cbox{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
 .cbox .contact2__bg{display:none}
 @media (min-width:1200px){.cbox{grid-template-columns:minmax(0,1fr) 34%}.cbox .contact2__bg{display:block;overflow:hidden}.cbox .contact2__bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 45%;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 80%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 80%,transparent 100%);mask-composite:intersect}}
@@ -1491,7 +1500,7 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 <section class="sec has-orbs" id="seo">
   <div class="orbs" aria-hidden="true"><i class="orb orb--d" data-speed="60" style="--s:50vw;left:-10vw;top:20%;--o:.3"></i></div>
   <div class="wrap">
-    <div class="head-row"><h2 class="split xl">SEO, in four layers. The first one is free.</h2><span class="hint">Pick a layer</span></div>
+    <div class="head-row"><h2 class="split xl">SEO, in four layers. The first one is free.</h2><span class="hint">Scroll through the layers</span></div>
     <p class="lede" style="margin:-20px 0 40px">Most agencies bill SEO monthly and leave the site broken underneath. Here the foundation ships free with every build, and paid work sits on a site already structured for it.</p>
     <div class="layers" id="layers"></div>
     <div class="split2" style="margin-top:clamp(40px,6vw,80px)">
@@ -1666,7 +1675,7 @@ const I = {
   print:'<path d="M7 8V3h10v5M7 17H4v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7h-3"/><path d="M7 14h10v7H7z"/>'
 };
 const SVC = [
-  { ico:'code', kick:'Core', name:'Custom Website Development', sub:'Built from scratch for your business',
+  { ico:'code', kick:'Core', img:'word-build.webp?v=2', pos:'80% 50%', name:'Custom Website Development', sub:'Built from scratch for your business',
     body:['Written from a blank file for your business: your structure, your copy, your conversion paths. Nothing ships that your pages do not use, so it stays fast on a mid-range Android, not just a fast laptop.','Marketing sites, brand sites, campaign landing pages, full platforms with a login. Responsive to 360px, tested on real devices, handed over with the repository.'],
     lists:[{h:'What it covers',items:['Business, brand and campaign sites','Semantic HTML, hand-written CSS, vanilla or React JS','Responsive to 360px, tested on real handsets','Scroll storytelling, motion and CSS 3D','Three.js / WebGL centrepieces where they earn their place','Accessibility: focus states, contrast, reduced-motion','Basic on-page and technical SEO included','Deployed to your own domain, repository handed over']},{h:'Also on request',items:['Landing pages & one-pagers','Progressive web apps (PWA)','Next.js builds where a framework earns its place','Three.js / WebGL 3D and scroll storytelling']}],
     tags:['Most requested','2–3 weeks'] },
@@ -1676,10 +1685,10 @@ const SVC = [
   { ico:'cart', kick:'Commerce', name:'E-commerce &amp; Ordering', sub:'Catalogue, cart, checkout or WhatsApp',
     body:['A store that reads cleanly one-handed on a phone. Full checkout where you need it, or a catalogue that sends the order straight to WhatsApp where a gateway is overkill.'],
     lists:[{h:'What it covers',items:['Product catalogue with variants and stock','Cart, checkout and order confirmation','WhatsApp order routing as a lighter path','Product schema so listings can appear in search']}] },
-  { ico:'panel', kick:'Back office', name:'Admin Panels &amp; Dedicated Software', sub:'So you stop paying a developer for edits',
+  { ico:'panel', kick:'Back office', img:'more-admin.webp?v=1', name:'Admin Panels &amp; Dedicated Software', sub:'So you stop paying a developer for edits',
     body:['A back office built for your site. Add a product, publish a post, change a price, export a list, without touching code or messaging us for a one-line edit.'],
     lists:[{h:'What it covers',items:['Content, media and pricing management','Enquiry and booking inboxes','CSV export and simple reporting','Written for your data, not a generic CMS']}], href:'/business-software', cta:'See business software' },
-  { ico:'chat', kick:'AI', name:'AI Chatbots', sub:'An assistant trained on your business',
+  { ico:'chat', kick:'AI', img:'word-automate.webp?v=1', pos:'78% 50%', name:'AI Chatbots', sub:'An assistant trained on your business',
     body:['Trained on your services, hours, policies and pricing. It answers instantly, qualifies the visitor, and hands warm ones to WhatsApp instead of losing them at midnight.'],
     lists:[{h:'What it covers',items:['Trained on your own content','Qualifies before it hands over','Lives inside your site, no third-party badge','Transcript of every conversation','WhatsApp-native bots on the channel they already use','English, Urdu and Roman Urdu','API-key bots and CRM handoff']}] },
   { ico:'phone', kick:'AI', name:'AI Calling Agents', sub:'A voice that answers every ring',
@@ -1690,7 +1699,7 @@ const SVC = [
     lists:[{h:'What it covers',items:['Deployment, domain and SSL setup','Backups and dependency updates','Uptime and error monitoring','Content and layout changes on request','Analytics and Search Console kept clean','Migrations and redesigns with redirects mapped']}] }
 ];
 const BRAND = [
-  { ico:'mark', kick:'Identity', name:'Logo &amp; Mark Design', sub:'Three routes, then one is refined',
+  { ico:'mark', kick:'Identity', img:'word-brand.webp?v=1', pos:'80% 50%', name:'Logo &amp; Mark Design', sub:'Three routes, then one is refined',
     body:['Three genuinely different directions, not three colourways of one idea. The chosen one becomes a full set: primary lockup, stacked, icon-only, and a single-colour cut for stamps and embroidery.'],
     lists:[{h:'What you get',items:['Three distinct concepts, not variations','Unlimited refinement on the chosen route','Responsive set: primary, stacked, icon, mono','Vector source files: SVG, AI, PDF','PNG and WebP exports at every size','Favicon and app-icon set cut from the mark','Naming for businesses without one yet','Rebrands that keep existing recognition']}], href:'/design-and-ads', cta:'See design & ads' },
   { ico:'system', kick:'Identity', name:'Brand Identity System', sub:'The rules that keep it consistent',
@@ -1755,9 +1764,10 @@ NX.faq = [
   ['Do you do the logo as well as the site?','Yes, and it is usually the better order. Over a hundred logos have come out of the studio. When the identity and the site are made by the same people, the colours, type and tone line up on their own.']
 ];
 
-NX.cardsHTML = (list, api) => list.map((o, i) => `
+const CIMG = o => o && o.img ? `<span class="cimg" aria-hidden="true"><img src="${o.img}" alt="" width="800" height="500" loading="lazy" decoding="async"${o.pos ? ` style="object-position:${o.pos}"` : ''}></span>` : '';
+NX.cardsHTML = (list, api, all = list.every(o => o.img)) => list.map((o, i) => `
   <button class="card lc" type="button" data-i="${i}" aria-haspopup="dialog">
-    <span class="card__top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[o.ico] || ''}</svg></span><span class="card__sub">${o.kick}</span></span>
+    ${all ? CIMG(o) : ''}<span class="card__top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[o.ico] || ''}</svg></span><span class="card__sub">${o.kick}</span></span>
     <h3>${o.name}</h3><p>${o.sub}</p>
     <span class="card__more">Read the detail <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
   </button>`).join('');
@@ -1772,8 +1782,8 @@ NX.render = api => {
     <article class="layer lc" style="--i:${i}">
       <div><span class="layer__n">${pad(i + 1)}</span><h3>${l.name}</h3><p>${l.p}</p><span class="badge" style="margin-left:0">${l.badge}</span></div>
       <ul class="ticks">${l.items.map(t => `<li><span>${t}</span></li>`).join('')}</ul>
+      <i class="layer__dim" aria-hidden="true"></i>
     </article>`).join('');
-  if (window.NXTabs) NXTabs($('#layers'), $$('#layers .layer'), LAYERS.map(l => l.name), { label: 'SEO layers', swipe: true });
   // code panel with a tiny highlighter
   const hl = line => {
     let s = esc(line).replace(/&amp;/g, '&amp;');
@@ -1829,6 +1839,19 @@ NX.still = () => NX.buildAll && NX.buildAll();
 
 NX.motion = api => {
   const { $, $$ } = api;
+  /* SEO layers: each layer slides up over the last, the one underneath sinks back (desktop); rise in one by one on phones */
+  const layers = $$('#layers .layer');
+  gsap.matchMedia().add('(min-width: 861px)', () => {
+    layers.forEach((l, i) => {
+      const next = layers[i + 1]; if (!next) return;
+      gsap.timeline({ scrollTrigger: { trigger: next, start: 'top bottom', end: () => 'top ' + (100 + (i + 1) * 18) + 'px', scrub: true } })
+        .to(l, { scale: .93, ease: 'none' }, 0)
+        .to($('.layer__dim', l), { opacity: .6, ease: 'none' }, 0);
+    });
+  });
+  gsap.matchMedia().add('(max-width: 860px)', () => {
+    layers.forEach(l => gsap.from(l, { y: 60, opacity: 0, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: l, start: 'top 88%', once: true } }));
+  });
   gsap.to('.bp__page', { rotateY: 4, rotateX: -2, ease: 'none', scrollTrigger: { trigger: '.phero', start: 'top top', end: 'bottom top', scrub: true } });
   // code types itself in, line by line
   gsap.set('#codePre .ln', { clipPath: 'inset(0 100% 0 0)' });
@@ -1987,7 +2010,7 @@ window.NXCompact = function () {
     if ('IntersectionObserver' in window) new IntersectionObserver(es => { inView = es[0].isIntersecting; arm(); }, { threshold: .3 }).observe(ix);
     show(0);
   });
-  const RAILS = '.sec .quotes, .sec .cards, .sec .bento, .sec .sides, .sec .people, .sec .week, .sec .posts, .sec .layers, .sec .more, .sec .std__list.stack';
+  const RAILS = '.sec .quotes, .sec .cards, .sec .bento, .sec .sides, .sec .people, .sec .week, .sec .posts, .sec .more, .sec .std__list.stack';
   d.querySelectorAll(RAILS).forEach(r => {
     if (r.classList.contains('rail') || r.querySelector(':scope > .tab-panel')) return;
     const items = [...r.children].filter(c => !c.matches('script,template,style'));
