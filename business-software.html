@@ -1305,6 +1305,12 @@ tr.is-low .lvl i{background:linear-gradient(90deg,#FF8A6A,#FFB4A0)}
 .dd__opt svg{width:16px;height:16px;flex:none;opacity:0;color:var(--color-cyan)}
 .dd__opt[aria-selected="true"] svg{opacity:1}
 @media (prefers-reduced-motion: reduce){.dd__list,.dd__chev{transition:none}}
+#stack{position:relative;overflow:hidden;isolation:isolate}
+#stack .stack-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
+#stack .stack-bg img{width:100%;height:100%;object-fit:cover;object-position:100% 50%}
+#stack .stack-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--color-ink) 0%,rgb(6 10 16 / .9) 34%,rgb(6 10 16 / .2) 62%,rgb(6 10 16 / 0) 80%),linear-gradient(180deg,var(--color-ink) 0%,transparent 16%,transparent 84%,var(--color-ink) 100%)}
+#stack .stack-copy{max-width:600px;display:grid;gap:22px}
+@media (max-width:900px){#stack .stack-bg{position:relative;inset:auto;height:62vw;max-height:340px;margin:-20px -16px -70px;z-index:0}#stack .stack-bg img{object-position:88% 50%}#stack .stack-bg::after{display:none}#stack .stack-bg img{-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 55%,transparent 100%)}#stack .wrap{position:relative;z-index:1}}
 .contact2__side{border-radius:30px 0 0 30px}
 @media (max-width:900px){.contact2__side{border-radius:30px 30px 0 0}}
 .contact2:has(.dd.is-open){overflow:visible;z-index:5}
@@ -1458,12 +1464,11 @@ tr.is-low .lvl i{background:linear-gradient(90deg,#FF8A6A,#FFB4A0)}
 </section>
 
 <!-- ============ STACK ============ -->
-<section class="sec band has-orbs" id="stack">
-  <div class="orbs" aria-hidden="true"><i class="orb orb--c" style="--s:34vw;right:0;top:20%;--o:.14"></i></div>
-  <div class="wrap split2" style="align-items:center">
-    <div style="display:grid;gap:22px"><span class="kick">Under the bonnet</span><h2 class="split xl">Built on things that will still be here in five years.</h2>
-      <p class="lede">No page builder, no plugin stack that breaks when one of them updates, no licence you have to keep paying to keep your own business running.</p></div>
-    <div style="display:grid;gap:26px">
+<section class="sec band" id="stack">
+  <div class="stack-bg" aria-hidden="true"><img src="stack-monolith.webp?v=1" alt="" width="1672" height="941" loading="lazy" decoding="async"></div>
+  <div class="wrap">
+    <div class="stack-copy"><span class="kick">Under the bonnet</span><h2 class="split xl">Built on things that will still be here in five years.</h2>
+      <p class="lede">No page builder, no plugin stack that breaks when one of them updates, no licence you have to keep paying to keep your own business running.</p>
       <div class="chip-row" id="stackChips"></div>
       <p class="note"><b>You can always leave.</b> The database lives in your Supabase account and the site lives on your domain. If you ever want to move on, you take all of it and any competent developer can carry on from where we stopped.</p>
     </div>
