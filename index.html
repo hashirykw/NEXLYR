@@ -393,10 +393,16 @@ p{margin:0}
 /* ---------- STANDARD: spec list + layer rings ---------- */
 .std__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,110px);align-items:center}
 .std__art{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center}
-.std__svg{position:absolute;left:-12%;top:-12%;width:124%;height:124%;max-width:none;overflow:visible;filter:drop-shadow(0 0 6px rgb(24 200 240 / .55)) drop-shadow(0 0 22px rgb(24 200 240 / .25))}
-.std__svg .ring{fill:none;stroke:url(#stdg);stroke-width:.24}
-.std__svg .beam{stroke:url(#stdb);stroke-width:.42;stroke-linecap:round}
-.std__img{position:absolute;inset:21%;border-radius:26px;aspect-ratio:auto;box-shadow:0 30px 80px rgb(0 0 0 / .65),0 0 0 1px var(--color-line-2),0 0 60px -10px rgb(24 200 240 / .35)}
+.std__img,.std__layers i{position:absolute;left:4%;top:18%;width:78%;height:78%;border-radius:26px}
+.std__img{z-index:4;aspect-ratio:auto;box-shadow:0 34px 80px rgb(0 0 0 / .7),0 0 0 1px rgb(127 235 255 / .3),0 0 70px -14px rgb(24 200 240 / .45)}
+.std__layers i{--p:1;display:block;transform:translate(calc(var(--k) * 7% * var(--p)),calc(var(--k) * -7% * var(--p)));z-index:calc(4 - var(--k));background:linear-gradient(165deg,rgb(24 200 240 / calc(.16 - var(--k) * .03)),rgb(8 13 20 / .55) 45%);border:1px solid rgb(127 235 255 / calc(.42 - var(--k) * .08));box-shadow:inset 0 1px 0 rgb(255 255 255 / .07),0 20px 50px -24px rgb(0 0 0 / .8)}
+.std__layers i::before{content:"";position:absolute;left:10%;right:10%;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgb(127 235 255 / .9),transparent);opacity:calc(1 - var(--k) * .22)}
+.std__layers b{position:absolute;left:16px;top:clamp(5px,1.1vw,8px);font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgb(127 235 255 / calc(.95 - var(--k) * .18))}
+.std__now{position:absolute;z-index:5;left:calc(4% + 16px);bottom:calc(4% + 16px);display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:rgb(6 10 16 / .78);border:1px solid rgb(127 235 255 / .3);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-cyan-lt)}
+.std__now i{width:6px;height:6px;border-radius:50%;background:var(--color-cyan);box-shadow:0 0 10px var(--color-cyan);animation:stdPulse 1.6s ease-in-out infinite}
+@keyframes stdPulse{50%{opacity:.35}}
+@media (max-width:520px){.std__layers b{display:none}.std__now{font-size:9.5px;padding:6px 10px}}
+@media (prefers-reduced-motion: reduce){.std__now i{animation:none}}
 .std__copy{display:grid;gap:var(--space-lg)}
 .std__list{list-style:none;margin:10px 0 0;padding:0}
 .std__list li{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:19px 4px;transition:padding var(--dur-base) var(--ease-out)}
@@ -1569,8 +1575,9 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
   <div class="orbs" aria-hidden="true"><i class="orb orb--c" data-speed="-60" style="--s:42vw;left:-14vw;top:4%;--o:.16"></i><i class="orb orb--a" data-speed="40" style="--s:34vw;right:-10vw;bottom:-6%;--t:30s"></i></div>
   <div class="wrap std__grid">
     <div class="std__art">
-      <svg class="std__svg" id="stdSvg" viewBox="0 0 124 124" aria-hidden="true"></svg>
+      <div class="std__layers" aria-hidden="true"><i style="--k:3"><b>Layer 01</b></i><i style="--k:2"><b>Layer 02</b></i><i style="--k:1"><b>Layer 03</b></i></div>
       <figure class="ph std__img" data-file="studio.webp"><img data-img="studio.webp?v=3" alt="A new glass layer being lowered onto a stack of finished layers on a stone base" loading="lazy" decoding="async"></figure>
+      <span class="std__now mono" aria-hidden="true"><i></i>Layer 04 · going on now</span>
     </div>
     <div class="std__copy">
       <h2 class="split xl">Built one layer at a time.</h2>
@@ -2532,14 +2539,14 @@ NX.motion = api => {
         .fromTo('.hero__after', { opacity: 0 }, { opacity: 1, duration: .3 }, .62)
         .fromTo('.hero__after p span', { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .38, ease: 'power2.out', stagger: .08 }, .62)
         .fromTo('.hero__cue', { opacity: 0 }, { opacity: 1, duration: .3 }, .8);
-  /* standard: beams and layer rings draw on, rows slide in */
-  const std = $('#standard');
-  gsap.set('#stdSvg .ring, #stdSvg .beam', { strokeDasharray: 1, strokeDashoffset: 1 });
-  gsap.timeline({ scrollTrigger: { trigger: std, start: 'top 78%', end: 'center 50%', scrub: .8 } })
-    .to('#stdSvg .beam', { strokeDashoffset: 0, stagger: .08, duration: 1, ease: 'none' }, 0)
-    .to('#stdSvg .ring', { strokeDashoffset: 0, stagger: .12, duration: 1, ease: 'none' }, .15)
-    .fromTo('.std__img', { scale: .82, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: 'power2.out' }, 0);
-  gsap.to('#stdSvg .ring', { rotation: i => (i % 2 ? -1 : 1) * (1.5 + i * 1.2), transformOrigin: '50% 50%', ease: 'none', scrollTrigger: { trigger: std, start: 'top bottom', end: 'bottom top', scrub: true } });
+  /* standard: the layers stack up one at a time, then the picture lands on top */
+  const std = $('#standard'), stdLayers = $$('.std__layers i');
+  if (stdLayers.length) {
+    gsap.timeline({ scrollTrigger: { trigger: std, start: 'top 80%', end: 'center 55%', scrub: .8 } })
+      .fromTo(stdLayers, { '--p': 0, opacity: 0 }, { '--p': 1, opacity: 1, duration: .6, stagger: { each: .28, from: 'end' }, ease: 'power2.out' }, 0)
+      .fromTo('.std__img', { yPercent: -9, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .5, ease: 'power2.out' }, .95)
+      .fromTo('.std__now', { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .3 }, 1.3);
+  }
   gsap.from('#stdList li', { x: -28, opacity: 0, duration: .9, ease: 'expo.out', stagger: .09, scrollTrigger: { trigger: '#stdList', start: 'top 85%', once: true } });
 
   /* services: each big word fills in as its card arrives, the one underneath sinks back */
