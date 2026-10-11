@@ -1644,11 +1644,11 @@ const NXBoot = () => {
   /* reels: add a file to /media and add a line here, it shows up; missing files hide themselves */
   const REELS = NX.reels || [
     { t:'Market update reel', src:'reel-video-1.mp4', poster:'reel-video-1.webp' },
+    { t:'Animated explainer', src:'reel-video-5.mp4?v=1', poster:'reel-video-5.webp?v=1' },
     { t:'Motion-graphics promo', src:'reel-video-2.mp4', poster:'reel-video-2.webp' },
+    { t:'Kinetic type · Digital growth', src:'reel-video-4.mp4?v=1', poster:'reel-video-4.webp?v=1' },
     { t:'Cinematic cut', src:'reel-video-3.mp4', poster:'reel-video-3.webp' },
-    { t:'New reel', src:'reel-video-4.mp4', poster:'reel-video-4.webp' },
-    { t:'New reel', src:'reel-video-5.mp4', poster:'reel-video-5.webp' },
-    { t:'New reel', src:'reel-video-6.mp4', poster:'reel-video-6.webp' }
+    { t:'Animated brand promo', src:'reel-video-6.mp4?v=1', poster:'reel-video-6.webp?v=1' }
   ];
   api.reels = el => {
     if (!el) return;
@@ -1659,9 +1659,20 @@ const NXBoot = () => {
       const v = $('video', c), s = $('source', c);
       const drop = () => { c.remove(); if (window.ScrollTrigger) ScrollTrigger.refresh(); };
       s.addEventListener('error', drop); v.addEventListener('error', drop);
-      if (i > 2 && /^https?:/.test(location.protocol)) fetch(s.getAttribute('src'), { method: 'HEAD' }).then(r => { if (!r.ok) drop(); }).catch(drop);
-      else if (i > 2) drop();
+      
     });
+    /* reels rail: arrows + counter */
+    if (!el.nextElementSibling || !el.nextElementSibling.classList.contains('reels__nav')) {
+      const arrow = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+      el.insertAdjacentHTML('afterend', `<div class="reels__nav"><button type="button" aria-label="Previous reels">${arrow('m15 6-6 6 6 6')}</button><button type="button" aria-label="More reels">${arrow('m9 6 6 6-6 6')}</button><span class="reels__count"></span></div>`);
+      const nav = el.nextElementSibling, [pv, nx] = nav.querySelectorAll('button'), cnt = nav.querySelector('.reels__count');
+      const step = () => { const c = el.querySelector('.reel'); return c ? c.getBoundingClientRect().width + 14 : el.clientWidth; };
+      const sync = () => { const n = el.querySelectorAll('.reel').length, max = el.scrollWidth - el.clientWidth; pv.disabled = el.scrollLeft < 4; nx.disabled = el.scrollLeft > max - 4; const first = Math.round(el.scrollLeft / step()) + 1; cnt.textContent = n ? `${String(first).padStart(2, '0')}–${String(Math.min(n, first + 2)).padStart(2, '0')} / ${String(n).padStart(2, '0')}` : ''; nav.hidden = n <= 3; };
+      pv.addEventListener('click', () => el.scrollBy({ left: -step(), behavior: 'smooth' }));
+      nx.addEventListener('click', () => el.scrollBy({ left: step(), behavior: 'smooth' }));
+      el.addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
+      addEventListener('resize', sync); setTimeout(sync, 50);
+    }
     const vids = () => $$('.reel video', el);
     if ('IntersectionObserver' in window && !RM) {
       const io = new IntersectionObserver(es => es.forEach(en => { const v = en.target; if (en.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause(); }), { threshold: .35 });
