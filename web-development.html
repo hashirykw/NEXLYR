@@ -1286,6 +1286,8 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .dd__opt svg{width:16px;height:16px;flex:none;opacity:0;color:var(--color-cyan)}
 .dd__opt[aria-selected="true"] svg{opacity:1}
 @media (prefers-reduced-motion: reduce){.dd__list,.dd__chev{transition:none}}
+/* stacked SEO layers must be solid, or the card underneath shows through */
+#layers .layer{background:linear-gradient(160deg,#13202E,#080E16)!important}
 .cimg{display:block;aspect-ratio:16/10;overflow:hidden;pointer-events:none}
 .cimg img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-out);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%),linear-gradient(180deg,#000 55%,transparent 100%);mask-composite:intersect}
 .card:has(.cimg),.frame:has(.cimg),.fan__c:has(.cimg){overflow:hidden}
@@ -1295,7 +1297,7 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
 .card:hover .cimg img,.frame:hover .cimg img,.fan__c:hover .cimg img{transform:scale(1.06)}
 .layer{overflow:hidden;isolation:isolate;box-shadow:0 -24px 60px -24px rgb(0 0 0 / .75),inset 0 1px 0 rgb(127 235 255 / .12)}
 .layer__dim{position:absolute;inset:0;z-index:5;background:var(--color-ink);opacity:0;pointer-events:none}
-@media (max-width:860px){#layers .layer{position:relative;top:auto;margin:0 0 16px}}
+@media (max-width:860px){#layers .layer{margin:0 0 18px}}
 .cbox{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
 .cbox .contact2__bg{display:none}
 @media (min-width:1200px){.cbox{grid-template-columns:minmax(0,1fr) 34%}.cbox .contact2__bg{display:block;overflow:hidden}.cbox .contact2__bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 45%;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 80%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 10%,#000 80%,transparent 100%);mask-composite:intersect}}
@@ -1839,19 +1841,16 @@ NX.still = () => NX.buildAll && NX.buildAll();
 
 NX.motion = api => {
   const { $, $$ } = api;
-  /* SEO layers: each layer slides up over the last, the one underneath sinks back (desktop); rise in one by one on phones */
   const layers = $$('#layers .layer');
-  gsap.matchMedia().add('(min-width: 861px)', () => {
-    layers.forEach((l, i) => {
-      const next = layers[i + 1]; if (!next) return;
-      gsap.timeline({ scrollTrigger: { trigger: next, start: 'top bottom', end: () => 'top ' + (100 + (i + 1) * 18) + 'px', scrub: true } })
-        .to(l, { scale: .93, ease: 'none' }, 0)
-        .to($('.layer__dim', l), { opacity: .6, ease: 'none' }, 0);
-    });
+  /* each layer slides up over the one before it, which shrinks back and dims: laptop and phone alike */
+  const stackLayers = (top, step) => layers.forEach((l, i) => {
+    const next = layers[i + 1]; if (!next) return;
+    gsap.timeline({ scrollTrigger: { trigger: next, start: 'top bottom', end: () => 'top ' + (top + (i + 1) * step) + 'px', scrub: true } })
+      .to(l, { scale: .93, ease: 'none' }, 0)
+      .to($('.layer__dim', l), { opacity: .6, ease: 'none' }, 0);
   });
-  gsap.matchMedia().add('(max-width: 860px)', () => {
-    layers.forEach(l => gsap.from(l, { y: 60, opacity: 0, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: l, start: 'top 88%', once: true } }));
-  });
+  gsap.matchMedia().add('(min-width: 861px)', () => stackLayers(100, 18));
+  gsap.matchMedia().add('(max-width: 860px)', () => stackLayers(84, 10));
   gsap.to('.bp__page', { rotateY: 4, rotateX: -2, ease: 'none', scrollTrigger: { trigger: '.phero', start: 'top top', end: 'bottom top', scrub: true } });
   // code types itself in, line by line
   gsap.set('#codePre .ln', { clipPath: 'inset(0 100% 0 0)' });
