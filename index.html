@@ -1787,7 +1787,7 @@ button.btn[type="submit"]{--glyph:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22ht
   <div class="tour__in">
     <div class="wrap head-row" style="margin-bottom:clamp(22px,4vh,44px)"><h2 class="split xl">Sites we shipped.</h2><span class="hint">Scroll → project by project</span></div>
     <div class="tour__view" id="tourView"><div class="tour__track" id="track"></div></div>
-    <div class="wrap tour__foot"><span class="mono">200+ delivered · 9 to open</span><div class="tour__bar" aria-hidden="true"><i id="tourFill"></i></div><span class="tour__count" id="tourCount">01 / 09</span></div>
+    <div class="wrap tour__foot"><span class="mono">200+ delivered · 17 to open</span><div class="tour__bar" aria-hidden="true"><i id="tourFill"></i></div><span class="tour__count" id="tourCount">01 / 17</span></div>
   </div>
 </section>
 
@@ -2430,15 +2430,23 @@ const MORE = [
 ];
 
 let WORK = [
-  { name:'The Verzish.com', cat:'Fitness', what:'One site for three unisex gyms across Karachi, built around each branch\'s own footage.', url:'https://verzish.nexlyr.solutions', logo:'logo-verzish.webp', tone:'#8E99A8' },
-  { name:'Grub Coffee Co.', cat:'Café', what:'Coffee bar in North Nazimabad with a filmed hero, the full drinks menu and late hours up front.', url:'https://grub.nexlyr.solutions', logo:'logo-grub-coffee.webp', tone:'#2F7A4E' },
-  { name:'Cafe Shafe', cat:'Café', what:'Rooftop chai café with nine chais, twenty parathas and a menu that reads in one hand.', url:'https://cafe-shafe.vercel.app', logo:'logo-cafe-shafe.webp', tone:'#E8692B' },
-  { name:'Cambridge Online', cat:'Education', what:'Online academy of the SWK Solutions faculty: O Level, IGCSE and A Level, run from its own admin panel.', url:'https://cambridgeonline.tech', logo:'logo-cambridge-online.webp', tone:'#9B6B2F' },
-  { name:'Wrappi', cat:'Automotive · Oslo', what:'PPF, colour wraps and ceramic coating studio in Oslo, in English and Norwegian.', url:'https://wrappi.nexlyr.solutions', logo:'logo-wrappi.webp', tone:'#3A5A8C' },
-  { name:'Physics with SMK', cat:'Education', what:'O Level, IGCSE and A Level physics platform: student logins, notes and past papers back to 2002, and an admin panel the teacher runs himself.', url:'https://physicswithsmk.com', logo:'logo-physicswithsmk.webp', tone:'#2A5BA8' },
-  { name:'Hakuna Matata', cat:'Restaurant', what:'Loaded fries, zinger and broast deals, with delivery one tap away.', url:'https://hakuna-matata.nexlyr.solutions', logo:'logo-hakuna-matata.svg', tone:'#B5301F' },
   { name:'Markaz OUJ', cat:'Sports & martial arts', what:'Sports, fitness and martial arts for schools, colleges and corporate teams, with a store and five academy campuses.', url:'https://markaz-ouj.com', logo:'logo-markaz-ouj.webp', tone:'#C9A227' },
-  { name:'Maths With SB', cat:'Education', what:'Sir Saud Barlas\'s maths site, with past papers, mark schemes, examiner reports and the YKW Calculator in one place.', url:'https://saud.barlas.nexlyr.solutions', logo:'logo-maths-with-sb.webp', tone:'#D4A72C' }
+  { name:'Wrappi', cat:'Automotive · Oslo', what:'PPF, colour wraps and ceramic coating studio in Oslo, in English and Norwegian.', url:'https://wrappingartdesign.no', logo:'logo-wrappi.webp', tone:'#3A5A8C' },
+  { name:'Cambridge Online', cat:'Education', what:'Online academy of the SWK Solutions faculty: O Level, IGCSE and A Level, run from its own admin panel.', url:'https://cambridgeonline.tech', logo:'logo-cambridge-online.webp', tone:'#9B6B2F' },
+  { name:'Physics with SMK', cat:'Education', what:'O Level, IGCSE and A Level physics platform: student logins, notes and past papers back to 2002, and an admin panel the teacher runs himself.', url:'https://physicswithsmk.com', logo:'logo-physicswithsmk.webp', tone:'#2A5BA8' },
+  { name:'Sir Xahid Anwar', cat:'Education', what:'O Level and IGCSE English with a student portal, past papers in a timed exam mode and AI essay checking.', url:'https://englishwithsxa.com', logo:'logo-xahid-anwar.webp', tone:'#5B4FB0' },
+  { name:'Revolution MMA', cat:'Martial arts', what:'MMA and Brazilian Jiu-Jitsu academy across DHA Phase 6 and North Nazimabad, with free trials booked on WhatsApp.', url:'https://revolution.com.pk', logo:'logo-revolution.webp', tone:'#B3262C' },
+  { name:'The Verzish.com', cat:'Fitness', what:'One site for three unisex gyms across Karachi, built around each branch\'s own footage.', url:'https://verzish.nexlyr.solutions', logo:'logo-verzish.webp', tone:'#8E99A8' },
+  { name:'The Fit Monster', cat:'Fitness', what:'Premium gym in Nazimabad with Hammer Strength kit, a 3D tour and doors open till 4 AM.', url:'https://fit-monster.nexlyr.solutions', logo:'logo-fit-monster.webp', tone:'#B8961E' },
+  { name:'14th Street Pizza', cat:'Restaurant chain', what:'Xtreme double-deckers, midnight deals and sixteen branches across seven cities, on one fast menu.', url:'https://14-street-pizza.nexlyr.solutions', logo:'logo-14th-street-pizza.webp', tone:'#C8302A' },
+  { name:'Evessé', cat:'Skin clinic', what:'Dermatology-led skin, hair and aesthetic clinic by Dr. Faria Khan, with two branches in Karachi.', url:'https://evesse.nexlyr.solutions', logo:'logo-evesse.webp', tone:'#A8826A' },
+  { name:'Grub Coffee Co.', cat:'Café', what:'Coffee bar in North Nazimabad with a filmed hero, the full drinks menu and late hours up front.', url:'https://grub.nexlyr.solutions', logo:'logo-grub-coffee.webp', tone:'#2F7A4E' },
+  { name:'Desi Sawad', cat:'Restaurant · Riyadh', what:'Pakistani restaurant in Riyadh: karahi, biryani and seekh kebab, with the menu and hours up front.', url:'https://desi-sawad.nexlyr.solutions', logo:'logo-desi-sawad.webp', tone:'#C2862B' },
+  { name:'Cafe Shafe', cat:'Café', what:'Rooftop chai café with nine chais, twenty parathas and a menu that reads in one hand.', url:'https://cafe-shafe.vercel.app', logo:'logo-cafe-shafe.webp', tone:'#E8692B' },
+  { name:'Maths With SB', cat:'Education', what:'Sir Saud Barlas\'s maths site, with past papers, mark schemes, examiner reports and the YKW Calculator in one place.', url:'https://saud.barlas.nexlyr.solutions', logo:'logo-maths-with-sb.webp', tone:'#D4A72C' },
+  { name:'Sir Osama Musani', cat:'Education', what:'O Level, IGCSE and A Level Business taught through live campaigns, with case files, past papers and a student portal.', url:'https://osama-musani.nexlyr.solutions', logo:'logo-osama-musani.webp', tone:'#B08A2E' },
+  { name:'Sir Yawar Abbas', cat:'Education', what:'O Level, IGCSE and A Level Physics with a syllabus tracker, past papers, a Physics Lab and a student portal.', url:'https://sir-yahwar-abbas.nexlyr.solutions', logo:'logo-yawar-abbas.webp', tone:'#2E6FB0' },
+  { name:'Hakuna Matata', cat:'Restaurant', what:'Loaded fries, zinger and broast deals, with delivery one tap away.', url:'https://hakuna-matata.nexlyr.solutions', logo:'logo-hakuna-matata.svg', tone:'#B5301F' }
 ];
 
 let TEAM = [
